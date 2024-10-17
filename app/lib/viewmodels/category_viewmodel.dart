@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:routine/models/tasks/category_model.dart';
-import 'package:routine/services/category_service.dart';
 import '../config/app_config.dart';
+import '../models/tasks/category_model.dart';
+import '../services/category_service.dart';
 
 class CategoryViewModel {
   final CategoryService _categoryService = CategoryService();

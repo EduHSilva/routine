@@ -1,10 +1,11 @@
+import 'package:app/views/tasks/tabs/all_tasks_tab.dart';
+import 'package:app/views/tasks/tabs/category_tab.dart';
+import 'package:app/views/tasks/tabs/rules_tab.dart';
 import 'package:flutter/material.dart';
-import 'package:routine/config/design_system.dart';
-import 'package:routine/views/tasks/tabs/all_tasks_tab.dart';
-import 'package:routine/views/tasks/tabs/category_tab.dart';
-import 'package:routine/views/tasks/tabs/rules_tab.dart';
-import 'package:routine/widgets/custom_appbar.dart';
-import 'package:routine/widgets/custom_drawer.dart';
+
+import '../../config/design_system.dart';
+import '../../widgets/custom_appbar.dart';
+import '../../widgets/custom_drawer.dart';
 
 class TasksView extends StatefulWidget {
   const TasksView({super.key});

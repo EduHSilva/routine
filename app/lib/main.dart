@@ -1,10 +1,10 @@
+import 'package:app/views/auth/register_view.dart';
+import 'package:app/views/auth/splash_view.dart';
+import 'package:app/views/tasks/tasks_view.dart';
 import 'package:flutter/material.dart';
-import 'package:routine/config/app_config.dart';
-import 'package:routine/config/design_system.dart';
-import 'package:routine/views/auth/register_view.dart';
-import 'package:routine/views/auth/splash_view.dart';
-import 'package:routine/views/tasks/tasks_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'config/app_config.dart';
+import 'config/design_system.dart';
 import 'views/auth/login_view.dart';
 import 'views/home/home_view.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -49,7 +49,7 @@ class MyAppState extends State<MyApp> {
     if (token != null && token.isNotEmpty && user != null && user.isNotEmpty) {
       AppConfig.getUser();
       setState(() {
-        _initialRoute = '/home'; 
+        _initialRoute = '/home';
       });
     } else {
       setState(() {

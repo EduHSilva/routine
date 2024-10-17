@@ -1,12 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:routine/config/app_config.dart';
-import 'package:routine/viewmodels/category_viewmodel.dart';
-import 'package:routine/widgets/custom_text_field.dart';
 
+import '../../config/app_config.dart';
 import '../../config/helper.dart';
 import '../../models/tasks/category_model.dart';
+import '../../viewmodels/category_viewmodel.dart';
+import '../../widgets/custom_text_field.dart';
 
 class NewCategoryView extends StatefulWidget {
   final int? id;

@@ -1,7 +1,8 @@
-name: routine
-description: "An app for routine"
+name: app
+description: "A new Flutter project."
+publish_to: 'none'
 
-publish_to: 'none' 
+version: 1.0.0+1
 
 environment:
   sdk: ^3.5.1
@@ -14,10 +15,9 @@ dependencies:
   http: ^1.2.2
   easy_localization: ^3.0.0
   flutter_dotenv: ^5.0.2
-  shared_preferences: ^2.0.6
+  shared_preferences: ^2.3.2
   logger: ^2.4.0
   flutter_colorpicker: ^1.0.3
-
 
 dev_dependencies:
   flutter_test:

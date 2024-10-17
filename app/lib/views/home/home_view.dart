@@ -1,7 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:routine/widgets/custom_appbar.dart';
-import 'package:routine/widgets/custom_drawer.dart';
+
+import '../../widgets/custom_appbar.dart';
+import '../../widgets/custom_drawer.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});

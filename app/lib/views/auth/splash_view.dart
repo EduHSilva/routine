@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:routine/widgets/custom_button.dart';
+import '../../widgets/custom_button.dart';
 import 'login_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 

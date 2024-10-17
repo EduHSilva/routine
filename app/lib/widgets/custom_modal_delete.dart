@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:routine/widgets/custom_button.dart';
 
 import '../config/design_system.dart';
+import 'custom_button.dart';
 
 class CustomModalDelete extends StatefulWidget {
   final String title;
@@ -15,10 +15,10 @@ class CustomModalDelete extends StatefulWidget {
   });
 
   @override
-  _CustomModalDeleteState createState() => _CustomModalDeleteState();
+  CustomModalDeleteState createState() => CustomModalDeleteState();
 }
 
-class _CustomModalDeleteState extends State<CustomModalDelete> {
+class CustomModalDeleteState extends State<CustomModalDelete> {
   late List<TextEditingController> controllers;
   Color selectedColor = Colors.green;
 

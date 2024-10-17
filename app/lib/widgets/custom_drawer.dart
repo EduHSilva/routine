@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:routine/config/app_config.dart';
-import 'package:routine/config/design_system.dart';
-import 'package:routine/views/auth/splash_view.dart';
+
+import '../config/app_config.dart';
+import '../config/design_system.dart';
+import '../views/auth/splash_view.dart';
+
 
 class CustomDrawer extends StatelessWidget {
   final String currentRoute;

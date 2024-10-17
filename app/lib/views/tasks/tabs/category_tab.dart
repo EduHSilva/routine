@@ -1,11 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:routine/models/tasks/category_model.dart';
-import 'package:routine/viewmodels/category_viewmodel.dart';
-import 'package:routine/views/tasks/new_category_view.dart';
 
 import '../../../config/helper.dart';
+import '../../../models/tasks/category_model.dart';
+import '../../../viewmodels/category_viewmodel.dart';
 import '../../../widgets/custom_modal_delete.dart';
+import '../new_category_view.dart';
 
 class CategoryTab extends StatefulWidget {
   const CategoryTab({super.key});

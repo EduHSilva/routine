@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:routine/config/app_config.dart';
 
+import '../config/app_config.dart';
 import '../models/user/login_model.dart';
 import '../models/user/user_model.dart';
 import '../services/auth_service.dart';

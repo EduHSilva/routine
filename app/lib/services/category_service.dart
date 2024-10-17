@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:routine/config/app_config.dart';
-import 'package:routine/models/tasks/category_model.dart';
+
+import '../config/app_config.dart';
+import '../models/tasks/category_model.dart';
+
 
 class CategoryService {
   Future<CategoryResponse?> createCategory(

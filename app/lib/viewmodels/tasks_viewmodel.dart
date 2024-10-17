@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:routine/models/tasks/task_model.dart';
-import 'package:routine/services/tasks_service.dart';
-
 import '../config/app_config.dart';
+import '../models/tasks/task_model.dart';
+import '../services/tasks_service.dart';
 
 class TasksViewModel {
   final TasksService _tasksService = TasksService();

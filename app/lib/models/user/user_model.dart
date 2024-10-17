@@ -1,5 +1,4 @@
-
-import 'package:routine/models/response.dart';
+import '../response.dart';
 
 class User {
   final int id;

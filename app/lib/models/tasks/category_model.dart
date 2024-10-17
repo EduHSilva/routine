@@ -1,5 +1,5 @@
-import 'package:routine/config/app_config.dart';
-import 'package:routine/models/response.dart';
+import '../../config/app_config.dart';
+import '../response.dart';
 
 class Category {
   final int id;

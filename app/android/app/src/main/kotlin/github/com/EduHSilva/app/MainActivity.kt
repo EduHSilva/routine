@@ -1,4 +1,4 @@
-package com.example.routineapp
+package github.com.EduHSilva.app
 
 import io.flutter.embedding.android.FlutterActivity
 

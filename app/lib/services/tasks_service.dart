@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:routine/config/app_config.dart';
-import 'package:routine/models/tasks/task_model.dart';
+
+import '../config/app_config.dart';
+import '../models/tasks/task_model.dart';
+
 
 class TasksService {
   Future<Map<String, List<Task>>> fetchWeekTasks() async {
