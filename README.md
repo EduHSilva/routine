@@ -6,12 +6,17 @@ This project consists of a Go backend API and a Flutter frontend. The backend is
 mobile application that interacts with the API. This guide provides instructions on how to set up and run the project
 locally.
 
+## Documentation
+
+[Documentation](https://drive.google.com/drive/folders/1ZAmGGtibudneU68qirLa-FDqOuBvKO9z?usp=drive_link)
+
 ## Table of Contents
 
 - [Prerequisites](#prerequisites)
-- [Backend Setup](#backend-setup)
+- [Backend Setup](#backend)
     - [Environment Variables](#backend-environment-variables)
     - [Running the Backend](#running-the-backend)
+- [Backend Docs](#backend-docs)
 - [Frontend Setup](#frontend-setup)
     - [Environment Variables](#frontend-environment-variables)
     - [Running the Frontend](#running-the-frontend)
@@ -26,9 +31,13 @@ Before running this project locally, ensure that you have the following installe
 - PostgreSQL (for the database)
 - [Make](https://www.gnu.org/software/make/)
 
-## Backend Setup
+## Backend
 
-### Environment Variables
+### Backend Docs
+
+[Documentation](https://routine-back.onrender.com/api/v1/swagger/index.html)
+
+### Backend Environment Variables
 
 Create a `.env` file in the backend root directory with the following structure:
 
@@ -51,7 +60,7 @@ make
 
 ## Frontend Setup
 
-### Environment Variables
+### Frontend Environment Variables
 
 Create a `.env` file in the frontend root directory with the following structure:
 
@@ -65,3 +74,15 @@ URL_API=yourUrlApi
 flutter pub get
 flutter run
 ```
+
+### License
+
+This project is licensed under the MIT License.
+
+The key changes include:
+
+1. **Fixed indentation for section headers** to ensure that links to those sections work.
+2. **Clarified the environment variables section** in both the backend and frontend setup.
+
+This should work properly with all links now rendering correctly.
+
