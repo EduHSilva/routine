@@ -1,9 +1,11 @@
 package category
 
 import (
+	"github.com/EduHSilva/routine/config"
 	"github.com/EduHSilva/routine/helper"
 	"github.com/EduHSilva/routine/schemas"
 	"github.com/gin-gonic/gin"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"net/http"
 )
 
@@ -23,14 +25,27 @@ import (
 func GetAllCategoriesHandler(ctx *gin.Context) {
 	var categoryResponses []ResponseData
 
+	locale, exists := ctx.Get("locale")
+	if !exists {
+		locale = "en"
+	}
+
+	localizer := i18n.NewLocalizer(config.GetBundler(), locale.(string))
+
 	userID, exists := ctx.Get("user_id")
 	if !exists {
-		helper.SendError(ctx, http.StatusUnauthorized, "error getting tasks from database - user not found")
+		message := localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: "userNotFound",
+		})
+		helper.SendError(ctx, http.StatusUnauthorized, message)
 		return
 	}
 
 	if err := db.Where("user_id = ? OR system = 1", userID).Model(&schemas.Category{}).Scan(&categoryResponses).Error; err != nil {
-		helper.SendError(ctx, http.StatusInternalServerError, "error getting categories from database")
+		message := localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: "genericError500",
+		})
+		helper.SendError(ctx, http.StatusInternalServerError, message)
 		return
 	}
 

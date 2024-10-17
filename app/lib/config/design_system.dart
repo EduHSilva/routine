@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
-  static const Color primary = Color(0xFF0B0C2B);
-  static const Color primaryVariant = Color(0xFF079CC6);
-  static const Color secondary = Color(0xFF00BFAF);
-  static const Color secondaryVariant = Color(0xFF018786);
+  static const Color primary = Color(0xFF079CC6);
+  static const Color primaryVariant = Color(0xFF00BFAF);
   static const Color background = Color(0xFFF5F7FA);
   static const Color surface = Color(0xFFFFFFFF);
   static const Color error = Color(0xFFE94E77);
@@ -19,12 +18,6 @@ class AppColors {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
-
-  static const Gradient secondaryGradient = LinearGradient(
-    colors: [secondary, secondaryVariant],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
 }
 
 class AppTheme {
@@ -34,22 +27,20 @@ class AppTheme {
   static ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     primaryColor: AppColors.primary,
-    scaffoldBackgroundColor: AppColors.background, 
+    scaffoldBackgroundColor: AppColors.background,
     appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.transparent, 
-      elevation: 0, 
-      toolbarTextStyle: TextStyle(
-        color: AppColors.onSecondary
-      ),
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      toolbarTextStyle: TextStyle(color: AppColors.primary),
       iconTheme: IconThemeData(
-        color: AppColors.onSecondary, 
+        color: AppColors.primary,
       ),
     ),
     colorScheme: const ColorScheme.light(
       primary: AppColors.primary,
       primaryContainer: AppColors.primaryVariant,
-      secondary: AppColors.secondary,
-      secondaryContainer: AppColors.secondaryVariant,
+      secondary: AppColors.primaryVariant,
+      secondaryContainer: AppColors.primary,
       surface: AppColors.surface,
       error: AppColors.error,
       onPrimary: AppColors.onPrimary,
@@ -57,13 +48,21 @@ class AppTheme {
       onSurface: AppColors.onSurface,
       onError: AppColors.onError,
     ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: ButtonStyle(
+        shape: WidgetStateProperty.all(_roundedShape),
+        padding: WidgetStateProperty.all(
+            const EdgeInsets.symmetric(vertical: 12, horizontal: 20)),
+        foregroundColor: WidgetStateProperty.all(AppColors.primary),
+      ),
+    ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
         shape: WidgetStateProperty.all(_roundedShape),
         elevation: WidgetStateProperty.all(4),
-        padding: WidgetStateProperty .all(
+        padding: WidgetStateProperty.all(
             const EdgeInsets.symmetric(vertical: 12, horizontal: 20)),
-        backgroundColor: WidgetStateProperty .resolveWith((states) {
+        backgroundColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.pressed)) {
             return AppColors.primaryVariant;
           }
@@ -72,18 +71,10 @@ class AppTheme {
         foregroundColor: WidgetStateProperty.all(AppColors.onPrimary),
       ),
     ),
-    textTheme: const TextTheme(
-      headlineLarge: TextStyle(
-        fontSize: 30.0,
-        fontWeight: FontWeight.bold,
-        color: AppColors.onBackground,
-      ),
-      bodyLarge: TextStyle(fontSize: 16.0, color: AppColors.onBackground),
-      bodyMedium: TextStyle(fontSize: 14.0, color: AppColors.onSurface),
-    ),
+    textTheme: GoogleFonts.poppinsTextTheme(),
     cardTheme: CardTheme(
       shape: _roundedShape,
-      elevation: 4, 
+      elevation: 4,
       margin: const EdgeInsets.all(10),
     ),
   );
@@ -99,8 +90,8 @@ class AppTheme {
     colorScheme: const ColorScheme.dark(
       primary: AppColors.primary,
       primaryContainer: AppColors.primaryVariant,
-      secondary: AppColors.secondary,
-      secondaryContainer: AppColors.secondaryVariant,
+      secondary: AppColors.primaryVariant,
+      secondaryContainer: AppColors.primary,
       surface: AppColors.surface,
       error: AppColors.error,
       onPrimary: AppColors.onPrimary,

@@ -110,7 +110,7 @@ class CustomDrawer extends StatelessWidget {
         }
       },
       selected: isActive,
-      selectedTileColor: AppColors.secondary.withOpacity(0.1),
+      selectedTileColor: AppColors.primaryVariant.withOpacity(0.1),
     );
   }
 }

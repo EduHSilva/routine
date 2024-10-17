@@ -11,7 +11,7 @@ func Init() {
 	router.Use(cors.New(cors.Config{
 		AllowOrigins: []string{"*"},
 		AllowMethods: []string{"GET", "POST", "PUT", "DELETE"},
-		AllowHeaders: []string{"Content-Type", "Authorization", "x-access-token"},
+		AllowHeaders: []string{"Content-Type", "Authorization", "x-access-token", "Accept-Language"},
 	}))
 
 	initRoutes(router)

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -73,6 +74,8 @@ class _HttpClientWithBearerToken extends http.BaseClient {
     }
 
     request.headers['Content-Type'] = 'application/json; charset=UTF-8';
+    request.headers['Accept-Language'] = Platform.localeName;
+
 
     return _client.send(request);
   }

@@ -2,10 +2,12 @@ package user
 
 import (
 	"errors"
+	"github.com/EduHSilva/routine/config"
 	"github.com/EduHSilva/routine/helper"
 	"github.com/EduHSilva/routine/schemas"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"os"
@@ -27,32 +29,48 @@ import (
 func LoginHandler(ctx *gin.Context) {
 	loginRequest := &LoginRequest{}
 
+	locale, exists := ctx.Get("locale")
+	if !exists {
+		locale = "en"
+	}
+
+	localizer := i18n.NewLocalizer(config.GetBundler(), locale.(string))
+
 	if err := ctx.BindJSON(&loginRequest); err != nil {
 		logger.ErrF("validation error: %v", err.Error())
 		helper.SendError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	findOne(ctx, loginRequest.Email, loginRequest.Password)
+	findOne(ctx, loginRequest.Email, loginRequest.Password, localizer)
 }
 
-func findOne(ctx *gin.Context, email, password string) {
+func findOne(ctx *gin.Context, email, password string, localizer *i18n.Localizer) {
 	user := &schemas.User{}
 
 	if err := db.Where("Email = ?", email).First(user).Error; err != nil {
-		helper.SendError(ctx, http.StatusBadRequest, "Invalid login credentials. Please try again")
+		message := localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: "invalidCredentials",
+		})
+		helper.SendError(ctx, http.StatusBadRequest, message)
 		return
 	}
 
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil && errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
-		helper.SendError(ctx, http.StatusBadRequest, "Invalid login credentials. Please try again")
+		message := localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: "invalidCredentials",
+		})
+		helper.SendError(ctx, http.StatusBadRequest, message)
 		return
 	}
 
 	tokenString, err := createToken(user)
 	if err != nil {
-		helper.SendError(ctx, http.StatusInternalServerError, "Failed to create token")
+		message := localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: "genericError500",
+		})
+		helper.SendError(ctx, http.StatusInternalServerError, message)
 		return
 	}
 

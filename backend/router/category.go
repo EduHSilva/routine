@@ -13,9 +13,9 @@ func initCategoryRoutes(router *gin.Engine) {
 	docs.SwaggerInfo.BasePath = basePath
 	api := router.Group(basePath)
 
-	api.GET("/category", helper.AuthMiddleware(), category.GetCategoryHandler)
-	api.GET("/categories", helper.AuthMiddleware(), category.GetAllCategoriesHandler)
-	api.DELETE("/category", helper.AuthMiddleware(), category.DeleteCategoryHandler)
-	api.POST("/category", helper.AuthMiddleware(), category.CreateCategoryHandler)
-	api.PUT("/category", helper.AuthMiddleware(), category.UpdateCategoryHandler)
+	api.GET("/category", helper.DefaultMiddleware(), category.GetCategoryHandler)
+	api.GET("/categories", helper.DefaultMiddleware(), category.GetAllCategoriesHandler)
+	api.DELETE("/category", helper.DefaultMiddleware(), category.DeleteCategoryHandler)
+	api.POST("/category", helper.DefaultMiddleware(), category.CreateCategoryHandler)
+	api.PUT("/category", helper.DefaultMiddleware(), category.UpdateCategoryHandler)
 }

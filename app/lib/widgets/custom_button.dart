@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
+import '../config/design_system.dart';
+
 class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
@@ -12,9 +14,9 @@ class CustomButton extends StatelessWidget {
       {super.key,
       required this.text,
       required this.onPressed,
-      this.isOutlined = false, this.isLoading = false,
-
-        this.style});
+      this.isOutlined = false,
+      this.isLoading = false,
+      this.style});
 
   @override
   Widget build(BuildContext context) {

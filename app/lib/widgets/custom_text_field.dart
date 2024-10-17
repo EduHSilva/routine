@@ -45,7 +45,7 @@ class CustomTextField extends StatelessWidget {
         prefixIcon: prefixIcon != null
             ? Icon(
           prefixIcon,
-          color: AppColors.secondary,
+          color: AppColors.primaryVariant,
         )
             : null,
         border: OutlineInputBorder(

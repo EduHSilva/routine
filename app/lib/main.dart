@@ -68,7 +68,7 @@ class MyAppState extends State<MyApp> {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      initialRoute: _initialRoute, 
+      initialRoute: _initialRoute,
       routes: {
         '/splash': (context) => const SplashView(),
         '/login': (context) => const LoginView(),

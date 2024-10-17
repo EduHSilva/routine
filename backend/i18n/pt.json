@@ -1,0 +1,5 @@
+{
+  "userNotFound": "Usuário não encontrado!",
+  "genericError500": "Erro ao buscar no servidor!",
+  "invalidCredentials": "Informações de login incorretas. Tente novamente."
+}

@@ -15,12 +15,12 @@ func initUserRoutes(router *gin.Engine) {
 	docs.SwaggerInfo.BasePath = basePath
 	api := router.Group(basePath)
 
-	api.POST("/login", user.LoginHandler)
-	api.POST("/user", user.CreateUserHandler)
-	api.GET("/user", helper.AuthMiddleware(), user.GetUserHandler)
-	api.PUT("/user", helper.AuthMiddleware(), user.UpdateUserHandler)
-	api.DELETE("/user", helper.AuthMiddleware(), user.DeleteUserHandler)
-	api.GET("/users", helper.AuthMiddleware(), user.GetAllUsersHandler)
+	api.POST("/login", helper.Middleware(false), user.LoginHandler)
+	api.POST("/user", helper.Middleware(false), user.CreateUserHandler)
+	api.GET("/user", helper.DefaultMiddleware(), user.GetUserHandler)
+	api.PUT("/user", helper.DefaultMiddleware(), user.UpdateUserHandler)
+	api.DELETE("/user", helper.DefaultMiddleware(), user.DeleteUserHandler)
+	api.GET("/users", helper.DefaultMiddleware(), user.GetAllUsersHandler)
 
 	api.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 }
