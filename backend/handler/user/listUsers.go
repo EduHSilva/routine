@@ -4,6 +4,7 @@ import (
 	"github.com/EduHSilva/routine/helper"
 	"github.com/EduHSilva/routine/schemas"
 	"github.com/gin-gonic/gin"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"net/http"
 )
 
@@ -22,11 +23,12 @@ import (
 // @Router /user [GET]
 func GetAllUsersHandler(ctx *gin.Context) {
 	var users []schemas.User
+	getI18n, _ := ctx.Get("i18n")
 
 	if err := db.Find(&users).Error; err != nil {
-		helper.SendError(ctx, http.StatusInternalServerError, "error getting users from database")
+		helper.SendErrorDefault(ctx, http.StatusInternalServerError, getI18n.(*i18n.Localizer))
 		return
 	}
 
-	helper.SendSuccess(ctx, "list-users", users)
+	helper.SendSuccess(ctx, users)
 }

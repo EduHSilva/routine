@@ -1,9 +1,11 @@
 package helper
 
 import (
+	"github.com/EduHSilva/routine/config"
 	"github.com/EduHSilva/routine/schemas"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"net/http"
 	"os"
 	"strings"
@@ -45,7 +47,10 @@ func Middleware(auth bool) gin.HandlerFunc {
 		if locale == "" {
 			locale = "en"
 		}
-		ctx.Set("locale", locale)
+
+		localizer := i18n.NewLocalizer(config.GetBundler(), locale)
+
+		ctx.Set("i18n", localizer)
 
 		ctx.Next()
 	}

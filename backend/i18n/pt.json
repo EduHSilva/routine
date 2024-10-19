@@ -1,5 +1,9 @@
 {
   "userNotFound": "Usuário não encontrado!",
   "genericError500": "Erro ao buscar no servidor!",
-  "invalidCredentials": "Informações de login incorretas. Tente novamente."
+  "invalidCredentials": "Informações de login incorretas. Tente novamente.",
+  "categoryAlreadyExists": "",
+  "notFound": "Não encontrado",
+  "unauthorized": "Sem autorização",
+  "hasTaskRule": "Há uma regra associada a categoria e não podemos exclui-la."
 }

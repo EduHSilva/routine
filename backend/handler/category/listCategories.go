@@ -1,7 +1,6 @@
 package category
 
 import (
-	"github.com/EduHSilva/routine/config"
 	"github.com/EduHSilva/routine/helper"
 	"github.com/EduHSilva/routine/schemas"
 	"github.com/gin-gonic/gin"
@@ -25,29 +24,18 @@ import (
 func GetAllCategoriesHandler(ctx *gin.Context) {
 	var categoryResponses []ResponseData
 
-	locale, exists := ctx.Get("locale")
-	if !exists {
-		locale = "en"
-	}
-
-	localizer := i18n.NewLocalizer(config.GetBundler(), locale.(string))
+	getI18n, _ := ctx.Get("i18n")
 
 	userID, exists := ctx.Get("user_id")
 	if !exists {
-		message := localizer.MustLocalize(&i18n.LocalizeConfig{
-			MessageID: "userNotFound",
-		})
-		helper.SendError(ctx, http.StatusUnauthorized, message)
+		helper.SendErrorDefault(ctx, http.StatusUnauthorized, getI18n.(*i18n.Localizer))
 		return
 	}
 
-	if err := db.Where("user_id = ? OR system = 1", userID).Model(&schemas.Category{}).Scan(&categoryResponses).Error; err != nil {
-		message := localizer.MustLocalize(&i18n.LocalizeConfig{
-			MessageID: "genericError500",
-		})
-		helper.SendError(ctx, http.StatusInternalServerError, message)
+	if err := db.Where("user_id = ? OR system = 1", userID).Order("title").Model(&schemas.Category{}).Scan(&categoryResponses).Error; err != nil {
+		helper.SendErrorDefault(ctx, http.StatusInternalServerError, getI18n.(*i18n.Localizer))
 		return
 	}
 
-	helper.SendSuccess(ctx, "list-categories", categoryResponses)
+	helper.SendSuccess(ctx, categoryResponses)
 }

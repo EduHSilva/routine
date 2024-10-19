@@ -19,7 +19,7 @@ class CustomModalDelete extends StatefulWidget {
 }
 
 class CustomModalDeleteState extends State<CustomModalDelete> {
-  late List<TextEditingController> controllers;
+  List<TextEditingController> controllers = [];
   Color selectedColor = Colors.green;
 
   @override

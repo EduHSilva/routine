@@ -2,7 +2,6 @@ package user
 
 import (
 	"errors"
-	"github.com/EduHSilva/routine/config"
 	"github.com/EduHSilva/routine/helper"
 	"github.com/EduHSilva/routine/schemas"
 	"github.com/gin-gonic/gin"
@@ -29,12 +28,7 @@ import (
 func LoginHandler(ctx *gin.Context) {
 	loginRequest := &LoginRequest{}
 
-	locale, exists := ctx.Get("locale")
-	if !exists {
-		locale = "en"
-	}
-
-	localizer := i18n.NewLocalizer(config.GetBundler(), locale.(string))
+	getI18n, _ := ctx.Get("i18n")
 
 	if err := ctx.BindJSON(&loginRequest); err != nil {
 		logger.ErrF("validation error: %v", err.Error())
@@ -42,14 +36,14 @@ func LoginHandler(ctx *gin.Context) {
 		return
 	}
 
-	findOne(ctx, loginRequest.Email, loginRequest.Password, localizer)
+	findOne(ctx, loginRequest.Email, loginRequest.Password, getI18n.(*i18n.Localizer))
 }
 
-func findOne(ctx *gin.Context, email, password string, localizer *i18n.Localizer) {
+func findOne(ctx *gin.Context, email, password string, getI18n *i18n.Localizer) {
 	user := &schemas.User{}
 
 	if err := db.Where("Email = ?", email).First(user).Error; err != nil {
-		message := localizer.MustLocalize(&i18n.LocalizeConfig{
+		message := getI18n.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: "invalidCredentials",
 		})
 		helper.SendError(ctx, http.StatusBadRequest, message)
@@ -58,7 +52,7 @@ func findOne(ctx *gin.Context, email, password string, localizer *i18n.Localizer
 
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil && errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
-		message := localizer.MustLocalize(&i18n.LocalizeConfig{
+		message := getI18n.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: "invalidCredentials",
 		})
 		helper.SendError(ctx, http.StatusBadRequest, message)
@@ -67,10 +61,7 @@ func findOne(ctx *gin.Context, email, password string, localizer *i18n.Localizer
 
 	tokenString, err := createToken(user)
 	if err != nil {
-		message := localizer.MustLocalize(&i18n.LocalizeConfig{
-			MessageID: "genericError500",
-		})
-		helper.SendError(ctx, http.StatusInternalServerError, message)
+		helper.SendErrorDefault(ctx, http.StatusInternalServerError, getI18n)
 		return
 	}
 
@@ -78,7 +69,7 @@ func findOne(ctx *gin.Context, email, password string, localizer *i18n.Localizer
 	data.Token = tokenString
 	data.User = ConvertUserToUserResponse(user)
 
-	helper.SendSuccess(ctx, "login", data)
+	helper.SendSuccess(ctx, data)
 }
 
 func createToken(user *schemas.User) (string, error) {

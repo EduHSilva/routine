@@ -1,10 +1,10 @@
 package category
 
 import (
-	"fmt"
 	"github.com/EduHSilva/routine/helper"
 	"github.com/EduHSilva/routine/schemas"
 	"github.com/gin-gonic/gin"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"net/http"
 )
 
@@ -25,6 +25,8 @@ import (
 // @Router /category [PUT]
 func UpdateCategoryHandler(ctx *gin.Context) {
 	request := UpdateCategoryRequest{}
+
+	getI18n, _ := ctx.Get("i18n")
 
 	if err := ctx.BindJSON(&request); err != nil {
 		logger.ErrF("validation error: %v", err.Error())
@@ -49,7 +51,7 @@ func UpdateCategoryHandler(ctx *gin.Context) {
 	category := &schemas.Category{}
 
 	if err := db.First(&category, id).Error; err != nil {
-		helper.SendError(ctx, http.StatusNotFound, fmt.Sprintf("category with id %s not found", id))
+		helper.SendErrorDefault(ctx, http.StatusNotFound, getI18n.(*i18n.Localizer))
 		return
 	}
 
@@ -66,5 +68,5 @@ func UpdateCategoryHandler(ctx *gin.Context) {
 		helper.SendError(ctx, http.StatusInternalServerError, err.Error())
 	}
 
-	helper.SendSuccess(ctx, "edit-category", ConvertCategoryToCategoryResponse(category))
+	helper.SendSuccess(ctx, ConvertCategoryToCategoryResponse(category))
 }

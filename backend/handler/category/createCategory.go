@@ -5,6 +5,7 @@ import (
 	"github.com/EduHSilva/routine/helper"
 	"github.com/EduHSilva/routine/schemas"
 	"github.com/gin-gonic/gin"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"gorm.io/gorm"
 	"net/http"
 )
@@ -26,6 +27,8 @@ import (
 // @Router /category [POST]
 func CreateCategoryHandler(ctx *gin.Context) {
 	request := CreateCategoryRequest{}
+	getI18n, _ := ctx.Get("i18n")
+
 	if err := ctx.BindJSON(&request); err != nil {
 		logger.ErrF("validation error: %v", err.Error())
 		helper.SendError(ctx, http.StatusBadRequest, err.Error())
@@ -41,11 +44,14 @@ func CreateCategoryHandler(ctx *gin.Context) {
 	var existingCategory schemas.Category
 	if err := db.Where("title = ? and user_id", request.Title, request.UserID).First(&existingCategory).Error; err == nil {
 		logger.Err("Category already exists")
-		helper.SendError(ctx, http.StatusBadRequest, "Category already exists with the same title")
+		message := getI18n.(*i18n.Localizer).MustLocalize(&i18n.LocalizeConfig{
+			MessageID: "categoryAlreadyExists",
+		})
+		helper.SendError(ctx, http.StatusBadRequest, message)
 		return
 	} else if !errors.Is(err, gorm.ErrRecordNotFound) {
 		logger.ErrF("Error checking category existence: %s", err.Error())
-		helper.SendError(ctx, http.StatusInternalServerError, "Internal server error")
+		helper.SendErrorDefault(ctx, http.StatusInternalServerError, getI18n.(*i18n.Localizer))
 		return
 	}
 
@@ -61,5 +67,5 @@ func CreateCategoryHandler(ctx *gin.Context) {
 		return
 	}
 
-	helper.SendSuccess(ctx, "create-category", ConvertCategoryToCategoryResponse(&category))
+	helper.SendSuccess(ctx, ConvertCategoryToCategoryResponse(&category))
 }

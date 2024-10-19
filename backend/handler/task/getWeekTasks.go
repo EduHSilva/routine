@@ -4,6 +4,7 @@ import (
 	"github.com/EduHSilva/routine/helper"
 	"github.com/EduHSilva/routine/schemas"
 	"github.com/gin-gonic/gin"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"gorm.io/gorm"
 	"net/http"
 	"time"
@@ -25,9 +26,10 @@ import (
 // @Router /tasks/week [GET]
 func GetWeekTasksHandler(ctx *gin.Context) {
 	userID, exists := ctx.Get("user_id")
+	getI18n, _ := ctx.Get("i18n")
 
 	if !exists {
-		helper.SendError(ctx, http.StatusUnauthorized, "error getting tasks from database - user not found")
+		helper.SendErrorDefault(ctx, http.StatusNotFound, getI18n.(*i18n.Localizer))
 		return
 	}
 
@@ -42,7 +44,7 @@ func GetWeekTasksHandler(ctx *gin.Context) {
 
 	var task []schemas.Task
 	if err := query.Find(&task).Error; err != nil {
-		helper.SendError(ctx, http.StatusInternalServerError, "error getting tasks from database")
+		helper.SendErrorDefault(ctx, http.StatusInternalServerError, getI18n.(*i18n.Localizer))
 		return
 	}
 
@@ -69,7 +71,7 @@ func GetWeekTasksHandler(ctx *gin.Context) {
 		})
 	}
 
-	helper.SendSuccess(ctx, "get-week-tasks", taskMap)
+	helper.SendSuccess(ctx, taskMap)
 }
 
 func getTaskStatusQuery(userID uint, currentDate time.Time) *gorm.DB {

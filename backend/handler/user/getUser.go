@@ -1,10 +1,10 @@
 package user
 
 import (
-	"fmt"
 	"github.com/EduHSilva/routine/helper"
 	"github.com/EduHSilva/routine/schemas"
 	"github.com/gin-gonic/gin"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"net/http"
 )
 
@@ -24,6 +24,7 @@ import (
 // @Router /user [GET]
 func GetUserHandler(ctx *gin.Context) {
 	id := ctx.Query("id")
+	getI18n, _ := ctx.Get("i18n")
 
 	if id == "" {
 		helper.SendError(ctx, http.StatusBadRequest,
@@ -34,9 +35,9 @@ func GetUserHandler(ctx *gin.Context) {
 	user := &schemas.User{}
 
 	if err := db.First(&user, id).Error; err != nil {
-		helper.SendError(ctx, http.StatusNotFound, fmt.Sprintf("user with id %s not found", id))
+		helper.SendErrorDefault(ctx, http.StatusNotFound, getI18n.(*i18n.Localizer))
 		return
 	}
 
-	helper.SendSuccess(ctx, "get-user", ConvertUserToUserResponse(user))
+	helper.SendSuccess(ctx, ConvertUserToUserResponse(user))
 }

@@ -26,6 +26,7 @@ import (
 // @Router /task/rule [POST]
 func CreateTaskRuleHandler(ctx *gin.Context) {
 	request := CreateTaskRequest{}
+
 	if err := ctx.BindJSON(&request); err != nil {
 		logger.ErrF("validation error: %v", err.Error())
 		helper.SendError(ctx, http.StatusBadRequest, err.Error())
@@ -73,7 +74,7 @@ func CreateTaskRuleHandler(ctx *gin.Context) {
 
 	tx.Commit()
 
-	helper.SendSuccess(ctx, "create-task", ConvertTaskRuleToResponseData(&taskRule))
+	helper.SendSuccess(ctx, ConvertTaskRuleToResponseData(&taskRule))
 }
 
 func createTaskStatus(tx *gorm.DB, task schemas.TaskRule) error {

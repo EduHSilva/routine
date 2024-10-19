@@ -1,10 +1,10 @@
 package task
 
 import (
-	"fmt"
 	"github.com/EduHSilva/routine/helper"
 	"github.com/EduHSilva/routine/schemas"
 	"github.com/gin-gonic/gin"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"gorm.io/gorm"
 	"net/http"
 )
@@ -26,6 +26,7 @@ import (
 // @Router /task/rule [DELETE]
 func DeleteTaskRuleHandler(ctx *gin.Context) {
 	id := ctx.Query("id")
+	getI18n, _ := ctx.Get("i18n")
 
 	if id == "" {
 		helper.SendError(ctx, http.StatusBadRequest,
@@ -44,7 +45,7 @@ func DeleteTaskRuleHandler(ctx *gin.Context) {
 	taskRule := &schemas.TaskRule{}
 
 	if err := db.First(&taskRule, id).Error; err != nil {
-		helper.SendError(ctx, http.StatusNotFound, fmt.Sprintf("task rule with id %s not found", id))
+		helper.SendErrorDefault(ctx, http.StatusNotFound, getI18n.(*i18n.Localizer))
 		return
 	}
 
@@ -57,13 +58,13 @@ func DeleteTaskRuleHandler(ctx *gin.Context) {
 	tx.Commit()
 	tx = db.Begin()
 	if err := db.Delete(&taskRule).Error; err != nil {
-		helper.SendError(ctx, http.StatusInternalServerError, fmt.Sprintf("error deleting category with id %s not found", id))
+		helper.SendErrorDefault(ctx, http.StatusInternalServerError, getI18n.(*i18n.Localizer))
 		return
 	}
 
 	tx.Commit()
 
-	helper.SendSuccess(ctx, "delete-taskRule", ConvertTaskRuleToResponseData(taskRule))
+	helper.SendSuccess(ctx, ConvertTaskRuleToResponseData(taskRule))
 }
 
 func deleteTaskStatus(tx *gorm.DB, id string) error {
