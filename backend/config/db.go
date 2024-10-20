@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/EduHSilva/routine/schemas"
+	"github.com/EduHSilva/routine/schemas/health/workout"
+	"github.com/EduHSilva/routine/schemas/tasks"
 	"github.com/EduHSilva/routine/seeds"
 	"github.com/glebarez/sqlite"
 	"gorm.io/driver/postgres"
@@ -12,7 +14,7 @@ import (
 )
 
 func InitDatabase() (*gorm.DB, error) {
-	logger := GetLogger("PG")
+	logger = GetLogger("PG")
 
 	var db *gorm.DB
 	var err error
@@ -32,7 +34,19 @@ func InitDatabase() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	err = db.AutoMigrate(&schemas.User{}, &schemas.Category{}, &schemas.TaskRule{}, &schemas.Task{})
+	err = db.AutoMigrate(
+		&schemas.User{},
+		&tasks.CategoryTask{},
+		&tasks.TaskRule{},
+		&tasks.Task{},
+		&workout.Alternative{},
+		&workout.Muscle{},
+		&workout.Exercise{},
+		&workout.Variation{},
+		&workout.Workout{},
+		&workout.ExerciseWorkout{},
+		&workout.ExerciseMuscle{},
+	)
 
 	seeds.Load(db)
 

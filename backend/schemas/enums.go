@@ -18,3 +18,21 @@ const (
 	Normal    Priority = "normal"
 	Low       Priority = "low"
 )
+
+type MuscleHead string
+
+const (
+	HeadLong     MuscleHead = "Long"
+	HeadShort    MuscleHead = "Short"
+	HeadMiddle   MuscleHead = "Middle"
+	HeadSuperior MuscleHead = "Superior"
+	HeadInferior MuscleHead = "Inferior"
+)
+
+type MuscleFunction string
+
+const (
+	Target     MuscleFunction = "Target"
+	Synergist  MuscleFunction = "Synergist"
+	Stabilizer MuscleFunction = "Stabilizer"
+)

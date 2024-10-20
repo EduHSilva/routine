@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/EduHSilva/routine/docs"
-	"github.com/EduHSilva/routine/handler/task"
+	"github.com/EduHSilva/routine/handler/tasks/task"
 	"github.com/EduHSilva/routine/helper"
 	"github.com/gin-gonic/gin"
 )

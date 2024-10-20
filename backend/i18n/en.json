@@ -2,7 +2,7 @@
   "userNotFound": "User not found!",
   "genericError500": "Error on server!",
   "invalidCredentials": "Invalid login credentials. Please try again",
-  "categoryAlreadyExists": "Category already exists with the same title",
+  "alreadyExists": "Already exists!",
   "notFound": "Not found",
   "unauthorized": "Unauthorized",
   "hasTaskRule": "There is a rule associated with the category and we cannot delete it."

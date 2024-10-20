@@ -4,11 +4,10 @@ import 'package:http/http.dart' as http;
 import '../config/app_config.dart';
 import '../models/tasks/category_model.dart';
 
-
 class CategoryService {
   Future<CategoryResponse?> createCategory(
       CreateCategoryRequest createCategoryRequest) async {
-    final String apiUrl = '${AppConfig.apiUrl}category';
+    final String apiUrl = '${AppConfig.apiUrl}tasks/category';
     http.Client client = await AppConfig.getHttpClient();
 
     try {
@@ -37,17 +36,16 @@ class CategoryService {
   Future<List<Category>> fetchCategories() async {
     http.Client client = await AppConfig.getHttpClient();
     final response =
-        await client.get(Uri.parse('${AppConfig.apiUrl}categories'));
+        await client.get(Uri.parse('${AppConfig.apiUrl}tasks/categories'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
 
       List<Category> categories = [];
 
-      if(data['data'] != null) {
-        categories = List<Category>.from(
-            data['data'].map((categoryData) =>
-                Category.fromJson(categoryData)));
+      if (data['data'] != null) {
+        categories = List<Category>.from(data['data']
+            .map((categoryData) => Category.fromJson(categoryData)));
       }
 
       return categories;
@@ -59,7 +57,7 @@ class CategoryService {
   Future<CategoryResponse> getCategory(int id) async {
     http.Client client = await AppConfig.getHttpClient();
     final response =
-    await client.get(Uri.parse('${AppConfig.apiUrl}category?id=$id'));
+        await client.get(Uri.parse('${AppConfig.apiUrl}tasks/category?id=$id'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
@@ -73,7 +71,7 @@ class CategoryService {
   }
 
   Future<CategoryResponse?> deleteCategory(int id) async {
-    final String apiUrl = '${AppConfig.apiUrl}category';
+    final String apiUrl = '${AppConfig.apiUrl}tasks/category';
     http.Client client = await AppConfig.getHttpClient();
 
     try {
@@ -92,15 +90,17 @@ class CategoryService {
     }
   }
 
-  Future<CategoryResponse?> editCategory(int id, String title, String color) async {
-    final String apiUrl = '${AppConfig.apiUrl}category';
+  Future<CategoryResponse?> editCategory(
+      int id, String title, String color) async {
+    final String apiUrl = '${AppConfig.apiUrl}tasks/category';
     http.Client client = await AppConfig.getHttpClient();
 
     try {
-      final response = await client.put(Uri.parse("$apiUrl?id=$id"), body: jsonEncode(<String, dynamic>{
-        'title': title,
-        'color': color,
-      }));
+      final response = await client.put(Uri.parse("$apiUrl?id=$id"),
+          body: jsonEncode(<String, dynamic>{
+            'title': title,
+            'color': color,
+          }));
 
       final Map<String, dynamic> jsonResponse = json.decode(response.body);
 

@@ -227,6 +227,89 @@ definitions:
       name:
         type: string
     type: object
+  workout.CreateWorkoutRequest:
+    properties:
+      exercises:
+        items:
+          $ref: '#/definitions/workout.ExerciseWorkoutRequest'
+        type: array
+      name:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  workout.ExerciseWorkoutRequest:
+    properties:
+      exercise_id:
+        type: integer
+      load:
+        type: number
+      repetitions:
+        type: integer
+      rest_seconds:
+        type: integer
+      series:
+        type: integer
+      workout_id:
+        type: integer
+    type: object
+  workout.ResponseData:
+    properties:
+      createAt:
+        type: string
+      deletedAt:
+        type: string
+      exercises:
+        items:
+          $ref: '#/definitions/workout.ResponseDataExercise'
+        type: array
+      id:
+        type: integer
+      name:
+        type: string
+      updateAt:
+        type: string
+    type: object
+  workout.ResponseDataExercise:
+    properties:
+      body_part:
+        type: string
+      id:
+        type: integer
+      instructions:
+        type: string
+      load:
+        type: number
+      name:
+        type: string
+      rest_seconds:
+        type: integer
+      series:
+        type: integer
+    type: object
+  workout.ResponseExercises:
+    properties:
+      data:
+        $ref: '#/definitions/workout.ResponseDataExercise'
+      message:
+        type: string
+    type: object
+  workout.ResponseWorkout:
+    properties:
+      data:
+        $ref: '#/definitions/workout.ResponseData'
+      message:
+        type: string
+    type: object
+  workout.UpdateWorkoutRequest:
+    properties:
+      exercises:
+        items:
+          $ref: '#/definitions/workout.ExerciseWorkoutRequest'
+        type: array
+      name:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
@@ -846,4 +929,222 @@ paths:
       summary: Update user
       tags:
       - User
+  /workout:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a workout
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/workout.ResponseWorkout'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete workout
+      tags:
+      - Workout
+    get:
+      consumes:
+      - application/json
+      description: Get one workout
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/workout.ResponseWorkout'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get workout
+      tags:
+      - Workout
+    post:
+      consumes:
+      - application/json
+      description: Create a new workout
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/workout.CreateWorkoutRequest'
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/workout.ResponseWorkout'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create workout
+      tags:
+      - Workout
+    put:
+      consumes:
+      - application/json
+      description: Update the name and exercises of workout
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/workout.UpdateWorkoutRequest'
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/workout.ResponseWorkout'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update workout
+      tags:
+      - Workout
+  /workout/exercises:
+    get:
+      consumes:
+      - application/json
+      description: Get all exercises
+      parameters:
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/workout.ResponseExercises'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get exerciser
+      tags:
+      - Workout
+  /workouts:
+    get:
+      consumes:
+      - application/json
+      description: Get all workouts
+      parameters:
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/workout.ResponseWorkout'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get workouts
+      tags:
+      - Workout
 swagger: "2.0"
