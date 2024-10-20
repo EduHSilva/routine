@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../config/design_system.dart';
@@ -23,7 +24,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       title: Text(
-        title,
+        title.tr(),
         style: const TextStyle(color: AppColors.onPrimary),
       ),
       actions: actions,

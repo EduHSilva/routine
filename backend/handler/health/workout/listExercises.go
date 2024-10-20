@@ -22,7 +22,7 @@ import (
 // @Param x-access-token header string true "Access token"
 // @Router /workout/exercises [GET]
 func GetExercisesHandler(ctx *gin.Context) {
-	var exercisesResponses []ResponseExercises
+	var exercisesResponses []ResponseDataExercise
 
 	getI18n, _ := ctx.Get("i18n")
 

@@ -1,5 +1,6 @@
 import 'package:app/views/auth/register_view.dart';
 import 'package:app/views/auth/splash_view.dart';
+import 'package:app/views/health/health_view.dart';
 import 'package:app/views/tasks/tasks_view.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -75,6 +76,7 @@ class MyAppState extends State<MyApp> {
         '/register': (context) => const RegisterView(),
         '/home': (context) => const HomeView(),
         '/tasks': (context) => const TasksView(),
+        '/health': (context) => const HealthView(),
       },
     );
   }
