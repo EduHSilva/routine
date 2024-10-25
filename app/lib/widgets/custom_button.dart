@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import '../config/design_system.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;

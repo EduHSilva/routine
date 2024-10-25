@@ -1,4 +1,4 @@
-name: app
+name: routine
 description: "A new Flutter project."
 publish_to: 'none'
 
@@ -19,6 +19,7 @@ dependencies:
   logger: ^2.4.0
   flutter_colorpicker: ^1.0.3
   google_fonts: ^6.2.1
+  basic_utils: ^5.7.0
 
 dev_dependencies:
   flutter_test:

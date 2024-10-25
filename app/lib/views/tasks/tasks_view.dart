@@ -1,6 +1,6 @@
-import 'package:app/views/tasks/tabs/all_tasks_tab.dart';
-import 'package:app/views/tasks/tabs/category_tab.dart';
-import 'package:app/views/tasks/tabs/rules_tab.dart';
+import 'package:routine/views/tasks/tabs/all_tasks_tab.dart';
+import 'package:routine/views/tasks/tabs/category_tab.dart';
+import 'package:routine/views/tasks/tabs/rules_tab.dart';
 import 'package:flutter/material.dart';
 
 import '../../config/design_system.dart';

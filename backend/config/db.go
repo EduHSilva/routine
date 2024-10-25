@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/EduHSilva/routine/schemas"
+	"github.com/EduHSilva/routine/schemas/health/diet"
 	"github.com/EduHSilva/routine/schemas/health/workout"
 	"github.com/EduHSilva/routine/schemas/tasks"
 	"github.com/EduHSilva/routine/seeds"
@@ -46,6 +47,8 @@ func InitDatabase() (*gorm.DB, error) {
 		&workout.Workout{},
 		&workout.ExerciseWorkout{},
 		&workout.ExerciseMuscle{},
+		&diet.Meal{},
+		&diet.Food{},
 	)
 
 	seeds.Load(db)

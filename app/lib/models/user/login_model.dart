@@ -1,5 +1,5 @@
 
-import 'package:app/models/user/user_model.dart';
+import 'package:routine/models/user/user_model.dart';
 
 import '../response.dart';
 

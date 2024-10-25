@@ -1,8 +1,8 @@
-import 'package:app/config/design_system.dart';
-import 'package:app/models/health/workout_model.dart';
-import 'package:app/viewmodels/workout_viewmodel.dart';
-import 'package:app/views/health/health_view.dart';
-import 'package:app/widgets/custom_button.dart';
+import 'package:routine/config/design_system.dart';
+import 'package:routine/models/health/workout_model.dart';
+import 'package:routine/viewmodels/workout_viewmodel.dart';
+import 'package:routine/views/health/health_view.dart';
+import 'package:routine/widgets/custom_button.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 

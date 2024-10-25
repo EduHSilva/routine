@@ -1,36 +1,38 @@
 import 'package:routine/models/health/workout_model.dart';
+import 'package:routine/services/diet_service.dart';
 import 'package:routine/services/workout_service.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../config/app_config.dart';
+import '../models/health/diet_model.dart';
 
-class WorkoutViewModel {
-  final WorkoutService _workoutService = WorkoutService();
+class DietViewModel {
+  final DietService _dietService = DietService();
   ValueNotifier<bool> isLoading = ValueNotifier(false);
   ValueNotifier<String?> errorMessage = ValueNotifier(null);
-  ValueNotifier<List<Exercise>> exercises = ValueNotifier([]);
-  ValueNotifier<List<Workout>> workouts = ValueNotifier([]);
+  ValueNotifier<List<Food>> foods = ValueNotifier([]);
+  ValueNotifier<List<Meal>> meals = ValueNotifier([]);
 
-  Future<void> fetchExercises() async {
+  Future<void> fetchFoods(search) async {
     try {
-      exercises.value = [];
+      foods.value = [];
       isLoading.value = true;
-      List<Exercise> response = await _workoutService.fetchExercises();
-      exercises.value = response;
+      List<Food> response = await _dietService.fetchFoods(search);
+      foods.value = response;
     } catch (e) {
-      errorMessage.value = "Error fetching exercises";
+      errorMessage.value = "Error fetching foods";
       AppConfig.getLogger().e(e);
     } finally {
       isLoading.value = false;
     }
   }
 
-  Future<WorkoutResponse?> deleteWorkout(int id) async {
+  Future<MealResponse?> deleteMeal(int id) async {
     try {
       isLoading.value = true;
-      WorkoutResponse? response = await _workoutService.deleteWorkout(id);
-      if (response?.workout != null) {
-        await fetchWorkouts();
+      MealResponse? response = await _dietService.deleteMeal(id);
+      if (response?.meal != null) {
+        await fetchMeals();
       } else {
         errorMessage.value = response?.message;
       }
@@ -43,27 +45,27 @@ class WorkoutViewModel {
     return null;
   }
 
-  Future<void> fetchWorkouts() async {
-    workouts.value = [];
+  Future<void> fetchMeals() async {
+    meals.value = [];
     try {
       isLoading.value = true;
-      List<Workout> response = await _workoutService.fetchWorkouts();
-      workouts.value = response;
+      List<Meal> response = await _dietService.fetchMeals();
+      meals.value = response;
     } catch (e) {
-      errorMessage.value = "Error fetching workoutss";
+      errorMessage.value = "Error fetching meals";
       AppConfig.getLogger().e(e);
     } finally {
       isLoading.value = false;
     }
   }
 
-  Future<WorkoutResponse?> getWorkout(int id) async {
+  Future<MealResponse?> getMeal(int id) async {
     try {
       isLoading.value = true;
 
-      WorkoutResponse? response = await _workoutService.getWorkout(id);
+      MealResponse? response = await _dietService.getMeal(id);
 
-      if (response.workout == null) {
+      if (response.meal == null) {
         errorMessage.value = response.message;
       }
 
@@ -76,13 +78,13 @@ class WorkoutViewModel {
     return null;
   }
 
-  Future<WorkoutResponse?> addWorkout(CreateWorkoutRequest request) async {
+  Future<MealResponse?> addMeal(CreateMealRequest request) async {
     try {
       isLoading.value = true;
-      WorkoutResponse? response =
-      await _workoutService.addWorkout(request);
-      if (response?.workout != null) {
-        await fetchWorkouts();
+      MealResponse? response =
+      await _dietService.addMeal(request);
+      if (response?.meal != null) {
+        await fetchMeals();
       } else {
         errorMessage.value = errorMessage.value = response?.message;
       }
@@ -95,14 +97,14 @@ class WorkoutViewModel {
     return null;
   }
 
-  Future<WorkoutResponse?> editWorkout(
-      int id, UpdateWorkoutRequest request) async {
+  Future<MealResponse?> editMeal(
+      int id, UpdateMealRequest request) async {
     try {
       isLoading.value = true;
-      WorkoutResponse? response =
-          await _workoutService.editWorkout(id, request);
-      if (response?.workout != null) {
-        await fetchWorkouts();
+      MealResponse? response =
+          await _dietService.editMeal(id, request);
+      if (response?.meal != null) {
+        await fetchMeals();
       } else {
         errorMessage.value = errorMessage.value = response?.message;
       }

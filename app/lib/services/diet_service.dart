@@ -4,85 +4,86 @@ import 'package:routine/models/health/workout_model.dart';
 import 'package:http/http.dart' as http;
 
 import '../config/app_config.dart';
+import '../models/health/diet_model.dart';
 
 
-class WorkoutService {
-  Future<List<Exercise>> fetchExercises() async {
+class DietService {
+  Future<List<Food>> fetchFoods(search) async {
     http.Client client = await AppConfig.getHttpClient();
     final response = await client.get(Uri.parse(
-        '${AppConfig.apiUrl}workout/exercises'));
+        '${AppConfig.apiUrl}meal/food?query=$search'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
 
 
-      List<Exercise> exercises = [];
+      List<Food> foods = [];
 
-      if (data['data'] != null) {
-        exercises = List<Exercise>.from(data['data'].map((exe) => Exercise.fromJson(exe)));
+      if (data['common'] != null) {
+        foods = List<Food>.from(data['common'].map((food) => Food.fromJson(food)));
       }
 
-      return exercises;
+      return foods;
     } else {
       throw Exception('Failed to load exercises');
     }
   }
 
-  Future<List<Workout>> fetchWorkouts() async {
+  Future<List<Meal>> fetchMeals() async {
     http.Client client = await AppConfig.getHttpClient();
     final response =
-        await client.get(Uri.parse('${AppConfig.apiUrl}workouts'));
+        await client.get(Uri.parse('${AppConfig.apiUrl}meals'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
 
-      List<Workout> workouts = [];
+      List<Meal> diets = [];
 
       if (data['data'] != null) {
-        workouts =
-            List<Workout>.from(data['data'].map((w) => Workout.fromJson(w)));
+        diets =
+            List<Meal>.from(data['data'].map((task) => Meal.fromJson(task)));
       }
 
-      return workouts;
+      return diets;
     } else {
-      throw Exception('Failed to load workouts');
+      throw Exception('Failed to load meals');
     }
   }
 
-  Future<WorkoutResponse> getWorkout(int id) async {
+  Future<MealResponse> getMeal(int id) async {
     http.Client client = await AppConfig.getHttpClient();
     final response =
-        await client.get(Uri.parse('${AppConfig.apiUrl}workout?id=$id'));
+        await client.get(Uri.parse('${AppConfig.apiUrl}meal?id=$id'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
 
-      WorkoutResponse? workoutResponse = WorkoutResponse.fromJson(jsonResponse);
+      MealResponse? dietResponse = MealResponse.fromJson(jsonResponse);
 
-      return workoutResponse;
+      return dietResponse;
     } else {
-      throw Exception('Failed to load workout');
+      throw Exception('Failed to load meal');
     }
   }
 
-  Future<WorkoutResponse?> addWorkout(CreateWorkoutRequest request) async {
-    final String apiUrl = '${AppConfig.apiUrl}workout';
+  Future<MealResponse?> addMeal(CreateMealRequest request) async {
+    final String apiUrl = '${AppConfig.apiUrl}meal';
     http.Client client = await AppConfig.getHttpClient();
 
     try {
       final response = await client.post(Uri.parse(apiUrl),
           body: jsonEncode(<String, dynamic>{
             'name': request.name,
-            'exercises': request.exercises,
+            'foods': request.foods,
             'user_id': request.userID
           }));
 
       final Map<String, dynamic> jsonResponse = json.decode(response.body);
 
       if (response.statusCode == 200) {
-        return WorkoutResponse.fromJson(jsonResponse);
+        return MealResponse.fromJson(jsonResponse);
       } else {
-        return WorkoutResponse(message: jsonResponse['message']);
+        return MealResponse(message: jsonResponse['message']);
       }
     } catch (e) {
       AppConfig.getLogger().e(e);
@@ -90,23 +91,23 @@ class WorkoutService {
     }
   }
 
-  Future<WorkoutResponse?> editWorkout(int id, UpdateWorkoutRequest request) async {
-    final String apiUrl = '${AppConfig.apiUrl}workout';
+  Future<MealResponse?> editMeal(int id, UpdateMealRequest request) async {
+    final String apiUrl = '${AppConfig.apiUrl}meal';
     http.Client client = await AppConfig.getHttpClient();
 
     try {
       final response = await client.put(Uri.parse("$apiUrl?id=$id"),
           body: jsonEncode(<String, dynamic>{
             'name': request.name,
-            'exercises': request.exercises,
+            'foods': request.foods,
           }));
 
       final Map<String, dynamic> jsonResponse = json.decode(response.body);
 
       if (response.statusCode == 200) {
-        return WorkoutResponse.fromJson(jsonResponse);
+        return MealResponse.fromJson(jsonResponse);
       } else {
-        return WorkoutResponse(message: jsonResponse['message']);
+        return MealResponse(message: jsonResponse['message']);
       }
     } catch (e) {
       AppConfig.getLogger().e(e);
@@ -114,8 +115,8 @@ class WorkoutService {
     }
   }
 
-  Future<WorkoutResponse?> deleteWorkout(int id) async {
-    final String apiUrl = '${AppConfig.apiUrl}workout';
+  Future<MealResponse?> deleteMeal(int id) async {
+    final String apiUrl = '${AppConfig.apiUrl}meal';
     http.Client client = await AppConfig.getHttpClient();
 
     try {
@@ -124,9 +125,9 @@ class WorkoutService {
       final Map<String, dynamic> jsonResponse = json.decode(response.body);
 
       if (response.statusCode == 200) {
-        return WorkoutResponse.fromJson(jsonResponse);
+        return MealResponse.fromJson(jsonResponse);
       } else {
-        return WorkoutResponse(message: jsonResponse['message']);
+        return MealResponse(message: jsonResponse['message']);
       }
     } catch (e) {
       AppConfig.getLogger().e(e);

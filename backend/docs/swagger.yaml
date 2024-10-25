@@ -48,6 +48,81 @@ definitions:
       title:
         type: string
     type: object
+  diet.CreateMealRequest:
+    properties:
+      foods:
+        items:
+          $ref: '#/definitions/diet.FoodRequest'
+        type: array
+      name:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  diet.FoodRequest:
+    properties:
+      exercise_id:
+        type: integer
+      image_url:
+        type: string
+      name:
+        type: string
+      observation:
+        type: string
+      quantity:
+        type: integer
+    type: object
+  diet.PhotoField:
+    properties:
+      thumb:
+        type: string
+    type: object
+  diet.ResponseData:
+    properties:
+      createAt:
+        type: string
+      deletedAt:
+        type: string
+      foods:
+        items:
+          $ref: '#/definitions/diet.ResponseDataFood'
+        type: array
+      id:
+        type: integer
+      name:
+        type: string
+      updateAt:
+        type: string
+    type: object
+  diet.ResponseDataFood:
+    properties:
+      food_name:
+        type: string
+      observation:
+        type: string
+      photo:
+        $ref: '#/definitions/diet.PhotoField'
+      quantity:
+        type: integer
+      tag_id:
+        type: integer
+    type: object
+  diet.ResponseFood:
+    properties:
+      data:
+        $ref: '#/definitions/diet.ResponseDataFood'
+      message:
+        type: string
+    type: object
+  diet.UpdateMealRequest:
+    properties:
+      foods:
+        items:
+          $ref: '#/definitions/diet.FoodRequest'
+        type: array
+      name:
+        type: string
+    type: object
   helper.ErrorResponse:
     properties:
       code:
@@ -502,6 +577,46 @@ paths:
       summary: Update category
       tags:
       - Category
+  /diet/food:
+    get:
+      consumes:
+      - application/json
+      description: Search food for a diet
+      parameters:
+      - description: query
+        in: query
+        name: search
+        required: true
+        type: string
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/diet.ResponseFood'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Search food
+      tags:
+      - Diet
   /login:
     post:
       consumes:
@@ -532,6 +647,152 @@ paths:
       summary: Login
       tags:
       - User
+  /meal:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a meal
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/diet.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete meal
+      tags:
+      - Diet
+    get:
+      consumes:
+      - application/json
+      description: Get one meal
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/diet.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get meal
+      tags:
+      - Diet
+    post:
+      consumes:
+      - application/json
+      description: Create a new meal
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/diet.CreateMealRequest'
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/diet.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create meal
+      tags:
+      - Diet
+  /meals:
+    get:
+      consumes:
+      - application/json
+      description: Get all meals
+      parameters:
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/diet.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get meals
+      tags:
+      - Diet
   /task:
     put:
       consumes:

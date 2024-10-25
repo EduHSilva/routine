@@ -1,7 +1,7 @@
-import 'package:app/views/auth/register_view.dart';
-import 'package:app/views/auth/splash_view.dart';
-import 'package:app/views/health/health_view.dart';
-import 'package:app/views/tasks/tasks_view.dart';
+import 'package:routine/views/auth/register_view.dart';
+import 'package:routine/views/auth/splash_view.dart';
+import 'package:routine/views/health/health_view.dart';
+import 'package:routine/views/tasks/tasks_view.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'config/app_config.dart';
@@ -68,7 +68,7 @@ class MyAppState extends State<MyApp> {
       locale: context.locale,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.light,
       initialRoute: _initialRoute,
       routes: {
         '/splash': (context) => const SplashView(),

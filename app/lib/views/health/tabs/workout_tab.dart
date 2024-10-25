@@ -1,4 +1,4 @@
-import 'package:app/models/health/workout_model.dart';
+import 'package:routine/models/health/workout_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 

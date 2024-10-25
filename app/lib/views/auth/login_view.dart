@@ -1,4 +1,4 @@
-import 'package:app/views/auth/register_view.dart';
+import 'package:routine/views/auth/register_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../../config/design_system.dart';

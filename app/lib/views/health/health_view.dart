@@ -1,5 +1,5 @@
-import 'package:app/views/health/tabs/diet_tab.dart';
-import 'package:app/views/health/tabs/workout_tab.dart';
+import 'package:routine/views/health/tabs/diet_tab.dart';
+import 'package:routine/views/health/tabs/workout_tab.dart';
 import 'package:flutter/material.dart';
 
 import '../../config/design_system.dart';

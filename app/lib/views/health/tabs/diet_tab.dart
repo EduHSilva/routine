@@ -1,4 +1,5 @@
-import 'package:app/views/health/new_workout_view.dart';
+import 'package:routine/views/health/new_meal_view.dart';
+import 'package:routine/views/health/new_workout_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -69,7 +70,7 @@ class DietTabState extends State<DietTab> {
               builder: (context, tasks, child) {
                 return Scaffold(
                   appBar: AppBar(
-                    title: Text('meal'.tr()),
+                    title: Text('meals'.tr()),
                     automaticallyImplyLeading: false,
                     actions: [
                       IconButton(
@@ -78,7 +79,7 @@ class DietTabState extends State<DietTab> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const NewWorkoutView(),
+                              builder: (context) => const NewMealView(),
                             ),
                           );
                         },
