@@ -28,6 +28,7 @@ import (
 func CreateWorkoutHandler(ctx *gin.Context) {
 	request := CreateWorkoutRequest{}
 	getI18n, _ := ctx.Get("i18n")
+	locale, _ := ctx.Get("locale")
 
 	if err := ctx.BindJSON(&request); err != nil {
 		logger.ErrF("validation error: %v", err.Error())
@@ -77,5 +78,5 @@ func CreateWorkoutHandler(ctx *gin.Context) {
 		return
 	}
 
-	helper.SendSuccess(ctx, ConvertWorkoutToWorkoutResponse(&work))
+	helper.SendSuccess(ctx, ConvertWorkoutToWorkoutResponse(&work, locale))
 }

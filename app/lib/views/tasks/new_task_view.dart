@@ -1,3 +1,4 @@
+import 'package:app/views/tasks/tasks_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -148,7 +149,12 @@ class NewTaskViewState extends State<NewTaskView> {
 
   _handlerResponse(TaskResponse? response) {
     if (response?.task != null) {
-      Navigator.pop(context);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => TasksView(initialIndex: 1),
+        ),
+      );
     } else {
       if (!mounted) return;
       showErrorBar(context, response);

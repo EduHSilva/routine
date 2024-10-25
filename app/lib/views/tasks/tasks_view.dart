@@ -8,7 +8,8 @@ import '../../widgets/custom_appbar.dart';
 import '../../widgets/custom_drawer.dart';
 
 class TasksView extends StatefulWidget {
-  const TasksView({super.key});
+  final int initialIndex;
+  const TasksView({super.key, this.initialIndex = 0});
 
   @override
   TasksViewState createState() => TasksViewState();
@@ -22,9 +23,10 @@ class TasksViewState extends State<TasksView> {
 
   @override
   Widget build(BuildContext context) {
-    return const DefaultTabController(
+    return DefaultTabController(
       length: 3,
-      child: Scaffold(
+      initialIndex: widget.initialIndex,
+      child: const Scaffold(
         appBar: CustomAppBar(
           title: 'tasks',
           bottom: TabBar(

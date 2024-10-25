@@ -35,12 +35,12 @@ func (r CreateWorkoutRequest) Validate() error {
 }
 
 type UpdateWorkoutRequest struct {
-	Title     string                   `json:"name"`
+	Name      string                   `json:"name"`
 	Exercises []ExerciseWorkoutRequest `json:"exercises"`
 }
 
 func (r UpdateWorkoutRequest) Validate() error {
-	if r.Title == "" {
+	if r.Name == "" {
 		return helper.ErrParamIsRequired("name", "string")
 	}
 	if len(r.Exercises) == 0 {

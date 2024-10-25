@@ -1,3 +1,4 @@
+import 'package:app/views/tasks/tasks_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -65,7 +66,12 @@ class NewCategoryViewStateState extends State<NewCategoryView> {
 
   _handleResponse(CategoryResponse? response) {
     if (response?.category != null) {
-      Navigator.pop(context);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => TasksView(initialIndex: 2),
+        ),
+      );
     } else {
       showErrorBar(context, response);
     }

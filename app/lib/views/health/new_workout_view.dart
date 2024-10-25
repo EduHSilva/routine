@@ -1,14 +1,14 @@
+import 'package:app/config/design_system.dart';
+import 'package:app/models/health/workout_model.dart';
+import 'package:app/viewmodels/workout_viewmodel.dart';
+import 'package:app/views/health/health_view.dart';
+import 'package:app/widgets/custom_button.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import '../../../viewmodels/tasks_viewmodel.dart';
 import '../../config/helper.dart';
-import '../../models/enums.dart';
-import '../../models/tasks/category_model.dart';
-import '../../models/tasks/task_model.dart';
-import '../../viewmodels/category_viewmodel.dart';
-import '../../widgets/custom_dropdown.dart';
 import '../../widgets/custom_text_field.dart';
+import 'modals/exercise_modal.dart';
 
 class NewWorkoutView extends StatefulWidget {
   final int? id;
@@ -21,289 +21,268 @@ class NewWorkoutView extends StatefulWidget {
 
 class NewWorkoutViewState extends State<NewWorkoutView> {
   final _formKey = GlobalKey<FormState>();
-  final TasksViewModel _tasksViewModel = TasksViewModel();
-  final CategoryViewModel _categoryViewModel = CategoryViewModel();
+  final WorkoutViewModel _workoutViewModel = WorkoutViewModel();
+  final TextEditingController _nameController = TextEditingController();
 
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _startDateController = TextEditingController();
-  final TextEditingController _endDateController = TextEditingController();
-  final TextEditingController _startTimeController = TextEditingController();
-  final TextEditingController _endTimeController = TextEditingController();
-
-  DropdownItem<Category>? _selectedCategory;
-  DropdownItem<Priority>? _selectedPriority;
-  DropdownItem<Frequency>? _selectedFrequency;
-
-  final List<DropdownItem<Priority>> _priorities = Priority.values
-      .map((priority) => DropdownItem(
-            label: priority.label,
-            value: priority,
-          ))
-      .toList();
-
-  final List<DropdownItem<Frequency>> _frequencies = Frequency.values
-      .map((frequency) => DropdownItem(
-            label: frequency.label,
-            value: frequency,
-          ))
-      .toList();
+  List<Exercise> _selectedExercises = [];
 
   @override
   initState() {
     super.initState();
-    _categoryViewModel.fetchCategories().then((_) {
-      if (widget.id != null) {
-        _loadTaskData(widget.id!);
-      }
-    });
+    if (widget.id != null) {
+      _loadWorkoutData(widget.id!);
+    }
   }
 
-  _loadTaskData(int id) async {
-    TaskResponse? response = await _tasksViewModel.getTask(id);
+  _loadWorkoutData(int id) async {
+    WorkoutResponse? response = await _workoutViewModel.getWorkout(id);
 
-    if (response?.task != null) {
+    if (response?.workout != null) {
       setState(() {
-        _titleController.text = response!.task!.title;
-        _startDateController.text = formatDate(response.task!.dateStart!);
-        _endDateController.text = formatDate(response.task!.dateEnd!);
-        _startTimeController.text = response.task!.startTime;
-        _endTimeController.text = response.task!.endTime;
-
-        Category? category = _categoryViewModel.categories.value.firstWhere(
-            (category) => category.title == response.task!.category);
-
-        _selectedCategory = DropdownItem(
-          label: response.task!.category,
-          value: category,
-        );
-
-        _selectedPriority = _priorities.firstWhere((item) =>
-            item.value ==
-            Priority.values.firstWhere(
-                (priority) => priority.label == response.task!.priority));
-
-        _selectedFrequency = _frequencies.firstWhere((item) =>
-            item.value ==
-            Frequency.values.firstWhere(
-                (frequency) => frequency.label == response.task!.frequency));
+        _nameController.text = response!.workout!.name;
+        _selectedExercises = response.workout!.exercises ?? [];
       });
     }
   }
 
-  Future<void> _selectDate(
-      BuildContext context, TextEditingController controller) async {
-    DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (pickedDate != null) {
-      setState(() {
-        controller.text = DateFormat('yyyy-MM-dd').format(pickedDate);
-      });
-    }
-  }
-
-  Future<void> _selectTime(
-      BuildContext context, TextEditingController controller) async {
-    TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-    if (pickedTime != null) {
-      setState(() {
-        controller.text = pickedTime.format(context);
-      });
-    }
-  }
-
-  _addRule() async {
-    if (_formKey.currentState!.validate()) {
-      TaskResponse? response;
-      if (widget.id == null) {
-        if (_formKey.currentState!.validate()) {
-           response = await _tasksViewModel.addRule(CreateTaskRequest(
-            title: _titleController.text,
-            categoryID: _selectedCategory!.value.id,
-            dateStart: _startDateController.text,
-            dateEnd: _endDateController.text,
-            frequency: _selectedFrequency!.value.label,
-            priority: _selectedPriority!.value.label,
-            startTime: _startTimeController.text,
-            endTime: _endTimeController.text,
-          ));
-        }
-      } else {
-        response = await _tasksViewModel.editTaskRule(
-            widget.id!,
-            UpdateTaskRequest(
-                priority: _selectedPriority!.value.label,
-                categoryID: _selectedCategory!.value.id,
-                title: _titleController.text));
-      }
-      _handlerResponse(response);
-    }
-  }
-
-  _handlerResponse(TaskResponse? response) {
-    if (response?.task != null) {
-      Navigator.pop(context);
+  _handlerResponse(WorkoutResponse? response) {
+    if (response?.workout != null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HealthView(),
+        ),
+      );
     } else {
       if (!mounted) return;
       showErrorBar(context, response);
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: _categoryViewModel.isLoading,
-      builder: (context, isLoading, child) {
-        if (isLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        return ValueListenableBuilder<List<Category>>(
-          valueListenable: _categoryViewModel.categories,
-          builder: (context, categories, child) {
-            final cat = categories
-                .map((category) =>
-                    DropdownItem(label: category.title, value: category))
-                .toList();
+  _addWorkout() async {
+    if (_formKey.currentState!.validate()) {
+      WorkoutResponse? response;
+      if (widget.id == null) {
+        response = await _workoutViewModel.addWorkout(CreateWorkoutRequest(
+          name: _nameController.text,
+          exercises: _selectedExercises,
+        ));
+      } else {
+        response = await _workoutViewModel.editWorkout(
+          widget.id!,
+          UpdateWorkoutRequest(
+            name: _nameController.text,
+            exercises: _selectedExercises,
+          ),
+        );
+      }
+      _handlerResponse(response);
+    }
+  }
 
-            return Scaffold(
-              appBar: AppBar(
-                title: Text('add'.tr()),
-              ),
-              body: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Form(
-                  key: _formKey,
-                  child: ListView(
-                    children: [
-                      const SizedBox(height: 16),
-                      Text(
-                        'newTask'.tr(),
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                      ),
-                      const SizedBox(height: 24),
-                      CustomTextField(
-                        controller: _titleController,
-                        labelText: 'title'.tr(),
-                        validator: requiredFieldValidator,
-                      ),
-                      const SizedBox(height: 16),
-                      CustomDropdown(
-                        labelText: 'category'.tr(),
-                        items: cat,
-                        selectedItem: _selectedCategory,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedCategory =
-                                cat.firstWhere((item) => item.value == value);
-                          });
-                        },
-                        validator: (value) =>
-                            value == null ? 'Select a category' : null,
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: CustomTextField(
-                              controller: _startDateController,
-                              labelText: 'startDate'.tr(),
-                              readOnly: true,
-                              enable: widget.id == null,
-                              onTap: () =>
-                                  _selectDate(context, _startDateController),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: CustomTextField(
-                              controller: _endDateController,
-                              labelText: 'endDate'.tr(),
-                              enable: widget.id == null,
-                              readOnly: true,
-                              onTap: () =>
-                                  _selectDate(context, _endDateController),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: CustomTextField(
-                              controller: _startTimeController,
-                              labelText: 'startTime'.tr(),
-                              enable: widget.id == null,
-                              readOnly: true,
-                              onTap: () =>
-                                  _selectTime(context, _startTimeController),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: CustomTextField(
-                              controller: _endTimeController,
-                              enable: widget.id == null,
-                              labelText: 'endTime'.tr(),
-                              readOnly: true,
-                              onTap: () =>
-                                  _selectTime(context, _endTimeController),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      CustomDropdown(
-                        labelText: 'priority'.tr(),
-                        items: _priorities,
-                        selectedItem: _selectedPriority,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedPriority = _priorities
-                                .firstWhere((item) => item.value == value);
-                          });
-                        },
-                        validator: (value) =>
-                            value == null ? 'Select a priority' : null,
-                      ),
-                      const SizedBox(height: 16),
-                      CustomDropdown(
-                        labelText: 'frequency'.tr(),
-                        items: _frequencies,
-                        selectedItem: _selectedFrequency,
-                        onChanged: widget.id != null
-                            ? null
-                            : (value) {
-                                setState(() {
-                                  _selectedFrequency = _frequencies.firstWhere(
-                                      (item) => item.value == value);
-                                });
-                              },
-                        validator: (value) =>
-                            value == null ? 'Select a frequency' : null,
-                      ),
-                      const SizedBox(height: 32),
-                      ElevatedButton(
-                        onPressed: _addRule,
-                        child: Text('save'.tr()),
-                      ),
-                    ],
-                  ),
-                ),
+  void _openExerciseModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: ExerciseModal(
+                onSelected: (selectedExercises) {
+                  setState(() {
+                    _selectedExercises = selectedExercises;
+                  });
+                },
+                selectedExercises: _selectedExercises,
               ),
             );
           },
         );
       },
+    );
+  }
+
+  void _removeExercise(Exercise exercise) {
+    setState(() {
+      _selectedExercises.remove(exercise);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: widget.id == null ? Text('add'.tr()) : Text('edit'.tr()),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              const SizedBox(height: 16),
+              Text(
+                widget.id == null ? 'newWorkout'.tr() : 'editWorkout',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).primaryColor,
+                    ),
+              ),
+              const SizedBox(height: 24),
+              CustomTextField(
+                controller: _nameController,
+                labelText: 'name'.tr(),
+                validator: requiredFieldValidator,
+              ),
+              const SizedBox(height: 24),
+
+              // Botão de adicionar exercícios
+              CustomButton(
+                onPressed: () => _openExerciseModal(context),
+                text: 'addExercise'.tr(),
+                isOutlined: true,
+              ),
+
+              const SizedBox(height: 16),
+
+              Expanded(
+                child: _selectedExercises.isEmpty
+                    ? Center(child: Text('noData'.tr()))
+                    : ListView.builder(
+                        itemCount: _selectedExercises.length,
+                        itemBuilder: (context, index) {
+                          var exercise = _selectedExercises[index];
+
+                          return Card(
+                            margin: const EdgeInsets.symmetric(vertical: 8),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        exercise.name,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.remove,
+                                            color: Colors.redAccent),
+                                        onPressed: () =>
+                                            _removeExercise(exercise),
+                                      ),
+                                    ],
+                                  ),
+                                  Text(
+                                    '${exercise.bodyPart?.toLowerCase()}'.tr(),
+                                    style: TextStyle(
+                                      color: Colors.grey[700],
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          children: [
+                                            Icon(Icons.fitness_center,
+                                                color: AppColors.primary),
+                                            const SizedBox(height: 4),
+                                            CustomTextField(
+                                              labelText: 'load'.tr(),
+                                              initialValue:
+                                                  exercise.load?.toString(),
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  exercise.load =
+                                                      int.tryParse(value) ?? 0;
+                                                });
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: Column(
+                                          children: [
+                                            Icon(Icons.repeat_one,
+                                                color: AppColors.primary),
+                                            const SizedBox(height: 4),
+                                            CustomTextField(
+                                              labelText: 'series'.tr(),
+                                              initialValue: exercise.series?.toString(),
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  exercise.series =
+                                                      int.tryParse(value) ?? 0;
+                                                });
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: Column(
+                                          children: [
+                                            Icon(Icons.repeat,
+                                                color: AppColors.primary),
+                                            const SizedBox(height: 4),
+                                            CustomTextField(
+                                              labelText: 'repetitions'.tr(),
+                                              initialValue: exercise.repetitions
+                                                  ?.toString(),
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  exercise.repetitions =
+                                                      int.tryParse(value) ?? 0;
+                                                });
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+              ),
+
+              const SizedBox(height: 16),
+              CustomButton(
+                onPressed: _addWorkout,
+                text: 'save'.tr(),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

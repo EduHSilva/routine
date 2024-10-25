@@ -1,5 +1,4 @@
-import 'dart:ffi';
-
+import '../../config/app_config.dart';
 import '../response.dart';
 
 class Workout {
@@ -18,7 +17,9 @@ class Workout {
 
   factory Workout.fromJson(Map<String, dynamic> json) {
     var exercisesFromJson = json['exercises'] as List;
-    List<Exercise> exerciseList = exercisesFromJson.map((exercise) => Exercise.fromJson(exercise)).toList();
+    List<Exercise> exerciseList = exercisesFromJson
+        .map((exercise) => Exercise.fromJson(exercise))
+        .toList();
     return Workout(
         createAt: json['createAt'],
         id: json['id'],
@@ -33,21 +34,31 @@ class Exercise {
   final String name;
   final String? bodyPart;
   final String instructions;
-  final int load;
-  final int series;
-  final int repetitions;
-  final int restSeconds;
+  late int? load;
+  late int? series;
+  late int? repetitions;
+  final int? restSeconds;
 
   Exercise({
     required this.id,
     required this.name,
     this.bodyPart,
     required this.instructions,
-    required this.load,
-    required this.restSeconds,
-    required this.series,
-    required this.repetitions,
+    this.load,
+    this.restSeconds,
+    this.series,
+    this.repetitions,
   });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'exercise_id': id,
+      'repetitions': repetitions,
+      'series': series,
+      'load': load,
+      'rest_seconds': restSeconds,
+    };
+  }
 
   factory Exercise.fromJson(Map<String, dynamic> json) {
     return Exercise(
@@ -77,4 +88,19 @@ class WorkoutResponse extends DefaultResponse {
       message: json['message'],
     );
   }
+}
+
+class CreateWorkoutRequest {
+  final String name;
+  final List<Exercise> exercises;
+  final int userID = AppConfig.user!.id;
+
+  CreateWorkoutRequest({required this.name, required this.exercises});
+}
+
+class UpdateWorkoutRequest {
+  final String name;
+  final List<Exercise> exercises;
+
+  UpdateWorkoutRequest({required this.name, required this.exercises});
 }

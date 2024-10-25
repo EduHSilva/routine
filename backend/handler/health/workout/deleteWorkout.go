@@ -27,6 +27,7 @@ func DeleteWorkoutHandler(ctx *gin.Context) {
 	id := ctx.Query("id")
 
 	getI18n, _ := ctx.Get("i18n")
+	locale, _ := ctx.Get("locale")
 
 	if id == "" {
 		helper.SendError(ctx, http.StatusBadRequest,
@@ -46,5 +47,5 @@ func DeleteWorkoutHandler(ctx *gin.Context) {
 		return
 	}
 
-	helper.SendSuccess(ctx, ConvertWorkoutToWorkoutResponse(work))
+	helper.SendSuccess(ctx, ConvertWorkoutToWorkoutResponse(work, locale))
 }

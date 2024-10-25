@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/EduHSilva/routine/schemas"
 	"github.com/EduHSilva/routine/schemas/health/workout"
+	gt "github.com/bas24/googletranslatefree"
 	"html/template"
 	"io/ioutil"
 	"log"
@@ -66,9 +67,11 @@ func loadExercisesFromFile(filePath string) ([]workout.Exercise, error) {
 		htmlInstructions := instructionsToHTML(input.Instructions)
 
 		exercise := workout.Exercise{
-			Name:         input.Name,
-			BodyPart:     input.BodyPart,
-			Instructions: htmlInstructions,
+			Name:           input.Name,
+			NamePt:         translateFromFile(input.Name, loadTranslations()),
+			BodyPart:       input.BodyPart,
+			Instructions:   htmlInstructions,
+			InstructionsPt: translate(htmlInstructions),
 		}
 
 		for _, alt := range input.Alternatives {
@@ -106,6 +109,33 @@ func loadExercisesFromFile(filePath string) ([]workout.Exercise, error) {
 	}
 
 	return exercises, nil
+}
+
+func translate(text string) string {
+	result, _ := gt.Translate(text, "en", "pt")
+	return result
+}
+
+func loadTranslations() map[string]string {
+	file, err := ioutil.ReadFile("seeds/json/exercises_translations.json")
+	if err != nil {
+		log.Fatalf("Erro ao carregar o arquivo de traduções: %v", err)
+	}
+
+	var translations map[string]string
+	err = json.Unmarshal(file, &translations)
+	if err != nil {
+		log.Fatalf("Erro ao fazer o parse do arquivo de traduções: %v", err)
+	}
+
+	return translations
+}
+
+func translateFromFile(text string, translations map[string]string) string {
+	if translation, exists := translations[text]; exists {
+		return translation
+	}
+	return text
 }
 
 func loadExerciseFromFile() *[]workout.Exercise {

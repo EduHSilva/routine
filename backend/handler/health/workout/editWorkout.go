@@ -27,6 +27,7 @@ func UpdateWorkoutHandler(ctx *gin.Context) {
 	request := UpdateWorkoutRequest{}
 
 	getI18n, _ := ctx.Get("i18n")
+	locale, _ := ctx.Get("locale")
 
 	if err := ctx.BindJSON(&request); err != nil {
 		logger.ErrF("validation error: %v", err.Error())
@@ -53,8 +54,8 @@ func UpdateWorkoutHandler(ctx *gin.Context) {
 		return
 	}
 
-	if request.Title != "" {
-		work.Name = request.Title
+	if request.Name != "" {
+		work.Name = request.Name
 	}
 
 	if len(request.Exercises) != 0 {
@@ -86,5 +87,5 @@ func UpdateWorkoutHandler(ctx *gin.Context) {
 		return
 	}
 
-	helper.SendSuccess(ctx, ConvertWorkoutToWorkoutResponse(work))
+	helper.SendSuccess(ctx, ConvertWorkoutToWorkoutResponse(work, locale))
 }

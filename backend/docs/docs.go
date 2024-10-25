@@ -1746,6 +1746,9 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
+                "repetitions": {
+                    "type": "integer"
+                },
                 "rest_seconds": {
                     "type": "integer"
                 },

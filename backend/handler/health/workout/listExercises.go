@@ -22,13 +22,32 @@ import (
 // @Param x-access-token header string true "Access token"
 // @Router /workout/exercises [GET]
 func GetExercisesHandler(ctx *gin.Context) {
+	var exercises []workout.Exercise
 	var exercisesResponses []ResponseDataExercise
 
 	getI18n, _ := ctx.Get("i18n")
+	locale, _ := ctx.Get("locale")
 
-	if err := db.Order("name").Model(&workout.Exercise{}).Scan(&exercisesResponses).Error; err != nil {
+	if err := db.Order("name").Find(&exercises).Error; err != nil {
 		helper.SendErrorDefault(ctx, http.StatusInternalServerError, getI18n.(*i18n.Localizer))
 		return
+	}
+
+	for _, exercise := range exercises {
+		translatedName := exercise.Name
+		translatedInstructions := exercise.Instructions
+
+		if locale == "pt_BR" {
+			translatedName = exercise.NamePt
+			translatedInstructions = exercise.InstructionsPt
+		}
+
+		exercisesResponses = append(exercisesResponses, ResponseDataExercise{
+			ID:           exercise.ID,
+			Name:         translatedName,
+			BodyPart:     exercise.BodyPart,
+			Instructions: translatedInstructions,
+		})
 	}
 
 	helper.SendSuccess(ctx, exercisesResponses)

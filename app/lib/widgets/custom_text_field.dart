@@ -4,25 +4,31 @@ import 'package:easy_localization/easy_localization.dart';
 import '../config/design_system.dart';
 
 class CustomTextField extends StatelessWidget {
-  final String labelText;
+  final String? labelText;
   final IconData? prefixIcon;
   final bool isPassword;
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final String? Function(String?)? validator;
   final bool readOnly;
   final bool enable;
   final Future<void> Function()? onTap;
+  final void Function(String searchText)? onChanged;
+  final TextInputType? keyboardType;
+  final String? initialValue;
 
   const CustomTextField({
     super.key,
-    required this.labelText,
+    this.labelText,
     this.prefixIcon,
     this.isPassword = false,
-    required this.controller,
+    this.controller,
     this.validator,
     this.readOnly = false,
     this.onTap,
-    this.enable = true
+    this.enable = true,
+    this.onChanged,
+    this.initialValue,
+    this.keyboardType
   });
 
   @override
@@ -32,11 +38,14 @@ class CustomTextField extends StatelessWidget {
       obscureText: isPassword,
       readOnly: readOnly,
       enabled: enable,
+      initialValue: initialValue,
+      keyboardType: keyboardType,
       onTap: readOnly && onTap != null
           ? () async => await onTap!()
           : null,
+      onChanged: onChanged,
       decoration: InputDecoration(
-        labelText: labelText.tr(),
+        labelText: labelText?.tr(),
         labelStyle: const TextStyle(
           color: AppColors.onSurface,
         ),

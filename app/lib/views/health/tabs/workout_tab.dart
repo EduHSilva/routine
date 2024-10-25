@@ -2,7 +2,10 @@ import 'package:app/models/health/workout_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
+import '../../../config/design_system.dart';
+import '../../../config/helper.dart';
 import '../../../viewmodels/workout_viewmodel.dart';
+import '../../../widgets/custom_modal_delete.dart';
 import '../new_workout_view.dart';
 
 class WorkoutTab extends StatefulWidget {
@@ -20,6 +23,34 @@ class WorkoutTabState extends State<WorkoutTab> {
   void initState() {
     super.initState();
     _workoutViewModel.fetchWorkouts();
+  }
+
+  _deleteWorkout(int id) async {
+    WorkoutResponse? response = await _workoutViewModel.deleteWorkout(id);
+    _handlerResponse(response);
+  }
+
+  _deleteWorkoutDialog(Workout workout) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return CustomModalDelete(
+          title: "confirmDelete",
+          onConfirm: () {
+            _deleteWorkout(workout.id);
+          },
+        );
+      },
+    );
+  }
+
+  _handlerResponse(WorkoutResponse? response) {
+    if (response?.workout != null) {
+      _workoutViewModel.fetchWorkouts();
+    } else {
+      if (!mounted) return;
+      showErrorBar(context, response);
+    }
   }
 
   @override
@@ -75,27 +106,66 @@ class WorkoutTabState extends State<WorkoutTab> {
                                   });
                                 },
                                 child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        workout.name,
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        // Nome do treino
+                                        Expanded(
+                                          child: Text(
+                                            workout.name,
+                                            style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                      Icon(
-                                        _expandedWorkout[workout.id]!
-                                            ? Icons.expand_less
-                                            : Icons.expand_more,
-                                      ),
-                                    ],
-                                  ),
-                                ),
+
+                                        // Ícone de edição
+                                        IconButton(
+                                          icon: const Icon(
+                                            Icons.edit,
+                                            color: AppColors.primary,
+
+                                            size: 24, //
+                                          ),
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    NewWorkoutView(
+                                                        id: workout.id),
+                                              ),
+                                            );
+                                          },
+                                        ),
+
+                                        const SizedBox(width: 8),
+
+                                        IconButton(
+                                          icon: const Icon(
+                                            Icons.delete,
+                                            color: AppColors.error,
+                                            size: 24,
+                                          ),
+                                          onPressed: () {
+                                            _deleteWorkoutDialog(workout);
+                                          },
+                                        ),
+
+                                        const SizedBox(width: 8),
+                                        Icon(
+                                          _expandedWorkout[workout.id]!
+                                              ? Icons.expand_less
+                                              : Icons.expand_more,
+                                          size: 28,
+                                          color: Colors.grey,
+                                        ),
+                                      ],
+                                    )),
                               ),
                               if (_expandedWorkout[workout.id]!)
                                 ListView.builder(
@@ -120,8 +190,7 @@ class WorkoutTabState extends State<WorkoutTab> {
                                           children: [
                                             ListTile(
                                               title: Text(
-                                                'exercises.${exercise.name}'
-                                                    .tr(),
+                                                exercise.name.tr(),
                                                 style: const TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 16),
@@ -131,20 +200,18 @@ class WorkoutTabState extends State<WorkoutTab> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                     children: [
                                                       Text(
-                                                          '${exercise.bodyPart}'
+                                                          '${exercise.bodyPart?.toLowerCase()}'
                                                               .tr()),
                                                       Text(
                                                           '${exercise.series}x${exercise.repetitions}'),
                                                     ],
                                                   ),
                                                   Text('${exercise.load} kg'),
-                                                  // Text('Instructions:'),
-                                                  // HtmlText(
-                                                  //     html: exercise
-                                                  //         .instructions),
                                                 ],
                                               ),
                                             ),

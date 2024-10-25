@@ -48,9 +48,10 @@ func Middleware(auth bool) gin.HandlerFunc {
 			locale = "en"
 		}
 
-		localizer := i18n.NewLocalizer(config.GetBundler(), locale)
+		newI18n := i18n.NewLocalizer(config.GetBundler(), locale)
 
-		ctx.Set("i18n", localizer)
+		ctx.Set("i18n", newI18n)
+		ctx.Set("locale", locale)
 
 		ctx.Next()
 	}

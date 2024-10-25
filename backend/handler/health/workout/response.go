@@ -35,12 +35,21 @@ type ResponseWorkout struct {
 	Data    ResponseData `json:"data"`
 }
 
-func ConvertExerciseToResponse(exercise workout.ExerciseWorkout) ResponseDataExercise {
+func ConvertExerciseToResponse(exercise workout.ExerciseWorkout, locale any) ResponseDataExercise {
+	var name = ""
+	var instructions = ""
+	if locale == "pt_BR" {
+		name = exercise.Exercise.NamePt
+		instructions = exercise.Exercise.InstructionsPt
+	} else {
+		name = exercise.Exercise.Name
+		instructions = exercise.Exercise.Instructions
+	}
 	return ResponseDataExercise{
 		ID:           exercise.ExerciseID,
-		Name:         exercise.Exercise.Name,
+		Name:         name,
 		BodyPart:     exercise.Exercise.BodyPart,
-		Instructions: exercise.Exercise.Instructions,
+		Instructions: instructions,
 		Load:         exercise.Load,
 		Series:       exercise.Series,
 		RestSeconds:  exercise.RestSeconds,
@@ -48,11 +57,11 @@ func ConvertExerciseToResponse(exercise workout.ExerciseWorkout) ResponseDataExe
 	}
 }
 
-func ConvertWorkoutToWorkoutResponse(workout *workout.Workout) ResponseData {
+func ConvertWorkoutToWorkoutResponse(workout *workout.Workout, locale any) ResponseData {
 	exercisesResponse := make([]ResponseDataExercise, len(workout.Exercises))
 
 	for i, exercise := range workout.Exercises {
-		exercisesResponse[i] = ConvertExerciseToResponse(exercise)
+		exercisesResponse[i] = ConvertExerciseToResponse(exercise, locale)
 	}
 
 	return ResponseData{

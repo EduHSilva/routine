@@ -20,7 +20,7 @@ class WorkoutService {
       List<Exercise> exercises = [];
 
       if (data['data'] != null) {
-        exercises = List<Exercise>.from(data['data'].map((task) => Task.fromJson(task)));
+        exercises = List<Exercise>.from(data['data'].map((task) => Exercise.fromJson(task)));
       }
 
       return exercises;
@@ -66,16 +66,40 @@ class WorkoutService {
     }
   }
 
-  Future<WorkoutResponse?> editWorkout(int id, UpdateTaskRequest request) async {
-    final String apiUrl = '${AppConfig.apiUrl}task/rule';
+  Future<WorkoutResponse?> addWorkout(CreateWorkoutRequest request) async {
+    final String apiUrl = '${AppConfig.apiUrl}workout';
+    http.Client client = await AppConfig.getHttpClient();
+
+    try {
+      final response = await client.post(Uri.parse(apiUrl),
+          body: jsonEncode(<String, dynamic>{
+            'name': request.name,
+            'exercises': request.exercises,
+            'user_id': request.userID
+          }));
+
+      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        return WorkoutResponse.fromJson(jsonResponse);
+      } else {
+        return WorkoutResponse(message: jsonResponse['message']);
+      }
+    } catch (e) {
+      AppConfig.getLogger().e(e);
+      return null;
+    }
+  }
+
+  Future<WorkoutResponse?> editWorkout(int id, UpdateWorkoutRequest request) async {
+    final String apiUrl = '${AppConfig.apiUrl}workout';
     http.Client client = await AppConfig.getHttpClient();
 
     try {
       final response = await client.put(Uri.parse("$apiUrl?id=$id"),
           body: jsonEncode(<String, dynamic>{
-            'title': request.title,
-            'priority': request.priority,
-            'category_id': request.categoryID,
+            'name': request.name,
+            'exercises': request.exercises,
           }));
 
       final Map<String, dynamic> jsonResponse = json.decode(response.body);

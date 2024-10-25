@@ -26,6 +26,7 @@ func GetWorkoutsHandler(ctx *gin.Context) {
 	var workoutResponses []ResponseData
 
 	getI18n, _ := ctx.Get("i18n")
+	locale, _ := ctx.Get("locale")
 
 	userID, exists := ctx.Get("user_id")
 	if !exists {
@@ -39,7 +40,7 @@ func GetWorkoutsHandler(ctx *gin.Context) {
 	}
 
 	for _, work := range workouts {
-		workoutResponse := ConvertWorkoutToWorkoutResponse(&work)
+		workoutResponse := ConvertWorkoutToWorkoutResponse(&work, locale)
 		workoutResponses = append(workoutResponses, workoutResponse)
 	}
 

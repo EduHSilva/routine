@@ -77,8 +77,27 @@ class WorkoutViewModel {
     return null;
   }
 
+  Future<WorkoutResponse?> addWorkout(CreateWorkoutRequest request) async {
+    try {
+      isLoading.value = true;
+      WorkoutResponse? response =
+      await _workoutService.addWorkout(request);
+      if (response?.workout != null) {
+        await fetchWorkouts();
+      } else {
+        errorMessage.value = errorMessage.value = response?.message;
+      }
+      return response;
+    } catch (e) {
+      AppConfig.getLogger().e(e);
+    } finally {
+      isLoading.value = false;
+    }
+    return null;
+  }
+
   Future<WorkoutResponse?> editWorkout(
-      int id, UpdateTaskRequest request) async {
+      int id, UpdateWorkoutRequest request) async {
     try {
       isLoading.value = true;
       WorkoutResponse? response =
