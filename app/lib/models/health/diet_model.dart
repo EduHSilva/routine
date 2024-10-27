@@ -16,7 +16,7 @@ class Meal {
       required this.foods});
 
   factory Meal.fromJson(Map<String, dynamic> json) {
-    var foodsFromJson = json['exercises'] as List;
+    var foodsFromJson = json['foods'] as List;
     List<Food> foodsList = foodsFromJson
         .map((exercise) => Food.fromJson(exercise))
         .toList();
@@ -33,19 +33,26 @@ class Food {
   final int id;
   final String name;
   final String img;
+  late int? quantity;
+  late String? observation;
 
 
   Food({
     required this.id,
     required this.name,
     required this.img,
+    this.quantity = 0,
+    this.observation
   });
+
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'food_id': id,
+      'quantity': quantity,
       'name': name,
-      'img': img,
+      'observation': observation,
+      'image_url': img,
     };
   }
 
@@ -54,6 +61,8 @@ class Food {
       id: json['tag_id'],
       name: json['food_name'],
       img: json['photo']['thumb'],
+      quantity: json['quantity'],
+      observation: json['observation'],
     );
   }
 }

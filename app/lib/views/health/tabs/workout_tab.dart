@@ -190,7 +190,7 @@ class WorkoutTabState extends State<WorkoutTab> {
                                           children: [
                                             ListTile(
                                               title: Text(
-                                                exercise.name.tr(),
+                                                exercise.name,
                                                 style: const TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 16),

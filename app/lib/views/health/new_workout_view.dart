@@ -134,7 +134,7 @@ class NewWorkoutViewState extends State<NewWorkoutView> {
               const SizedBox(height: 24),
               CustomTextField(
                 controller: _nameController,
-                labelText: 'name'.tr(),
+                labelText: 'name',
                 validator: requiredFieldValidator,
               ),
               const SizedBox(height: 24),
@@ -142,10 +142,9 @@ class NewWorkoutViewState extends State<NewWorkoutView> {
               // Botão de adicionar exercícios
               CustomButton(
                 onPressed: () => _openExerciseModal(context),
-                text: 'addExercise'.tr(),
+                text: 'addExercise',
                 isOutlined: true,
               ),
-
               const SizedBox(height: 16),
 
               Expanded(
@@ -277,7 +276,7 @@ class NewWorkoutViewState extends State<NewWorkoutView> {
               const SizedBox(height: 16),
               CustomButton(
                 onPressed: _addWorkout,
-                text: 'save'.tr(),
+                text: 'save',
               ),
             ],
           ),

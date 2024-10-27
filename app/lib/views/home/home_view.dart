@@ -10,7 +10,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Home'),
+      appBar: const CustomAppBar(title: 'home'),
       drawer: const CustomDrawer(currentRoute: '/home'),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

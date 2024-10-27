@@ -43,7 +43,7 @@ func CreateWorkoutHandler(ctx *gin.Context) {
 	}
 
 	var existingWorkout workout.Workout
-	if err := db.Where("name = ? and user_id", request.Name, request.UserID).First(&existingWorkout).Error; err == nil {
+	if err := db.Where("name = ? and user_id = ?", request.Name, request.UserID).First(&existingWorkout).Error; err == nil {
 		logger.Err("Workout already exists")
 		message := getI18n.(*i18n.Localizer).MustLocalize(&i18n.LocalizeConfig{
 			MessageID: "alreadyExists",

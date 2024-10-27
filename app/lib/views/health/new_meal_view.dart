@@ -33,8 +33,10 @@ class NewMealViewState extends State<NewMealView> {
     }
   }
 
-  _removeIngredient(Food food) {
-
+  _removeFood(Food food) {
+    setState(() {
+      _selectedFoods.remove(food);
+    });
   }
 
   _loadMealData(int id) async {
@@ -53,7 +55,9 @@ class NewMealViewState extends State<NewMealView> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => HealthView(initialIndex: 1,),
+          builder: (context) => HealthView(
+            initialIndex: 1,
+          ),
         ),
       );
     } else {
@@ -62,7 +66,7 @@ class NewMealViewState extends State<NewMealView> {
     }
   }
 
-  _addWorkout() async {
+  _addMeal() async {
     if (_formKey.currentState!.validate()) {
       MealResponse? response;
       if (widget.id == null) {
@@ -108,7 +112,6 @@ class NewMealViewState extends State<NewMealView> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,7 +151,7 @@ class NewMealViewState extends State<NewMealView> {
                     : ListView.builder(
                         itemCount: _selectedFoods.length,
                         itemBuilder: (context, index) {
-                          var ingredient = _selectedFoods[index];
+                          var food = _selectedFoods[index];
 
                           return Card(
                             margin: const EdgeInsets.symmetric(vertical: 8),
@@ -165,7 +168,7 @@ class NewMealViewState extends State<NewMealView> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        ingredient.name,
+                                        food.name,
                                         style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18,
@@ -174,10 +177,31 @@ class NewMealViewState extends State<NewMealView> {
                                       IconButton(
                                         icon: const Icon(Icons.remove,
                                             color: Colors.redAccent),
-                                        onPressed: () =>
-                                            _removeIngredient(ingredient),
+                                        onPressed: () => _removeFood(food),
                                       ),
                                     ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  CustomTextField(
+                                    initialValue: food.quantity?.toString(),
+                                    labelText: 'quantity',
+                                    keyboardType: TextInputType.number,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        food.quantity =
+                                            int.tryParse(value) ?? 0;
+                                      });
+                                    },
+                                  ),
+                                  const SizedBox(height: 8),
+                                  CustomTextField(
+                                    initialValue: food.observation,
+                                    labelText: 'notes',
+                                    onChanged: (value) {
+                                      setState(() {
+                                        food.observation = value;
+                                      });
+                                    },
                                   ),
                                 ],
                               ),
@@ -186,11 +210,10 @@ class NewMealViewState extends State<NewMealView> {
                         },
                       ),
               ),
-
               const SizedBox(height: 16),
               CustomButton(
-                onPressed: _addWorkout,
-                text: 'save'
+                onPressed: _addMeal,
+                text: 'save',
               ),
             ],
           ),

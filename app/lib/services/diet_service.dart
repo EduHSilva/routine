@@ -11,7 +11,7 @@ class DietService {
   Future<List<Food>> fetchFoods(search) async {
     http.Client client = await AppConfig.getHttpClient();
     final response = await client.get(Uri.parse(
-        '${AppConfig.apiUrl}meal/food?query=$search'));
+        '${AppConfig.apiUrl}diet/meal/food?query=$search'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
@@ -19,8 +19,8 @@ class DietService {
 
       List<Food> foods = [];
 
-      if (data['common'] != null) {
-        foods = List<Food>.from(data['common'].map((food) => Food.fromJson(food)));
+      if (data['data'] != null) {
+        foods = List<Food>.from(data['data'].map((food) => Food.fromJson(food)));
       }
 
       return foods;
@@ -32,7 +32,7 @@ class DietService {
   Future<List<Meal>> fetchMeals() async {
     http.Client client = await AppConfig.getHttpClient();
     final response =
-        await client.get(Uri.parse('${AppConfig.apiUrl}meals'));
+        await client.get(Uri.parse('${AppConfig.apiUrl}diet/meals'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
@@ -41,7 +41,7 @@ class DietService {
 
       if (data['data'] != null) {
         diets =
-            List<Meal>.from(data['data'].map((task) => Meal.fromJson(task)));
+            List<Meal>.from(data['data'].map((meal) => Meal.fromJson(meal)));
       }
 
       return diets;
@@ -53,7 +53,7 @@ class DietService {
   Future<MealResponse> getMeal(int id) async {
     http.Client client = await AppConfig.getHttpClient();
     final response =
-        await client.get(Uri.parse('${AppConfig.apiUrl}meal?id=$id'));
+        await client.get(Uri.parse('${AppConfig.apiUrl}diet/meal?id=$id'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
@@ -67,7 +67,7 @@ class DietService {
   }
 
   Future<MealResponse?> addMeal(CreateMealRequest request) async {
-    final String apiUrl = '${AppConfig.apiUrl}meal';
+    final String apiUrl = '${AppConfig.apiUrl}diet/meal';
     http.Client client = await AppConfig.getHttpClient();
 
     try {
@@ -92,7 +92,7 @@ class DietService {
   }
 
   Future<MealResponse?> editMeal(int id, UpdateMealRequest request) async {
-    final String apiUrl = '${AppConfig.apiUrl}meal';
+    final String apiUrl = '${AppConfig.apiUrl}diet/meal';
     http.Client client = await AppConfig.getHttpClient();
 
     try {
@@ -116,7 +116,7 @@ class DietService {
   }
 
   Future<MealResponse?> deleteMeal(int id) async {
-    final String apiUrl = '${AppConfig.apiUrl}meal';
+    final String apiUrl = '${AppConfig.apiUrl}diet/meal';
     http.Client client = await AppConfig.getHttpClient();
 
     try {

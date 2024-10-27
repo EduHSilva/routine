@@ -52,13 +52,13 @@ func UpdateMealHandler(ctx *gin.Context) {
 		helper.SendErrorDefault(ctx, http.StatusNotFound, getI18n.(*i18n.Localizer))
 		return
 	}
-
 	if request.Name != "" {
 		meal.Name = request.Name
 	}
 
 	if len(request.Foods) != 0 {
-		if err := db.Where("food_id = ?", meal.ID).Delete(&diet.Food{}).Error; err != nil {
+		if err := db.Where("meal_id = ?", meal.ID).Delete(&diet.Food{}).Error; err != nil {
+			logger.ErrF(err.Error())
 			helper.SendError(ctx, http.StatusInternalServerError, "Failed to delete associated foods")
 			return
 		}

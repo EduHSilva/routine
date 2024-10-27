@@ -42,7 +42,7 @@ func CreateMealHandler(ctx *gin.Context) {
 	}
 
 	var existingMeal diet.Meal
-	if err := db.Where("name = ? and user_id", request.Name, request.UserID).First(&existingMeal).Error; err == nil {
+	if err := db.Where("name = ? AND user_id = ?", request.Name, request.UserID).First(&existingMeal).Error; err == nil {
 		logger.Err("Meal already exists")
 		message := getI18n.(*i18n.Localizer).MustLocalize(&i18n.LocalizeConfig{
 			MessageID: "alreadyExists",
@@ -50,7 +50,7 @@ func CreateMealHandler(ctx *gin.Context) {
 		helper.SendError(ctx, http.StatusBadRequest, message)
 		return
 	} else if !errors.Is(err, gorm.ErrRecordNotFound) {
-		logger.ErrF("Error checking workout existence: %s", err.Error())
+		logger.ErrF("Error checking meal existence: %s", err.Error())
 		helper.SendErrorDefault(ctx, http.StatusInternalServerError, getI18n.(*i18n.Localizer))
 		return
 	}

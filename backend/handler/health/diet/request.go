@@ -11,7 +11,7 @@ type CreateMealRequest struct {
 }
 
 type FoodRequest struct {
-	FoodID      uint   `json:"exercise_id"`
+	FoodID      uint   `json:"food_id"`
 	Quantity    int    `json:"quantity"`
 	Name        string `json:"name"`
 	Observation string `json:"observation"`
