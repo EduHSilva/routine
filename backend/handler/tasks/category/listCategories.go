@@ -32,7 +32,7 @@ func GetAllCategoriesHandler(ctx *gin.Context) {
 		return
 	}
 
-	if err := db.Where("user_id = ? OR system = 1", userID).Order("title").Model(&tasks.CategoryTask{}).Scan(&categoryResponses).Error; err != nil {
+	if err := db.Where("user_id = ? OR system = true", userID).Order("title").Model(&tasks.CategoryTask{}).Scan(&categoryResponses).Error; err != nil {
 		helper.SendErrorDefault(ctx, http.StatusInternalServerError, getI18n.(*i18n.Localizer))
 		return
 	}
