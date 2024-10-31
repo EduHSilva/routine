@@ -6,6 +6,7 @@ import (
 
 type CreateMealRequest struct {
 	Name   string        `json:"name"`
+	Hour   string        `json:"hour"`
 	UserID uint          `json:"user_id"`
 	Foods  []FoodRequest `json:"foods"`
 }
@@ -23,6 +24,9 @@ func (r CreateMealRequest) Validate() error {
 	if r.Name == "" {
 		return helper.ErrParamIsRequired("name", "string")
 	}
+	if r.Hour == "" {
+		return helper.ErrParamIsRequired("hour", "string")
+	}
 	if r.UserID == 0 {
 		return helper.ErrParamIsRequired("user_id", "uint")
 	}
@@ -35,12 +39,16 @@ func (r CreateMealRequest) Validate() error {
 
 type UpdateMealRequest struct {
 	Name  string        `json:"name"`
+	Hour  string        `json:"hour"`
 	Foods []FoodRequest `json:"foods"`
 }
 
 func (r UpdateMealRequest) Validate() error {
 	if r.Name == "" {
 		return helper.ErrParamIsRequired("name", "string")
+	}
+	if r.Hour == "" {
+		return helper.ErrParamIsRequired("hour", "string")
 	}
 	if len(r.Foods) == 0 {
 		return helper.ErrParamIsRequired("exercises", "exercise")

@@ -3,7 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../models/health/workout_model.dart';
-import '../../../viewmodels/workout_viewmodel.dart';
+import '../../../view_models/workout_viewmodel.dart';
 import '../../../widgets/custom_text_field.dart';
 
 class ExerciseModal extends StatefulWidget {

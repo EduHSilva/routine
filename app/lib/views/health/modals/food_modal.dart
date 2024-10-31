@@ -1,10 +1,9 @@
 import 'package:basic_utils/basic_utils.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:routine/widgets/custom_button.dart';
 
 import '../../../models/health/diet_model.dart';
-import '../../../viewmodels/diet_viewmodel.dart';
+import '../../../view_models/diet_viewmodel.dart';
 import '../../../widgets/custom_text_field.dart';
 
 

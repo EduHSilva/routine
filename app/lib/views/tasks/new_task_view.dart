@@ -2,12 +2,12 @@ import 'package:routine/views/tasks/tasks_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import '../../../viewmodels/tasks_viewmodel.dart';
+import '../../../view_models/tasks_viewmodel.dart';
 import '../../config/helper.dart';
 import '../../models/enums.dart';
 import '../../models/tasks/category_model.dart';
 import '../../models/tasks/task_model.dart';
-import '../../viewmodels/category_viewmodel.dart';
+import '../../view_models/category_viewmodel.dart';
 import '../../widgets/custom_dropdown.dart';
 import '../../widgets/custom_text_field.dart';
 

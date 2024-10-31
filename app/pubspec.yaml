@@ -20,6 +20,8 @@ dependencies:
   flutter_colorpicker: ^1.0.3
   google_fonts: ^6.2.1
   basic_utils: ^5.7.0
+  flutter_markdown: ^0.7.4+1
+
 
 dev_dependencies:
   flutter_test:

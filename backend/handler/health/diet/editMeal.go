@@ -56,6 +56,10 @@ func UpdateMealHandler(ctx *gin.Context) {
 		meal.Name = request.Name
 	}
 
+	if request.Hour != "" {
+		meal.Hour = request.Hour
+	}
+
 	if len(request.Foods) != 0 {
 		if err := db.Where("meal_id = ?", meal.ID).Delete(&diet.Food{}).Error; err != nil {
 			logger.ErrF(err.Error())

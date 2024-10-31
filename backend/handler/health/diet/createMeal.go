@@ -58,6 +58,7 @@ func CreateMealHandler(ctx *gin.Context) {
 	meal := diet.Meal{
 		Name:   request.Name,
 		UserID: request.UserID,
+		Hour:   request.Hour,
 	}
 
 	for _, food := range request.Foods {

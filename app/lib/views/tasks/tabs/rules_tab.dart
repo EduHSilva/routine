@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../config/design_system.dart';
 import '../../../config/helper.dart';
 import '../../../models/tasks/task_model.dart';
-import '../../../viewmodels/tasks_viewmodel.dart';
+import '../../../view_models/tasks_viewmodel.dart';
 import '../../../widgets/custom_modal_delete.dart';
 import '../new_task_view.dart';
 

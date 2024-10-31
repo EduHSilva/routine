@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:routine/models/health/workout_model.dart';
 import 'package:http/http.dart' as http;
 
 import '../config/app_config.dart';
@@ -75,6 +74,7 @@ class DietService {
           body: jsonEncode(<String, dynamic>{
             'name': request.name,
             'foods': request.foods,
+            'hour': request.hour,
             'user_id': request.userID
           }));
 
@@ -99,6 +99,7 @@ class DietService {
       final response = await client.put(Uri.parse("$apiUrl?id=$id"),
           body: jsonEncode(<String, dynamic>{
             'name': request.name,
+            'hour': request.hour,
             'foods': request.foods,
           }));
 

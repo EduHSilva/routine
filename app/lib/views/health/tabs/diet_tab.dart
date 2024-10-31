@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:routine/viewmodels/diet_viewmodel.dart';
+import 'package:routine/view_models/diet_viewmodel.dart';
 import 'package:routine/views/health/new_meal_view.dart';
 
 import '../../../config/design_system.dart';

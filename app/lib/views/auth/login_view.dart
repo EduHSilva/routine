@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../config/design_system.dart';
 import '../../config/helper.dart';
 import '../../models/user/login_model.dart';
-import '../../viewmodels/auth_viewmodel.dart';
+import '../../view_models/auth_viewmodel.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text_field.dart';
 

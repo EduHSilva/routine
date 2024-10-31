@@ -5,7 +5,7 @@ import 'package:routine/widgets/custom_button.dart';
 
 import '../../config/helper.dart';
 import '../../models/health/diet_model.dart';
-import '../../viewmodels/diet_viewmodel.dart';
+import '../../view_models/diet_viewmodel.dart';
 import '../../widgets/custom_text_field.dart';
 import 'modals/food_modal.dart';
 
@@ -22,6 +22,8 @@ class NewMealViewState extends State<NewMealView> {
   final _formKey = GlobalKey<FormState>();
   final DietViewModel _dietViewModel = DietViewModel();
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _timeController = TextEditingController();
+
 
   List<Food> _selectedFoods = [];
 
@@ -30,6 +32,19 @@ class NewMealViewState extends State<NewMealView> {
     super.initState();
     if (widget.id != null) {
       _loadMealData(widget.id!);
+    }
+  }
+
+  Future<void> _selectTime(
+      BuildContext context, TextEditingController controller) async {
+    TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (pickedTime != null) {
+      setState(() {
+        controller.text = pickedTime.format(context);
+      });
     }
   }
 
@@ -45,6 +60,7 @@ class NewMealViewState extends State<NewMealView> {
     if (response?.meal != null) {
       setState(() {
         _nameController.text = response!.meal!.name;
+        _timeController.text = response.meal!.hour;
         _selectedFoods = response.meal!.foods ?? [];
       });
     }
@@ -72,6 +88,7 @@ class NewMealViewState extends State<NewMealView> {
       if (widget.id == null) {
         response = await _dietViewModel.addMeal(CreateMealRequest(
           name: _nameController.text,
+          hour: _timeController.text,
           foods: _selectedFoods,
         ));
       } else {
@@ -79,6 +96,7 @@ class NewMealViewState extends State<NewMealView> {
           widget.id!,
           UpdateMealRequest(
             name: _nameController.text,
+            hour: _timeController.text,
             foods: _selectedFoods,
           ),
         );
@@ -126,17 +144,31 @@ class NewMealViewState extends State<NewMealView> {
             children: [
               const SizedBox(height: 16),
               Text(
-                widget.id == null ? 'newMeal'.tr() : 'editMeal',
+                widget.id == null ? 'newMeal'.tr() : 'editMeal'.tr(),
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).primaryColor,
                     ),
               ),
               const SizedBox(height: 24),
-              CustomTextField(
-                controller: _nameController,
-                labelText: 'name',
-                validator: requiredFieldValidator,
+              Row(
+                children: [
+                  Expanded(child:
+                  CustomTextField(
+                    controller: _nameController,
+                    labelText: 'name',
+                    validator: requiredFieldValidator,
+                  )),
+                  const SizedBox(width: 10),
+                  Expanded(child:
+                  CustomTextField(
+                    controller: _timeController,
+                    labelText: 'startTime'.tr(),
+                    readOnly: true,
+                    onTap: () =>
+                        _selectTime(context, _timeController),
+                  ),),
+                ],
               ),
               const SizedBox(height: 24),
               CustomButton(

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../config/design_system.dart';
 import '../../../config/helper.dart';
-import '../../../viewmodels/workout_viewmodel.dart';
+import '../../../view_models/workout_viewmodel.dart';
 import '../../../widgets/custom_modal_delete.dart';
 import '../new_workout_view.dart';
 

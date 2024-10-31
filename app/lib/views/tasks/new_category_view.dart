@@ -6,7 +6,7 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import '../../config/app_config.dart';
 import '../../config/helper.dart';
 import '../../models/tasks/category_model.dart';
-import '../../viewmodels/category_viewmodel.dart';
+import '../../view_models/category_viewmodel.dart';
 import '../../widgets/custom_text_field.dart';
 
 class NewCategoryView extends StatefulWidget {

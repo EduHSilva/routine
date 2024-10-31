@@ -1,6 +1,6 @@
 import 'package:routine/config/design_system.dart';
 import 'package:routine/models/health/workout_model.dart';
-import 'package:routine/viewmodels/workout_viewmodel.dart';
+import 'package:routine/view_models/workout_viewmodel.dart';
 import 'package:routine/views/health/health_view.dart';
 import 'package:routine/widgets/custom_button.dart';
 import 'package:easy_localization/easy_localization.dart';

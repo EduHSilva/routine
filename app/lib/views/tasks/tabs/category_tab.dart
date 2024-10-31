@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../config/helper.dart';
 import '../../../models/tasks/category_model.dart';
-import '../../../viewmodels/category_viewmodel.dart';
+import '../../../view_models/category_viewmodel.dart';
 import '../../../widgets/custom_modal_delete.dart';
 import '../new_category_view.dart';
 

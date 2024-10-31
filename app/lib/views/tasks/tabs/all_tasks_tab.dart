@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../config/helper.dart';
 import '../../../models/tasks/task_model.dart';
-import '../../../viewmodels/tasks_viewmodel.dart';
+import '../../../view_models/tasks_viewmodel.dart';
 
 class AllTasksTab extends StatefulWidget {
   const AllTasksTab({super.key});

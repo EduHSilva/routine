@@ -1,6 +1,4 @@
-import 'package:routine/models/health/workout_model.dart';
 import 'package:routine/services/diet_service.dart';
-import 'package:routine/services/workout_service.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../config/app_config.dart';

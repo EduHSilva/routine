@@ -6,6 +6,7 @@ class Meal {
   final String? createAt;
   final String? updateAt;
   final String name;
+  final String hour;
   final List<Food> foods;
 
   Meal(
@@ -13,6 +14,7 @@ class Meal {
       this.createAt,
       this.updateAt,
       required this.name,
+      required this.hour,
       required this.foods});
 
   factory Meal.fromJson(Map<String, dynamic> json) {
@@ -24,6 +26,7 @@ class Meal {
         createAt: json['createAt'],
         id: json['id'],
         name: json['name'],
+        hour: json['hour'],
         updateAt: json['updateAt'],
         foods: foodsList);
   }
@@ -85,15 +88,17 @@ class MealResponse extends DefaultResponse {
 
 class CreateMealRequest {
   final String name;
+  final String hour;
   final List<Food> foods;
   final int userID = AppConfig.user!.id;
 
-  CreateMealRequest({required this.name, required this.foods});
+  CreateMealRequest({required this.name, required this.hour,  required this.foods});
 }
 
 class UpdateMealRequest {
   final String name;
   final List<Food> foods;
+  final String hour;
 
-  UpdateMealRequest({required this.name, required this.foods});
+  UpdateMealRequest({required this.name, required this.hour, required this.foods});
 }

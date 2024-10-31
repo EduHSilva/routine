@@ -21,7 +21,7 @@
   "requiredField": "Campo obrigatório",
   "pendingTasks": "Tarefas pendentes",
   "search": "Pesquisar",
-  "nextMealth": "Proxima refeicao",
+  "nextMeal": "Proxima refeicao",
   "noData": "Sem dados",
   "categories": "Categorias",
   "add": "Adicionar",
@@ -96,5 +96,8 @@
   "addFood": "Adicionar comida",
   "quantity": "Quantidade (g)",
   "notes": "Observações",
-  "editMeal": "Editar refeição"
+  "editMeal": "Editar refeição",
+  "enterText": "Insira texto",
+  "results": "Resultados",
+  "welcomeMessage": "# Bem vindo!\n #### Estamos prontos para ajudar voce na sua rotina!\n* Utilize pesquisa de IA\n* Organize suas tarefas\n* Registre seus treinos e refeições\n* Tenha controle da sua vida financeira!"
 }

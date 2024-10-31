@@ -22,7 +22,7 @@ class AppColors {
 
 class AppTheme {
   static final RoundedRectangleBorder _roundedShape =
-      RoundedRectangleBorder(borderRadius: BorderRadius.circular(15));
+      RoundedRectangleBorder(borderRadius: BorderRadius.circular(8));
 
   static ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,

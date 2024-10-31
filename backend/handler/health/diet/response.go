@@ -28,6 +28,7 @@ type ResponseData struct {
 	UpdateAt  time.Time          `json:"updateAt"`
 	DeletedAt time.Time          `json:"deletedAt,omitempty"`
 	Name      string             `json:"name"`
+	Hour      string             `json:"hour"`
 	Foods     []ResponseDataFood `json:"foods"`
 }
 
@@ -62,5 +63,6 @@ func ConvertMealToResponse(meal *diet.Meal) ResponseData {
 		DeletedAt: meal.DeletedAt.Time,
 		Name:      meal.Name,
 		Foods:     foodResponse,
+		Hour:      meal.Hour,
 	}
 }
