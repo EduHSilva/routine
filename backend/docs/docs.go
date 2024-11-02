@@ -305,6 +305,55 @@ const docTemplate = `{
                 }
             }
         },
+        "/daily": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Info of the day with pending tasks, next meal.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Home"
+                ],
+                "summary": "Get daily data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Access token",
+                        "name": "x-access-token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/home.ResponseDailyData"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helper.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/helper.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/diet/food": {
             "get": {
                 "security": [
@@ -1740,6 +1789,9 @@ const docTemplate = `{
                         "$ref": "#/definitions/diet.FoodRequest"
                     }
                 },
+                "hour": {
+                    "type": "string"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -1790,6 +1842,9 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/diet.ResponseDataFood"
                     }
+                },
+                "hour": {
+                    "type": "string"
                 },
                 "id": {
                     "type": "integer"
@@ -1842,6 +1897,9 @@ const docTemplate = `{
                         "$ref": "#/definitions/diet.FoodRequest"
                     }
                 },
+                "hour": {
+                    "type": "string"
+                },
                 "name": {
                     "type": "string"
                 }
@@ -1854,6 +1912,92 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "home.ResponseDailyData": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/home.ResponseData"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "home.ResponseData": {
+            "type": "object",
+            "properties": {
+                "meal": {
+                    "$ref": "#/definitions/home.ResponseDataMeal"
+                },
+                "tasks": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/home.ResponseDataTasks"
+                    }
+                }
+            }
+        },
+        "home.ResponseDataMeal": {
+            "type": "object",
+            "properties": {
+                "hour": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "home.ResponseDataTasks": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "color": {
+                    "type": "string"
+                },
+                "createAt": {
+                    "type": "string"
+                },
+                "date_end": {
+                    "type": "string"
+                },
+                "date_start": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "type": "string"
+                },
+                "done": {
+                    "type": "boolean"
+                },
+                "end_time": {
+                    "type": "string"
+                },
+                "frequency": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "priority": {
+                    "type": "string"
+                },
+                "start_time": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updateAt": {
                     "type": "string"
                 }
             }

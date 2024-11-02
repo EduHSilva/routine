@@ -80,7 +80,7 @@ func initPostgres(logger *Logger) (*gorm.DB, error) {
 }
 
 func initSQLite(logger *Logger) (*gorm.DB, error) {
-	dbPath := "C:\\PersonalProjects\\routine\\backend\\db\\test.db"
+	dbPath := "/media/eduardo/6610C15F4597DD37/Projects/routine/backend/db/test.db"
 	_, err := os.Stat(dbPath)
 	if os.IsNotExist(err) {
 		logger.Info("Creating database ...")

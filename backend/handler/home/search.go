@@ -63,7 +63,7 @@ func SearchHandler(ctx *gin.Context) {
 }
 
 func getGPTResponse(search string) ([]byte, error) {
-	url := "https://api.groq.com/openai/v1/chat/completions"
+	url := os.Getenv("GPT_API_URL")
 	apiKey := os.Getenv("GPT_API_KEY")
 
 	requestBody, err := json.Marshal(map[string]interface{}{

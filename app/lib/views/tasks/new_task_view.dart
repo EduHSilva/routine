@@ -198,12 +198,12 @@ class NewTaskViewState extends State<NewTaskView> {
                       const SizedBox(height: 24),
                       CustomTextField(
                         controller: _titleController,
-                        labelText: 'title'.tr(),
+                        labelText: 'title',
                         validator: requiredFieldValidator,
                       ),
                       const SizedBox(height: 16),
                       CustomDropdown(
-                        labelText: 'category'.tr(),
+                        labelText: 'category',
                         items: cat,
                         selectedItem: _selectedCategory,
                         onChanged: (value) {
@@ -221,7 +221,7 @@ class NewTaskViewState extends State<NewTaskView> {
                           Expanded(
                             child: CustomTextField(
                               controller: _startDateController,
-                              labelText: 'startDate'.tr(),
+                              labelText: 'startDate',
                               readOnly: true,
                               enable: widget.id == null,
                               onTap: () =>
@@ -232,7 +232,7 @@ class NewTaskViewState extends State<NewTaskView> {
                           Expanded(
                             child: CustomTextField(
                               controller: _endDateController,
-                              labelText: 'endDate'.tr(),
+                              labelText: 'endDate',
                               enable: widget.id == null,
                               readOnly: true,
                               onTap: () =>
@@ -247,7 +247,7 @@ class NewTaskViewState extends State<NewTaskView> {
                           Expanded(
                             child: CustomTextField(
                               controller: _startTimeController,
-                              labelText: 'startTime'.tr(),
+                              labelText: 'startTime',
                               enable: widget.id == null,
                               readOnly: true,
                               onTap: () =>
@@ -259,7 +259,7 @@ class NewTaskViewState extends State<NewTaskView> {
                             child: CustomTextField(
                               controller: _endTimeController,
                               enable: widget.id == null,
-                              labelText: 'endTime'.tr(),
+                              labelText: 'endTime',
                               readOnly: true,
                               onTap: () =>
                                   _selectTime(context, _endTimeController),
@@ -269,7 +269,7 @@ class NewTaskViewState extends State<NewTaskView> {
                       ),
                       const SizedBox(height: 16),
                       CustomDropdown(
-                        labelText: 'priority'.tr(),
+                        labelText: 'priority',
                         items: _priorities,
                         selectedItem: _selectedPriority,
                         onChanged: (value) {
@@ -279,11 +279,11 @@ class NewTaskViewState extends State<NewTaskView> {
                           });
                         },
                         validator: (value) =>
-                            value == null ? 'Select a priority' : null,
+                            value == null ? 'selectAValue'.tr() : null,
                       ),
                       const SizedBox(height: 16),
                       CustomDropdown(
-                        labelText: 'frequency'.tr(),
+                        labelText: 'frequency',
                         items: _frequencies,
                         selectedItem: _selectedFrequency,
                         onChanged: widget.id != null
@@ -295,7 +295,7 @@ class NewTaskViewState extends State<NewTaskView> {
                                 });
                               },
                         validator: (value) =>
-                            value == null ? 'Select a frequency' : null,
+                            value == null ? 'selectAValue'.tr() : null,
                       ),
                       const SizedBox(height: 32),
                       ElevatedButton(

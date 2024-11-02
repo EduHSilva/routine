@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-
 import '../../../config/helper.dart';
 import '../../../models/tasks/task_model.dart';
 import '../../../view_models/tasks_viewmodel.dart';
+import '../../../widgets/task_card.dart';
 
 class AllTasksTab extends StatefulWidget {
   const AllTasksTab({super.key});
@@ -94,90 +94,16 @@ class AllTasksTabState extends State<AllTasksTab> {
                                   itemBuilder: (context, taskIndex) {
                                     var task = tasks[taskIndex];
 
-                                    return Card(
-                                      margin: const EdgeInsets.symmetric(
-                                          vertical: 8),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Stack(
-                                        children: [
-                                          Positioned(
-                                            left: 0,
-                                            top: 0,
-                                            bottom: 0,
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  const BorderRadius.only(
-                                                topLeft: Radius.circular(12),
-                                                bottomLeft: Radius.circular(12),
-                                              ),
-                                              child: Container(
-                                                width: 10,
-                                                color: hexaToColor(task.color),
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 10),
-                                            child: Row(
-                                              children: [
-                                                Checkbox(
-                                                  value: task.done,
-                                                  onChanged: (value) {
-                                                    _tasksViewModel.changeTaskStatus(task);
-                                                  },
-                                                ),
-                                                Expanded(
-                                                  child: Column(
-                                                    children: [
-                                                      ListTile(
-                                                        title: Text(
-                                                          task.title,
-                                                          style:
-                                                              const TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize: 16),
-                                                        ),
-                                                        subtitle: Row(
-                                                          children: [
-                                                            Expanded(
-                                                              child: Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  Text(task
-                                                                      .category
-                                                                      .tr()),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            Expanded(
-                                                              child: Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .end,
-                                                                children: [
-                                                                  Text(
-                                                                      '${task.startTime} - ${task.endTime}'),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                    return TaskCard(
+                                      title: task.title,
+                                      category: task.category.tr(),
+                                      startTime: task.startTime,
+                                      endTime: task.endTime,
+                                      isDone: task.done,
+                                      color: hexaToColor(task.color),
+                                      onChanged: (value) {
+                                        _tasksViewModel.changeTaskStatus(task);
+                                      },
                                     );
                                   },
                                 ),

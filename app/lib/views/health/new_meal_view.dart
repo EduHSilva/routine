@@ -163,7 +163,7 @@ class NewMealViewState extends State<NewMealView> {
                   Expanded(child:
                   CustomTextField(
                     controller: _timeController,
-                    labelText: 'startTime'.tr(),
+                    labelText: 'startTime',
                     readOnly: true,
                     onTap: () =>
                         _selectTime(context, _timeController),

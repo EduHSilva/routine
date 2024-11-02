@@ -1,12 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:routine/view_models/diet_viewmodel.dart';
+import 'package:routine/views/health/meal_details.dart';
 import 'package:routine/views/health/new_meal_view.dart';
 
 import '../../../config/design_system.dart';
 import '../../../config/helper.dart';
 import '../../../models/health/diet_model.dart';
 import '../../../widgets/custom_modal_delete.dart';
+import '../../../widgets/meal_card.dart';
 
 class DietTab extends StatefulWidget {
   const DietTab({super.key});
@@ -32,6 +34,24 @@ class DietTabState extends State<DietTab> {
   _deleteMeal(int id) async {
     MealResponse? response = await _dietViewModel.deleteMeal(id);
     _handlerResponse(response);
+  }
+
+  _showDetails(int id) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MealDetailView(id: id),
+      ),
+    );
+  }
+
+  _editMeal(int id) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => NewMealView(id: id),
+      ),
+    );
   }
 
   _deleteMealDialog(Meal meal) {
@@ -92,144 +112,14 @@ class DietTabState extends State<DietTab> {
                 itemCount: meals.length,
                 itemBuilder: (context, index) {
                   Meal meal = meals[index];
-                  List<Food> foods = meal.foods;
 
-                  // Controla o estado expandido de cada refeição
-                  _expandedMeal.putIfAbsent(meal.id, () => false);
-
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              _expandedMeal[meal.id] =
-                              !_expandedMeal[meal.id]!;
-                            });
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8.0),
-                            child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              children: [
-                                // Nome da refeição
-                                Expanded(
-                                  child: Text(
-                                    meal.name,
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-
-                                // Ícone de edição
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.edit,
-                                    color: AppColors.primary,
-                                    size: 24,
-                                  ),
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            NewMealView(id: meal.id),
-                                      ),
-                                    );
-                                  },
-                                ),
-
-                                const SizedBox(width: 8),
-
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.delete,
-                                    color: AppColors.error,
-                                    size: 24,
-                                  ),
-                                  onPressed: () {
-                                    _deleteMealDialog(meal);
-                                  },
-                                ),
-
-                                const SizedBox(width: 8),
-                                Icon(
-                                  _expandedMeal[meal.id]!
-                                      ? Icons.expand_less
-                                      : Icons.expand_more,
-                                  size: 28,
-                                  color: Colors.grey,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        if (_expandedMeal[meal.id]!)
-                          ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: foods.length,
-                            itemBuilder: (context, foodIndex) {
-                              var food = foods[foodIndex];
-
-                              return Card(
-                                margin: const EdgeInsets.symmetric(
-                                    vertical: 8),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        food.name,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment
-                                            .spaceBetween,
-                                        children: [
-                                          Text(
-                                            '${food.quantity} g',
-                                            style: const TextStyle(
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                          if (food.observation != null &&
-                                              food.observation!.isNotEmpty)
-                                            Text(
-                                              food.observation!,
-                                              style: const TextStyle(
-                                                color: Colors.grey,
-                                                fontStyle:
-                                                FontStyle.italic,
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                      ],
-                    ),
+                  return MealCard(
+                    id: meal.id,
+                    name: meal.name,
+                    hour: meal.hour,
+                    onTap: () => _showDetails(meal.id),
+                    onEdit: () => _editMeal(meal.id),
+                    onRemove: () => _deleteMealDialog(meal),
                   );
                 },
               ),

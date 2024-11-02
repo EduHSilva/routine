@@ -24,7 +24,7 @@ class DietService {
 
       return foods;
     } else {
-      throw Exception('Failed to load exercises');
+      throw Exception('Failed to load foods');
     }
   }
 

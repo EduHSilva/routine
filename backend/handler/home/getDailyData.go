@@ -60,6 +60,13 @@ func GetDailyDataHandler(ctx *gin.Context) {
 	}
 
 	meal, _ := GetClosestMeal(db, userID.(uint))
+	if meal == nil {
+		data := ResponseData{
+			Tasks: dataTasks,
+		}
+		helper.SendSuccess(ctx, data)
+		return
+	}
 
 	data := ResponseData{
 		Tasks: dataTasks,

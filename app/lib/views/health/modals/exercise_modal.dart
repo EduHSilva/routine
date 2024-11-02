@@ -62,7 +62,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
               // Campo de busca
               CustomTextField(
                 controller: _searchController,
-                labelText: 'search'.tr(),
+                labelText: 'search',
                 onChanged: _setSearchFilter,
               ),
               const SizedBox(height: 16),

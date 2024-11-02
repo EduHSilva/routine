@@ -54,6 +54,8 @@ definitions:
         items:
           $ref: '#/definitions/diet.FoodRequest'
         type: array
+      hour:
+        type: string
       name:
         type: string
       user_id:
@@ -87,6 +89,8 @@ definitions:
         items:
           $ref: '#/definitions/diet.ResponseDataFood'
         type: array
+      hour:
+        type: string
       id:
         type: integer
       name:
@@ -120,6 +124,8 @@ definitions:
         items:
           $ref: '#/definitions/diet.FoodRequest'
         type: array
+      hour:
+        type: string
       name:
         type: string
     type: object
@@ -128,6 +134,62 @@ definitions:
       code:
         type: string
       message:
+        type: string
+    type: object
+  home.ResponseDailyData:
+    properties:
+      data:
+        $ref: '#/definitions/home.ResponseData'
+      message:
+        type: string
+    type: object
+  home.ResponseData:
+    properties:
+      meal:
+        $ref: '#/definitions/home.ResponseDataMeal'
+      tasks:
+        items:
+          $ref: '#/definitions/home.ResponseDataTasks'
+        type: array
+    type: object
+  home.ResponseDataMeal:
+    properties:
+      hour:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  home.ResponseDataTasks:
+    properties:
+      category:
+        type: string
+      color:
+        type: string
+      createAt:
+        type: string
+      date_end:
+        type: string
+      date_start:
+        type: string
+      deletedAt:
+        type: string
+      done:
+        type: boolean
+      end_time:
+        type: string
+      frequency:
+        type: string
+      id:
+        type: integer
+      priority:
+        type: string
+      start_time:
+        type: string
+      title:
+        type: string
+      updateAt:
         type: string
     type: object
   home.ResponseSearch:
@@ -584,6 +646,37 @@ paths:
       summary: Update category
       tags:
       - Category
+  /daily:
+    get:
+      consumes:
+      - application/json
+      description: Info of the day with pending tasks, next meal.
+      parameters:
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/home.ResponseDailyData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get daily data
+      tags:
+      - Home
   /diet/food:
     get:
       consumes:

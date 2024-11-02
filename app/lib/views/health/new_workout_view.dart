@@ -203,7 +203,7 @@ class NewWorkoutViewState extends State<NewWorkoutView> {
                                                 color: AppColors.primary),
                                             const SizedBox(height: 4),
                                             CustomTextField(
-                                              labelText: 'load'.tr(),
+                                              labelText: 'load',
                                               initialValue:
                                                   exercise.load?.toString(),
                                               keyboardType:
@@ -226,7 +226,7 @@ class NewWorkoutViewState extends State<NewWorkoutView> {
                                                 color: AppColors.primary),
                                             const SizedBox(height: 4),
                                             CustomTextField(
-                                              labelText: 'series'.tr(),
+                                              labelText: 'series',
                                               initialValue: exercise.series?.toString(),
                                               keyboardType:
                                                   TextInputType.number,
@@ -248,7 +248,7 @@ class NewWorkoutViewState extends State<NewWorkoutView> {
                                                 color: AppColors.primary),
                                             const SizedBox(height: 4),
                                             CustomTextField(
-                                              labelText: 'repetitions'.tr(),
+                                              labelText: 'repetitions',
                                               initialValue: exercise.repetitions
                                                   ?.toString(),
                                               keyboardType:

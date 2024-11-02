@@ -7,7 +7,7 @@ class Meal {
   final String? updateAt;
   final String name;
   final String hour;
-  final List<Food> foods;
+  final List<Food>? foods;
 
   Meal(
       {required this.id,
@@ -15,13 +15,16 @@ class Meal {
       this.updateAt,
       required this.name,
       required this.hour,
-      required this.foods});
+      this.foods});
 
   factory Meal.fromJson(Map<String, dynamic> json) {
-    var foodsFromJson = json['foods'] as List;
-    List<Food> foodsList = foodsFromJson
-        .map((exercise) => Food.fromJson(exercise))
-        .toList();
+    List<Food> foodsList = [];
+    if(json['foods'] != null) {
+      var foodsFromJson = json['foods'] as List;
+      foodsList = foodsFromJson
+          .map((exercise) => Food.fromJson(exercise))
+          .toList();
+    }
     return Meal(
         createAt: json['createAt'],
         id: json['id'],

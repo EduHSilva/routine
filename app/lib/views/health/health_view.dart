@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:routine/views/health/tabs/diet_tab.dart';
 import 'package:routine/views/health/tabs/workout_tab.dart';
 import 'package:flutter/material.dart';
@@ -25,14 +26,14 @@ class TasksViewState extends State<HealthView> {
     return DefaultTabController(
       length: 2,
       initialIndex: widget.initialIndex,
-      child: const Scaffold(
+      child: Scaffold(
         appBar: CustomAppBar(
           title: 'health',
           bottom: TabBar(
             labelColor: AppColors.onPrimary,
             tabs: [
-              Tab(text: 'Treinos'),
-              Tab(text: 'Dieta'),
+              Tab(child: Text('workout'.tr())),
+              Tab(child: Text('meals'.tr())),
             ],
           ),
         ),

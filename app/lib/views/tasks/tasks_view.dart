@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:routine/views/tasks/tabs/all_tasks_tab.dart';
 import 'package:routine/views/tasks/tabs/category_tab.dart';
 import 'package:routine/views/tasks/tabs/rules_tab.dart';
@@ -26,15 +27,15 @@ class TasksViewState extends State<TasksView> {
     return DefaultTabController(
       length: 3,
       initialIndex: widget.initialIndex,
-      child: const Scaffold(
+      child: Scaffold(
         appBar: CustomAppBar(
           title: 'tasks',
           bottom: TabBar(
             labelColor: AppColors.onPrimary,
             tabs: [
-              Tab(text: 'Semana'),
-              Tab(text: 'Regras'),
-              Tab(text: 'Categorias'),
+              Tab(child: Text('week'.tr())),
+              Tab(child: Text('rules'.tr())),
+              Tab(child: Text('categories'.tr())),
             ],
           ),
         ),

@@ -64,6 +64,7 @@ class TasksViewModel {
 
       if (response?.task != null) {
         await fetchTasksRules();
+        return response;
       } else {
         errorMessage.value = response?.message;
       }
