@@ -14,10 +14,11 @@ locally.
 
 - [Prerequisites](#prerequisites)
 - [Backend Setup](#backend)
+    - [Backend Docs](#backend-docs)
+    - [Integrations](#integrations)
     - [Environment Variables](#backend-environment-variables)
     - [Running the Backend](#running-the-backend)
-- [Backend Docs](#backend-docs)
-- [Integrations](#integrations)
+   
 - [Frontend Setup](#frontend-setup)
     - [Environment Variables](#frontend-environment-variables)
     - [Running the Frontend](#running-the-frontend)
