@@ -50,17 +50,15 @@ func (r CreateTaskRequest) Validate() error {
 }
 
 func isValidTimeFormat(t string) bool {
-	t, _ = ConvertTo24HourFormat(t)
-	_, err := time.Parse("15:04", t)
-	return err == nil
-}
-
-func ConvertTo24HourFormat(t string) (string, error) {
-	parsedTime, err := time.Parse("3:04 PM", t)
-	if err != nil {
-		return "", err
+	if _, err := time.Parse("15:04", t); err == nil {
+		return true
 	}
-	return parsedTime.Format("15:04"), nil
+
+	if _, err := time.Parse("3:04 PM", t); err == nil {
+		return true
+	}
+
+	return false
 }
 
 type UpdateTaskRequest struct {
