@@ -115,7 +115,7 @@ class NewWorkoutViewState extends State<NewWorkoutView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: widget.id == null ? Text('add'.tr()) : Text('edit'.tr()),
+        title: widget.id == null ? Text('newWorkout'.tr()) : Text('editWorkout'.tr()),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -123,14 +123,6 @@ class NewWorkoutViewState extends State<NewWorkoutView> {
           key: _formKey,
           child: Column(
             children: [
-              const SizedBox(height: 16),
-              Text(
-                widget.id == null ? 'newWorkout'.tr() : 'editWorkout',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).primaryColor,
-                    ),
-              ),
               const SizedBox(height: 24),
               CustomTextField(
                 controller: _nameController,

@@ -134,7 +134,7 @@ class NewMealViewState extends State<NewMealView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: widget.id == null ? Text('add'.tr()) : Text('edit'.tr()),
+        title: widget.id == null ? Text('newMeal'.tr()) : Text('editMeal'.tr()),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -142,14 +142,6 @@ class NewMealViewState extends State<NewMealView> {
           key: _formKey,
           child: Column(
             children: [
-              const SizedBox(height: 16),
-              Text(
-                widget.id == null ? 'newMeal'.tr() : 'editMeal'.tr(),
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).primaryColor,
-                    ),
-              ),
               const SizedBox(height: 24),
               Row(
                 children: [

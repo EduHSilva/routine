@@ -25,18 +25,19 @@ class LoginViewState extends State<LoginView> {
     return _formKey.currentState?.validate() ?? false;
   }
 
-  _login() async {
-    if (!_validateForm()) {
-      return;
+  Future<void> _login() async {
+    if (!_validateForm()) return;
+
+    try {
+      LoginResponse? response = await _authViewModel.login(
+          _usernameController.text, _passwordController.text);
+      _handleResponse(response);
+    } catch (error) {
+      //
     }
-
-    LoginResponse? response = await _authViewModel.login(
-        _usernameController.text, _passwordController.text);
-
-    _handleResponse(response);
   }
 
-  _handleResponse(LoginResponse? response) {
+  void _handleResponse(LoginResponse? response) {
     if (response?.user != null) {
       Navigator.pushReplacementNamed(context, '/home');
     } else {
@@ -54,69 +55,69 @@ class LoginViewState extends State<LoginView> {
             return const Center(child: CircularProgressIndicator());
           }
           return Scaffold(
-            body: Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 60.0, 16.0, 0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 60.0),
-                      child: Text(
-                        'login'.tr(),
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primary,
+              body: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16.0, 60.0, 16.0, 0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 60.0),
+                          child: Text(
+                            'login'.tr(),
+                            style: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    CustomTextField(
-                      labelText: 'email',
-                      controller: _usernameController,
-                      validator: requiredFieldValidator,
-                    ),
-                    const SizedBox(height: 16),
-                    CustomTextField(
-                      isPassword: true,
-                      labelText: 'password',
-                      controller: _passwordController,
-                      validator: requiredFieldValidator,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 50.0),
-                      child: Column(
-                        children: [
-                          CustomButton(
-                            text: 'login',
-                            onPressed: _login,
+                        CustomTextField(
+                          labelText: 'email'.tr(),
+                          controller: _usernameController,
+                          validator: requiredFieldValidator,
+                        ),
+                        const SizedBox(height: 16),
+                        CustomTextField(
+                          isPassword: true,
+                          labelText: 'password'.tr(),
+                          controller: _passwordController,
+                          validator: requiredFieldValidator,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 50.0),
+                          child: Column(
+                            children: [
+                              CustomButton(
+                                text: 'login'.tr(),
+                                onPressed: _login,
+                              ),
+                              const SizedBox(height: 10),
+                              CustomButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => const RegisterView(),
+                                  ));
+                                },
+                                text: 'signUp'.tr(),
+                                isOutlined: true,
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 10),
-                          CustomButton(
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const RegisterView(),
-                              ));
-                            },
-                            text: 'signUp',
-                            isOutlined: true,
-                          ),
-                        ],
-                      ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            // Implementar a lógica para recuperar a senha
+                          },
+                          child: Text('lostPassword'.tr()),
+                        ),
+                      ],
                     ),
-                    const Spacer(),
-                    TextButton(
-                      onPressed: () {
-                        // Implementar a lógica para recuperar a senha
-                      },
-                      child: Text('lostPassword'.tr()),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          );
+              ));
         });
   }
 }

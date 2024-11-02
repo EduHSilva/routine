@@ -106,7 +106,7 @@ class RegisterViewState extends State<RegisterView> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 60.0),
+                        padding: const EdgeInsets.only(bottom: 30.0),
                         child: Text(
                           'signUp'.tr(),
                           style: const TextStyle(

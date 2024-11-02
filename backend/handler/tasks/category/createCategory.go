@@ -42,7 +42,7 @@ func CreateCategoryHandler(ctx *gin.Context) {
 	}
 
 	var existingCategory tasks.CategoryTask
-	if err := db.Where("title = ? and user_id", request.Title, request.UserID).First(&existingCategory).Error; err == nil {
+	if err := db.Where("title = ? and user_id = ?", request.Title, request.UserID).First(&existingCategory).Error; err == nil {
 		logger.Err("Category already exists")
 		message := getI18n.(*i18n.Localizer).MustLocalize(&i18n.LocalizeConfig{
 			MessageID: "alreadyExists",
