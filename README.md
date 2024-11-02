@@ -17,6 +17,7 @@ locally.
     - [Environment Variables](#backend-environment-variables)
     - [Running the Backend](#running-the-backend)
 - [Backend Docs](#backend-docs)
+- [Integrations](#integrations)
 - [Frontend Setup](#frontend-setup)
     - [Environment Variables](#frontend-environment-variables)
     - [Running the Frontend](#running-the-frontend)
@@ -37,6 +38,14 @@ Before running this project locally, ensure that you have the following installe
 
 [Documentation](https://routine-back.onrender.com/api/v1/swagger/index.html)
 
+### Integrations
+- GPT
+  * link - https://console.groq.com/docs/overview
+  * usage - for the user search on home
+- Foods
+   * link - https://trackapi.nutritionix.com/
+   * usage - for search foods to meal of user diet
+
 ### Backend Environment Variables
 
 Create a `.env` file in the backend root directory with the following structure:
@@ -49,6 +58,11 @@ DB_USER=your_database_user
 DB_PASSWORD=your_database_password
 DB_NAME=your_database_name
 DB_PORT=5432
+FOOD_API_HOST=
+FOOD_API_KEY=
+FOOD_APP_ID=
+GPT_API_KEY=g
+GPT_API_URL=
 ```
 
 ### Running the Backend
