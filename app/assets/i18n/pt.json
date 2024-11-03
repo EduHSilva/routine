@@ -103,5 +103,16 @@
   "noTasksPending": "Sem tarefas pendentes para hoje!",
   "noNextMeal": "Sem proxima refeição!",
   "selectAValue": "Selecione um valor",
-  "mealDetails": "Detalhes de refeição"
+  "mealDetails": "Detalhes de refeição",
+  "week": "Semana",
+  "education": "Educacao",
+  "financing": "Financiamento",
+  "others": "Outros",
+  "salary": "Salario",
+  "supermarket": "Supermercado",
+  "supplementation": "Suplementacao",
+  "transport": "Transporte",
+  "profile": "Perfil",
+  "editCategory": "Editar categoria",
+  "type": "Tipo"
 }

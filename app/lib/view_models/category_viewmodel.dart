@@ -9,11 +9,11 @@ class CategoryViewModel {
   ValueNotifier<String?> errorMessage = ValueNotifier(null);
   ValueNotifier<List<Category>> categories = ValueNotifier([]);
 
-  Future<void> fetchCategories() async {
+  Future<void> fetchCategories(String? type) async {
     try {
       categories.value = [];
       isLoading.value = true;
-      List<Category> response = await _categoryService.fetchCategories();
+      List<Category> response = await _categoryService.fetchCategories(type);
       categories.value = response;
     } catch (e) {
       errorMessage.value = "Error fetching categories";
@@ -23,15 +23,15 @@ class CategoryViewModel {
     }
   }
 
-  Future<CategoryResponse?> createCategory(String title, String color) async {
+  Future<CategoryResponse?> createCategory(String title, String color, String type) async {
     try {
       isLoading.value = true;
       CreateCategoryRequest categoryRequest =
-          CreateCategoryRequest(title: title, color: color);
+          CreateCategoryRequest(title: title, color: color, type: type);
       CategoryResponse? response =
           await _categoryService.createCategory(categoryRequest);
       if (response?.category != null) {
-        await fetchCategories();
+        await fetchCategories('all');
       } else {
         errorMessage.value = response?.message;
       }
@@ -50,7 +50,7 @@ class CategoryViewModel {
       isLoading.value = true;
       CategoryResponse? response = await _categoryService.deleteCategory(id);
       if (response?.category != null) {
-        await fetchCategories();
+        await fetchCategories('all');
       } else {
         errorMessage.value = response?.message;
       }
@@ -70,7 +70,7 @@ class CategoryViewModel {
       CategoryResponse? response =
           await _categoryService.editCategory(id, title, color);
       if (response?.category != null) {
-        await fetchCategories();
+        await fetchCategories('all');
       } else {
         errorMessage.value = errorMessage.value = response?.message;
       }

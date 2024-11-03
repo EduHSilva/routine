@@ -3,7 +3,6 @@ package seeds
 import (
 	"github.com/EduHSilva/routine/schemas"
 	"github.com/EduHSilva/routine/schemas/health/workout"
-	"github.com/EduHSilva/routine/schemas/tasks"
 	"gorm.io/gorm"
 )
 
@@ -15,9 +14,9 @@ func Load(db *gorm.DB) {
 		db.Create(&users)
 	}
 
-	db.Model(&tasks.CategoryTask{}).Count(&count)
+	db.Model(&schemas.Category{}).Count(&count)
 	if count == 0 {
-		db.Create(&categoriesTask)
+		db.Create(&categories)
 	}
 
 	db.Model(&workout.Exercise{}).Count(&count)

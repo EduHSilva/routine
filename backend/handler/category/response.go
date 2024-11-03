@@ -1,7 +1,7 @@
 package category
 
 import (
-	"github.com/EduHSilva/routine/schemas/tasks"
+	"github.com/EduHSilva/routine/schemas"
 	"time"
 )
 
@@ -13,6 +13,7 @@ type ResponseData struct {
 	Title     string    `json:"title"`
 	Color     string    `json:"color"`
 	System    bool      `json:"system"`
+	Type      string    `json:"type"`
 }
 
 type ResponseCategory struct {
@@ -25,7 +26,7 @@ type ResponseCategories struct {
 	Data    []ResponseData `json:"data"`
 }
 
-func ConvertCategoryToCategoryResponse(category *tasks.CategoryTask) ResponseData {
+func ConvertCategoryToCategoryResponse(category *schemas.Category) ResponseData {
 	return ResponseData{
 		ID:        category.ID,
 		CreateAt:  category.CreatedAt,
@@ -33,5 +34,6 @@ func ConvertCategoryToCategoryResponse(category *tasks.CategoryTask) ResponseDat
 		DeletedAt: category.DeletedAt.Time,
 		Title:     category.Title,
 		Color:     category.Color,
+		Type:      string(category.Type),
 	}
 }

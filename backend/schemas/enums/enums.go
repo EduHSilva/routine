@@ -1,4 +1,4 @@
-package schemas
+package enums
 
 type Frequency string
 
@@ -35,4 +35,11 @@ const (
 	Target     MuscleFunction = "Target"
 	Synergist  MuscleFunction = "Synergist"
 	Stabilizer MuscleFunction = "Stabilizer"
+)
+
+type CategoryType string
+
+const (
+	Tasks    CategoryType = "tasks"
+	Finances CategoryType = "finances"
 )

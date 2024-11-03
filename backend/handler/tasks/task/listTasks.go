@@ -32,7 +32,7 @@ func GetAllTasksRulesHandler(ctx *gin.Context) {
 
 	if err := db.Table("task_rules").
 		Select("task_rules.*, c.title AS category_name, c.color as color").
-		Joins("left join category_tasks c on c.id = task_rules.category_id").
+		Joins("left join categories c on c.id = task_rules.category_id").
 		Where("task_rules.user_id = ? and task_rules.deleted_at is null", userID).
 		Scan(&tasksRules).Error; err != nil {
 		helper.SendErrorDefault(ctx, http.StatusInternalServerError, getI18n.(*i18n.Localizer))

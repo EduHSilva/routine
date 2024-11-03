@@ -7,7 +7,7 @@ import '../models/tasks/category_model.dart';
 class CategoryService {
   Future<CategoryResponse?> createCategory(
       CreateCategoryRequest createCategoryRequest) async {
-    final String apiUrl = '${AppConfig.apiUrl}tasks/category';
+    final String apiUrl = '${AppConfig.apiUrl}category';
     http.Client client = await AppConfig.getHttpClient();
 
     try {
@@ -16,7 +16,8 @@ class CategoryService {
         body: jsonEncode(<String, dynamic>{
           'title': createCategoryRequest.title,
           'user_id': createCategoryRequest.userID,
-          'color': createCategoryRequest.color
+          'color': createCategoryRequest.color,
+          'type': createCategoryRequest.type
         }),
       );
 
@@ -33,10 +34,10 @@ class CategoryService {
     }
   }
 
-  Future<List<Category>> fetchCategories() async {
+  Future<List<Category>> fetchCategories(String? type) async {
     http.Client client = await AppConfig.getHttpClient();
     final response =
-        await client.get(Uri.parse('${AppConfig.apiUrl}tasks/categories'));
+        await client.get(Uri.parse('${AppConfig.apiUrl}categories?type=$type'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
@@ -57,7 +58,7 @@ class CategoryService {
   Future<CategoryResponse> getCategory(int id) async {
     http.Client client = await AppConfig.getHttpClient();
     final response =
-        await client.get(Uri.parse('${AppConfig.apiUrl}tasks/category?id=$id'));
+        await client.get(Uri.parse('${AppConfig.apiUrl}category?id=$id'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
@@ -71,7 +72,7 @@ class CategoryService {
   }
 
   Future<CategoryResponse?> deleteCategory(int id) async {
-    final String apiUrl = '${AppConfig.apiUrl}tasks/category';
+    final String apiUrl = '${AppConfig.apiUrl}category';
     http.Client client = await AppConfig.getHttpClient();
 
     try {
@@ -92,7 +93,7 @@ class CategoryService {
 
   Future<CategoryResponse?> editCategory(
       int id, String title, String color) async {
-    final String apiUrl = '${AppConfig.apiUrl}tasks/category';
+    final String apiUrl = '${AppConfig.apiUrl}category';
     http.Client client = await AppConfig.getHttpClient();
 
     try {

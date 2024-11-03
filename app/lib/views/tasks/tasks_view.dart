@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:routine/views/tasks/tabs/all_tasks_tab.dart';
-import 'package:routine/views/tasks/tabs/category_tab.dart';
+import 'package:routine/views/categories/category_view.dart';
 import 'package:routine/views/tasks/tabs/rules_tab.dart';
 import 'package:flutter/material.dart';
 
@@ -25,7 +25,7 @@ class TasksViewState extends State<TasksView> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       initialIndex: widget.initialIndex,
       child: Scaffold(
         appBar: CustomAppBar(
@@ -35,7 +35,6 @@ class TasksViewState extends State<TasksView> {
             tabs: [
               Tab(child: Text('week'.tr())),
               Tab(child: Text('rules'.tr())),
-              Tab(child: Text('categories'.tr())),
             ],
           ),
         ),
@@ -44,7 +43,6 @@ class TasksViewState extends State<TasksView> {
           children: [
             AllTasksTab(),
             RulesTab(),
-            CategoryTab(),
           ],
         ),
       ),

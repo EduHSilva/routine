@@ -2,7 +2,7 @@ package task
 
 import (
 	"github.com/EduHSilva/routine/helper"
-	"github.com/EduHSilva/routine/schemas"
+	"github.com/EduHSilva/routine/schemas/enums"
 	"github.com/EduHSilva/routine/schemas/tasks"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
@@ -60,7 +60,7 @@ func UpdateTaskRuleHandler(ctx *gin.Context) {
 	}
 
 	if request.Priority != "" {
-		taskRule.Priority = schemas.Priority(request.Priority)
+		taskRule.Priority = enums.Priority(request.Priority)
 	}
 
 	if request.CategoryID != 0 {

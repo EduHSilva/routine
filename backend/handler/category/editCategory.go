@@ -2,7 +2,7 @@ package category
 
 import (
 	"github.com/EduHSilva/routine/helper"
-	"github.com/EduHSilva/routine/schemas/tasks"
+	"github.com/EduHSilva/routine/schemas"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"net/http"
@@ -48,7 +48,7 @@ func UpdateCategoryHandler(ctx *gin.Context) {
 		return
 	}
 
-	category := &tasks.CategoryTask{}
+	category := &schemas.Category{}
 
 	if err := db.First(&category, id).Error; err != nil {
 		helper.SendErrorDefault(ctx, http.StatusNotFound, getI18n.(*i18n.Localizer))

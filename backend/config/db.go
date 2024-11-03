@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/EduHSilva/routine/schemas"
+	"github.com/EduHSilva/routine/schemas/finances"
 	"github.com/EduHSilva/routine/schemas/health/diet"
 	"github.com/EduHSilva/routine/schemas/health/workout"
 	"github.com/EduHSilva/routine/schemas/tasks"
@@ -37,7 +38,7 @@ func InitDatabase() (*gorm.DB, error) {
 
 	err = db.AutoMigrate(
 		&schemas.User{},
-		&tasks.CategoryTask{},
+		&schemas.Category{},
 		&tasks.TaskRule{},
 		&tasks.Task{},
 		&workout.Exercise{},
@@ -49,6 +50,7 @@ func InitDatabase() (*gorm.DB, error) {
 		&workout.ExerciseMuscle{},
 		&diet.Meal{},
 		&diet.Food{},
+		&finances.Transaction{},
 	)
 
 	seeds.Load(db)

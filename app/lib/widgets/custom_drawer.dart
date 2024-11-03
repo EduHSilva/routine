@@ -62,9 +62,15 @@ class CustomDrawer extends StatelessWidget {
           const Divider(),
           _createDrawerItem(
             context,
-            icon: Icons.settings_outlined,
-            text: 'settings',
-            route: '/settings',
+            icon: Icons.category_outlined,
+            text: 'categories',
+            route: '/categories',
+          ),
+          _createDrawerItem(
+            context,
+            icon: Icons.person_outlined,
+            text: 'profile',
+            route: '/profile',
           ),
           _createDrawerItem(
             context,

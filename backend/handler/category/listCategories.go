@@ -2,7 +2,7 @@ package category
 
 import (
 	"github.com/EduHSilva/routine/helper"
-	"github.com/EduHSilva/routine/schemas/tasks"
+	"github.com/EduHSilva/routine/schemas"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"net/http"
@@ -32,7 +32,17 @@ func GetAllCategoriesHandler(ctx *gin.Context) {
 		return
 	}
 
-	if err := db.Where("user_id = ? OR system = true", userID).Order("title").Model(&tasks.CategoryTask{}).Scan(&categoryResponses).Error; err != nil {
+	queryParams := ctx.Request.URL.Query()
+
+	categoryType := queryParams.Get("type")
+
+	query := db.Where("(user_id = ? OR system = true)", userID).Order("title").Model(&schemas.Category{})
+
+	if categoryType != "all" {
+		query = query.Where("type = ?", categoryType)
+	}
+
+	if err := query.Scan(&categoryResponses).Error; err != nil {
 		helper.SendErrorDefault(ctx, http.StatusInternalServerError, getI18n.(*i18n.Localizer))
 		return
 	}

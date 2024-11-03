@@ -102,5 +102,17 @@
   "welcomeMessage": "# Welcome!\n #### We're ready to help you with your routine!\n* Use AI search\n* Organize your tasks\n* Track your workouts and meals\n* Take control of your finances!",
   "noTasksPending": "Without pending tasks",
   "noNextMeal": "Without next meal!",
-  "selectAValue": "Select a value"
+  "selectAValue": "Select a value",
+  "week": "Week",
+  "mealDetails": "Meal details",
+  "education": "Education",
+  "financing": "Financing",
+  "others": "Others",
+  "salary": "Salary",
+  "supermarket": "Supermarket",
+  "supplementation": "Supplementation",
+  "transport": "Transport",
+  "profile": "Profile",
+  "editCategory": "Edit category",
+  "type": "Type"
 }

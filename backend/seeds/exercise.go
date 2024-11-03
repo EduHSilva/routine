@@ -3,7 +3,7 @@ package seeds
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/EduHSilva/routine/schemas"
+	"github.com/EduHSilva/routine/schemas/enums"
 	"github.com/EduHSilva/routine/schemas/health/workout"
 	gt "github.com/bas24/googletranslatefree"
 	"html/template"
@@ -93,11 +93,11 @@ func loadExercisesFromFile(filePath string) ([]workout.Exercise, error) {
 						Name:  muscle.Name,
 						Group: muscle.Group,
 					},
-					Function: schemas.MuscleFunction(strings.Title(function)),
+					Function: enums.MuscleFunction(strings.Title(function)),
 				}
 
 				for _, head := range muscle.Heads {
-					exerciseMuscle.Muscle.Heads = schemas.MuscleHead(strings.Title(head))
+					exerciseMuscle.Muscle.Heads = enums.MuscleHead(strings.Title(head))
 				}
 
 				exercise.Muscles = append(exercise.Muscles, exerciseMuscle)

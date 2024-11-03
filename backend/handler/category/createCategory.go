@@ -3,7 +3,7 @@ package category
 import (
 	"errors"
 	"github.com/EduHSilva/routine/helper"
-	"github.com/EduHSilva/routine/schemas/tasks"
+	"github.com/EduHSilva/routine/schemas"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"gorm.io/gorm"
@@ -41,7 +41,7 @@ func CreateCategoryHandler(ctx *gin.Context) {
 		return
 	}
 
-	var existingCategory tasks.CategoryTask
+	var existingCategory schemas.Category
 	if err := db.Where("title = ? and user_id = ?", request.Title, request.UserID).First(&existingCategory).Error; err == nil {
 		logger.Err("Category already exists")
 		message := getI18n.(*i18n.Localizer).MustLocalize(&i18n.LocalizeConfig{
@@ -55,10 +55,11 @@ func CreateCategoryHandler(ctx *gin.Context) {
 		return
 	}
 
-	category := tasks.CategoryTask{
+	category := schemas.Category{
 		Title:  request.Title,
 		Color:  request.Color,
 		UserID: request.UserID,
+		Type:   request.Type,
 	}
 
 	if err := db.Create(&category).Error; err != nil {

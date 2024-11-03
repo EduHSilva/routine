@@ -197,8 +197,8 @@ class HomeViewState extends State<HomeView> {
                       valueListenable: _homeViewModel.nextMeal,
                       builder: (context, nextMeal, child) {
                         if (nextMeal == null || nextMeal.name.isEmpty) {
-                          return const Text(
-                            'noNextMeal',
+                          return Text(
+                            'noNextMeal'.tr(),
                             style: TextStyle(fontSize: 16),
                           );
                         }

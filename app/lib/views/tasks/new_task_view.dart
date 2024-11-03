@@ -52,7 +52,7 @@ class NewTaskViewState extends State<NewTaskView> {
   @override
   initState() {
     super.initState();
-    _categoryViewModel.fetchCategories().then((_) {
+    _categoryViewModel.fetchCategories('tasks').then((_) {
       if (widget.id != null) {
         _loadTaskData(widget.id!);
       }
@@ -213,7 +213,7 @@ class NewTaskViewState extends State<NewTaskView> {
                           });
                         },
                         validator: (value) =>
-                            value == null ? 'Select a category' : null,
+                            value == null ? 'selectAValue'.tr() : null,
                       ),
                       const SizedBox(height: 16),
                       Row(

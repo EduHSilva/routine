@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../models/health/workout_model.dart';
 import '../../../view_models/workout_viewmodel.dart';
 import '../../../widgets/custom_text_field.dart';
+import '../../../widgets/filter_card.dart';
 
 class ExerciseModal extends StatefulWidget {
   final List<Exercise> selectedExercises;
@@ -59,7 +60,6 @@ class _ExerciseModalState extends State<ExerciseModal> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Campo de busca
               CustomTextField(
                 controller: _searchController,
                 labelText: 'search',
@@ -127,22 +127,12 @@ class _ExerciseModalState extends State<ExerciseModal> {
     );
   }
 
-  Widget _buildFilterCard(String bodyPart, String label) {
-    bool isSelected = _selectedBodyPart == bodyPart;
-    return GestureDetector(
-      onTap: () => _setBodyPartFilter(bodyPart),
-      child: Card(
-        color: isSelected ? Colors.blueAccent : Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            label.tr(),
-            style: TextStyle(
-              color: isSelected ? Colors.white : Colors.black,
-            ),
-          ),
-        ),
-      ),
+  Widget _buildFilterCard(String value, String label) {
+    return FilterCard(
+      value: value,
+      label: label,
+      isSelected: _selectedBodyPart == value,
+      onTap: _setBodyPartFilter,
     );
   }
 }

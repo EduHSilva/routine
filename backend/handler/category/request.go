@@ -2,12 +2,14 @@ package category
 
 import (
 	"github.com/EduHSilva/routine/helper"
+	"github.com/EduHSilva/routine/schemas/enums"
 )
 
 type CreateCategoryRequest struct {
-	Title  string `json:"title"`
-	UserID uint   `json:"user_id"`
-	Color  string `json:"color"`
+	Title  string             `json:"title"`
+	UserID uint               `json:"user_id"`
+	Color  string             `json:"color"`
+	Type   enums.CategoryType `json:"type"`
 }
 
 func (r CreateCategoryRequest) Validate() error {

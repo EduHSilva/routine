@@ -2,7 +2,7 @@ package task
 
 import (
 	"github.com/EduHSilva/routine/helper"
-	"github.com/EduHSilva/routine/schemas"
+	"github.com/EduHSilva/routine/schemas/enums"
 	"github.com/EduHSilva/routine/schemas/tasks"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -50,8 +50,8 @@ func CreateTaskRuleHandler(ctx *gin.Context) {
 
 	taskRule := tasks.TaskRule{
 		Title:      request.Title,
-		Frequency:  schemas.Frequency(request.Frequency),
-		Priority:   schemas.Priority(request.Priority),
+		Frequency:  enums.Frequency(request.Frequency),
+		Priority:   enums.Priority(request.Priority),
 		DateStart:  request.DateStart,
 		DateEnd:    request.DateEnd,
 		StartTime:  request.StartTime,
@@ -85,17 +85,17 @@ func createTaskStatus(tx *gorm.DB, task tasks.TaskRule) error {
 
 	if task.DateEnd.IsZero() {
 		switch task.Frequency {
-		case schemas.Daily:
+		case enums.Daily:
 			task.DateEnd = task.DateStart.AddDate(0, 3, -1)
-		case schemas.Weekly:
+		case enums.Weekly:
 			task.DateEnd = task.DateStart.AddDate(1, 0, -1)
-		case schemas.MondayToFriday:
+		case enums.MondayToFriday:
 			task.DateEnd = task.DateStart.AddDate(0, 3, -1)
-		case schemas.Monthly:
+		case enums.Monthly:
 			task.DateEnd = task.DateStart.AddDate(1, 0, -1)
-		case schemas.Yearly:
+		case enums.Yearly:
 			task.DateEnd = task.DateStart.AddDate(2, 0, -1)
-		case schemas.Unique:
+		case enums.Unique:
 		default:
 			task.DateEnd = task.DateStart
 		}
@@ -103,18 +103,18 @@ func createTaskStatus(tx *gorm.DB, task tasks.TaskRule) error {
 
 	intervalDays := 1
 	switch task.Frequency {
-	case schemas.Daily:
+	case enums.Daily:
 		intervalDays = 1
-	case schemas.Weekly:
+	case enums.Weekly:
 		intervalDays = 7
-	case schemas.Monthly:
+	case enums.Monthly:
 		intervalDays = 30
-	case schemas.Yearly:
+	case enums.Yearly:
 		intervalDays = 365
 	}
 
 	for date := task.DateStart; date.Before(task.DateEnd) || date.Equal(task.DateEnd); date = date.AddDate(0, 0, intervalDays) {
-		if task.Frequency == schemas.MondayToFriday && (date.Weekday() < time.Monday || date.Weekday() > time.Friday) {
+		if task.Frequency == enums.MondayToFriday && (date.Weekday() < time.Monday || date.Weekday() > time.Friday) {
 			continue
 		}
 
