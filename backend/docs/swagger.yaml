@@ -5,6 +5,8 @@ definitions:
         type: string
       title:
         type: string
+      type:
+        $ref: '#/definitions/enums.CategoryType'
       user_id:
         type: integer
     type: object
@@ -37,6 +39,8 @@ definitions:
       system:
         type: boolean
       title:
+        type: string
+      type:
         type: string
       updateAt:
         type: string
@@ -128,6 +132,82 @@ definitions:
         type: string
       name:
         type: string
+    type: object
+  enums.CategoryType:
+    enum:
+    - tasks
+    - finances
+    type: string
+    x-enum-varnames:
+    - Tasks
+    - Finances
+  enums.Frequency:
+    enum:
+    - daily
+    - mondayToFriday
+    - weekly
+    - monthly
+    - yearly
+    - unique
+    type: string
+    x-enum-varnames:
+    - Daily
+    - MondayToFriday
+    - Weekly
+    - Monthly
+    - Yearly
+    - Unique
+  finances.CreateTransactionRequest:
+    properties:
+      category_id:
+        type: integer
+      date:
+        type: string
+      frequency:
+        $ref: '#/definitions/enums.Frequency'
+      income:
+        type: boolean
+      title:
+        type: string
+      user_id:
+        type: integer
+      value:
+        type: number
+    type: object
+  finances.ResponseCategory:
+    properties:
+      data:
+        $ref: '#/definitions/finances.ResponseData'
+      message:
+        type: string
+    type: object
+  finances.ResponseData:
+    properties:
+      category:
+        type: string
+      createAt:
+        type: string
+      date:
+        type: string
+      deletedAt:
+        type: string
+      frequency:
+        type: string
+      id:
+        type: integer
+      income:
+        type: boolean
+      title:
+        type: string
+      updateAt:
+        type: string
+    type: object
+  finances.UpdateTransactionRequest:
+    properties:
+      title:
+        type: string
+      value:
+        type: number
     type: object
   helper.ErrorResponse:
     properties:
@@ -717,6 +797,193 @@ paths:
       summary: Search food
       tags:
       - Diet
+  /finances/transaction:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a transaction
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/finances.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete transaction
+      tags:
+      - Finances
+    get:
+      consumes:
+      - application/json
+      description: Get one transaction
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/finances.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get a transaction
+      tags:
+      - Finances
+    post:
+      consumes:
+      - application/json
+      description: Create a new transaction
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/finances.CreateTransactionRequest'
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/finances.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create transaction
+      tags:
+      - Finances
+  /finances/transactions:
+    get:
+      consumes:
+      - application/json
+      description: Get all transactions
+      parameters:
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/finances.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all transactions
+      tags:
+      - Finances
+    put:
+      consumes:
+      - application/json
+      description: Update the title or value of transaction
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/finances.UpdateTransactionRequest'
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/finances.ResponseCategory'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update a transaction
+      tags:
+      - Finances
   /login:
     post:
       consumes:

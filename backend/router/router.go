@@ -30,4 +30,5 @@ func initRoutes(router *gin.Engine) {
 	initWorkoutRoutes(router)
 	initDietRoutes(router)
 	initHomeRoutes(router)
+	initFinancesRoutes(router)
 }
