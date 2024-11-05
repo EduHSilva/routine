@@ -13,9 +13,9 @@ func initFinancesRoutes(router *gin.Engine) {
 	docs.SwaggerInfo.BasePath = basePath
 	api := router.Group(basePath)
 
-	api.POST("finances/transaction", helper.DefaultMiddleware(), finances.CreateTransactionHandler)
-	api.DELETE("finances/transaction", helper.DefaultMiddleware(), finances.DeleteTransactionHandler)
-	api.PUT("finances/transaction", helper.DefaultMiddleware(), finances.UpdateTransactionHandler)
-	api.GET("finances/transaction", helper.DefaultMiddleware(), finances.GetTransactionHandler)
-	api.GET("finances/transactions", helper.DefaultMiddleware(), finances.GetAllTransactionsHandler)
+	api.POST("finances/rule", helper.DefaultMiddleware(), finances.CreateTransactionRuleHandler)
+	api.DELETE("finances/rule", helper.DefaultMiddleware(), finances.DeleteTransactionRuleHandler)
+	api.PUT("finances/rule", helper.DefaultMiddleware(), finances.UpdateTransactionRuleHandler)
+	api.GET("finances/rule", helper.DefaultMiddleware(), finances.GetTransactionRuleHandler)
+	api.GET("finances/rules", helper.DefaultMiddleware(), finances.GetAllTransactionRulesHandler)
 }

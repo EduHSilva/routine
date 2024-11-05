@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-// GetAllTransactionsHandler
+// GetAllTransactionRulesHandler
 // @BasePath /api/v1
 // @Summary Get all transactions
 // @Description Get all transactions
@@ -21,7 +21,7 @@ import (
 // @Security ApiKeyAuth
 // @Param x-access-token header string true "Access token"
 // @Router /finances/transactions [GET]
-func GetAllTransactionsHandler(ctx *gin.Context) {
+func GetAllTransactionRulesHandler(ctx *gin.Context) {
 	var transactionResponse []ResponseData
 
 	getI18n, _ := ctx.Get("i18n")
@@ -32,7 +32,7 @@ func GetAllTransactionsHandler(ctx *gin.Context) {
 		return
 	}
 
-	query := db.Where("user_id = ?", userID).Order("date").Model(&finances.Transaction{})
+	query := db.Where("user_id = ?", userID).Model(&finances.TransactionRule{})
 
 	if err := query.Scan(&transactionResponse).Error; err != nil {
 		helper.SendErrorDefault(ctx, http.StatusInternalServerError, getI18n.(*i18n.Localizer))

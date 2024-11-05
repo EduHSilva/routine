@@ -15,6 +15,10 @@ type ResponseData struct {
 	Date      time.Time `json:"date"`
 	Frequency string    `json:"frequency"`
 	Category  string    `json:"category"`
+	DateEnd   time.Time `json:"end_date"`
+	DateStart time.Time `json:"start_date"`
+	Color     string    `json:"color"`
+	Value     float64   `json:"value"`
 }
 
 type ResponseCategory struct {
@@ -27,7 +31,7 @@ type ResponseCategories struct {
 	Data    []ResponseData `json:"data"`
 }
 
-func ConvertTransactionToTransactionResponse(transaction *finances.Transaction) ResponseData {
+func ConvertTransactionToTransactionResponse(transaction *finances.TransactionRule) ResponseData {
 	return ResponseData{
 		ID:        transaction.ID,
 		CreateAt:  transaction.CreatedAt,
@@ -35,8 +39,11 @@ func ConvertTransactionToTransactionResponse(transaction *finances.Transaction) 
 		DeletedAt: transaction.DeletedAt.Time,
 		Title:     transaction.Title,
 		Income:    transaction.Income,
-		Date:      transaction.Date,
-		Frequency: string(transaction.Frequency),
 		Category:  transaction.Category.Title,
+		DateEnd:   transaction.DateEnd,
+		DateStart: transaction.DateStart,
+		Frequency: string(transaction.Frequency),
+		Color:     transaction.Category.Color,
+		Value:     transaction.Value,
 	}
 }

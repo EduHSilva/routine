@@ -11,4 +11,5 @@ type User struct {
 	Email     string    `gorm:"uniqueIndex" json:"email"`
 	Password  string    `json:"password"`
 	LastLogin time.Time `json:"lastLogin"`
+	InitMoney float32   `json:"initMoney"`
 }

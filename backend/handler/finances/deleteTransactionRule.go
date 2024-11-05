@@ -6,9 +6,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"net/http"
+	"time"
 )
 
-// DeleteTransactionHandler
+// DeleteTransactionRuleHandler
 // @BasePath /api/v1
 // @Summary Delete transaction
 // @Description Delete a transaction
@@ -23,7 +24,7 @@ import (
 // @Security ApiKeyAuth
 // @Param x-access-token header string true "Access token"
 // @Router /finances/transaction [DELETE]
-func DeleteTransactionHandler(ctx *gin.Context) {
+func DeleteTransactionRuleHandler(ctx *gin.Context) {
 	id := ctx.Query("id")
 
 	getI18n, _ := ctx.Get("i18n")
@@ -34,17 +35,25 @@ func DeleteTransactionHandler(ctx *gin.Context) {
 		return
 	}
 
-	transaction := &finances.Transaction{}
+	transactionRule := &finances.TransactionRule{}
 
-	if err := db.First(&transaction, id).Error; err != nil {
+	if err := db.First(&transactionRule, id).Error; err != nil {
 		helper.SendErrorDefault(ctx, http.StatusNotFound, getI18n.(*i18n.Localizer))
 		return
 	}
 
-	if err := db.Delete(&transaction).Error; err != nil {
-		helper.SendErrorDefault(ctx, http.StatusInternalServerError, getI18n.(*i18n.Localizer))
+	// Excluir apenas as transações futuras associadas (status != DONE)
+	if err := db.Where("transaction_rule_id = ? AND date > ? AND status != ?", id, time.Now(), "DONE").
+		Delete(&finances.Transaction{}).Error; err != nil {
+		helper.SendError(ctx, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	helper.SendSuccess(ctx, ConvertTransactionToTransactionResponse(transaction))
+	// Excluir a regra de transação
+	if err := db.Delete(&transactionRule).Error; err != nil {
+		helper.SendError(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	helper.SendSuccess(ctx, ConvertTransactionToTransactionResponse(transactionRule))
 }

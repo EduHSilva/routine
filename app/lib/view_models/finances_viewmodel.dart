@@ -1,0 +1,119 @@
+import 'package:flutter/cupertino.dart';
+import 'package:routine/models/finances/finances_model.dart';
+import 'package:routine/services/finances_service.dart';
+import '../config/app_config.dart';
+
+class FinancesViewmodel {
+  final FinancesService _financesService = FinancesService();
+  ValueNotifier<bool> isLoading = ValueNotifier(false);
+  ValueNotifier<String?> errorMessage = ValueNotifier(null);
+  ValueNotifier<List<Transaction>> rules = ValueNotifier([]);
+
+
+  Future<TransactionResponse?> deleteRule(int id) async {
+    try {
+      isLoading.value = true;
+      TransactionResponse? response = await _financesService.deleteTransactionRule(id);
+      if (response?.transaction != null) {
+        await fetchFinancesRules();
+      } else {
+        errorMessage.value = response?.message;
+      }
+      return response;
+    } catch (e) {
+      AppConfig.getLogger().e(e);
+    } finally {
+      isLoading.value = false;
+    }
+    return null;
+  }
+
+  Future<void> fetchFinancesRules() async {
+    rules.value = [];
+    try {
+      isLoading.value = true;
+      List<Transaction> response = await _financesService.fetchFinancesRules();
+      rules.value = response;
+    } catch (e) {
+      errorMessage.value = "Error fetching rules";
+      AppConfig.getLogger().e(e);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<TransactionResponse?>? addRule(CreateTransactionRuleRequest req) async {
+    try {
+      isLoading.value = true;
+      TransactionResponse? response = await _financesService.addRule(req);
+
+      if (response?.transaction != null) {
+        await fetchFinancesRules();
+        return response;
+      } else {
+        errorMessage.value = response?.message;
+      }
+    } catch (e) {
+      errorMessage.value = "Error on add transaction rule";
+      AppConfig.getLogger().e(e);
+    } finally {
+      isLoading.value = false;
+    }
+    return null;
+  }
+
+  Future<TransactionResponse?> getTransaction(int id) async {
+    try {
+      isLoading.value = true;
+
+      TransactionResponse? response = await _financesService.getTransactionRule(id);
+
+      if (response.transaction == null) {
+        errorMessage.value = response.message;
+      }
+
+      return response;
+    } catch (e) {
+      AppConfig.getLogger().e(e);
+    } finally {
+      isLoading.value = false;
+    }
+    return null;
+  }
+
+  Future<TransactionResponse?> editRule(int id, UpdateTransactionRuleRequest request) async {
+    try {
+      isLoading.value = true;
+      TransactionResponse? response = await _financesService.editTransactionRule(id, request);
+      if (response?.transaction != null) {
+        await fetchFinancesRules();
+      } else {
+        errorMessage.value = errorMessage.value = response?.message;
+      }
+      return response;
+    } catch (e) {
+      AppConfig.getLogger().e(e);
+    } finally {
+      isLoading.value = false;
+    }
+    return null;
+  }
+
+  Future<TransactionResponse?> changeTransactionStatus(Transaction t) async {
+    try {
+      isLoading.value = true;
+      TransactionResponse? response = await _financesService.changeTransactionStatus(t.id);
+      if (response?.transaction != null) {
+        await fetchFinancesRules();
+      } else {
+        errorMessage.value = errorMessage.value = response?.message;
+      }
+      return response;
+    } catch (e) {
+      AppConfig.getLogger().e(e);
+    } finally {
+      isLoading.value = false;
+    }
+    return null;
+  }
+}

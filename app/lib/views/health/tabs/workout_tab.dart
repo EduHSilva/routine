@@ -68,19 +68,6 @@ class WorkoutTabState extends State<WorkoutTab> {
               appBar: AppBar(
                 title: Text('workout'.tr()),
                 automaticallyImplyLeading: false,
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.add),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const NewWorkoutView(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
               ),
               body: workouts.isEmpty
                   ? Center(child: Text('noData'.tr()))
@@ -226,6 +213,17 @@ class WorkoutTabState extends State<WorkoutTab> {
                         );
                       },
                     ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const NewWorkoutView(),
+                    ),
+                  );
+                },
+                child: Icon(Icons.add),
+              ),
             );
           },
         );

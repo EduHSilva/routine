@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-// UpdateTransactionHandler
+// UpdateTransactionRuleHandler
 // @BasePath /api/v1
 // @Summary Update a transaction
 // @Description Update the title or value of transaction
@@ -23,7 +23,7 @@ import (
 // @Security ApiKeyAuth
 // @Param x-access-token header string true "Access token"
 // @Router /finances/transactions [PUT]
-func UpdateTransactionHandler(ctx *gin.Context) {
+func UpdateTransactionRuleHandler(ctx *gin.Context) {
 	request := UpdateTransactionRequest{}
 
 	getI18n, _ := ctx.Get("i18n")
@@ -48,25 +48,36 @@ func UpdateTransactionHandler(ctx *gin.Context) {
 		return
 	}
 
-	transaction := &finances.Transaction{}
+	transactionRule := &finances.TransactionRule{}
 
-	if err := db.First(&transaction, id).Error; err != nil {
+	if err := db.First(&transactionRule, id).Error; err != nil {
 		helper.SendErrorDefault(ctx, http.StatusNotFound, getI18n.(*i18n.Localizer))
 		return
 	}
 
 	if request.Title != "" {
-		transaction.Title = request.Title
+		transactionRule.Title = request.Title
 	}
 
 	if request.Value != 0 {
-		transaction.Value = request.Value
+		transactionRule.Value = request.Value
 	}
 
-	if err := db.Save(&transaction).Error; err != nil {
+	if err := db.Save(&transactionRule).Error; err != nil {
 		logger.ErrF("error updating: %s", err.Error())
 		helper.SendError(ctx, http.StatusInternalServerError, err.Error())
+		return
 	}
 
-	helper.SendSuccess(ctx, ConvertTransactionToTransactionResponse(transaction))
+	if request.Value != 0 {
+		if err := db.Model(&finances.Transaction{}).
+			Where("transaction_rule_id = ? AND status != ?", id, "DONE").
+			Update("value", request.Value).Error; err != nil {
+			logger.ErrF("error updating transactions: %s", err.Error())
+			helper.SendError(ctx, http.StatusInternalServerError, err.Error())
+			return
+		}
+	}
+
+	helper.SendSuccess(ctx, ConvertTransactionToTransactionResponse(transactionRule))
 }

@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-// GetTransactionHandler
+// GetTransactionRuleHandler
 // @BasePath /api/v1
 // @Summary Get a transaction
 // @Description Get one transaction
@@ -22,7 +22,7 @@ import (
 // @Security ApiKeyAuth
 // @Param x-access-token header string true "Access token"
 // @Router /finances/transaction [GET]
-func GetTransactionHandler(ctx *gin.Context) {
+func GetTransactionRuleHandler(ctx *gin.Context) {
 	id := ctx.Query("id")
 	getI18n, _ := ctx.Get("i18n")
 
@@ -32,7 +32,7 @@ func GetTransactionHandler(ctx *gin.Context) {
 		return
 	}
 
-	transaction := &finances.Transaction{}
+	transaction := &finances.TransactionRule{}
 
 	if err := db.First(&transaction, id).Error; err != nil {
 		helper.SendErrorDefault(ctx, http.StatusNotFound, getI18n.(*i18n.Localizer))

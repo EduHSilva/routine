@@ -71,19 +71,6 @@ class RulesTabState extends State<RulesTab> {
                   appBar: AppBar(
                     title: Text('rules'.tr()),
                     automaticallyImplyLeading: false,
-                    actions: [
-                      IconButton(
-                        icon: const Icon(Icons.add),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const NewTaskView(),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
                   ),
                   body: tasks.isEmpty
                       ? Center(child: Text('noData'.tr()))
@@ -200,6 +187,17 @@ class RulesTabState extends State<RulesTab> {
                             );
                           },
                         ),
+                  floatingActionButton: FloatingActionButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const NewTaskView(),
+                        ),
+                      );
+                    },
+                    child: Icon(Icons.add),
+                  ),
                 );
               });
         });

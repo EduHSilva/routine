@@ -89,43 +89,42 @@ class DietTabState extends State<DietTab> {
           valueListenable: _dietViewModel.meals,
           builder: (context, meals, child) {
             return Scaffold(
-                appBar: AppBar(
-                  title: Text('meals'.tr()),
-                  automaticallyImplyLeading: false,
-                  actions: [
-                    IconButton(
-                      icon: const Icon(Icons.add),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const NewMealView(),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-                body: meals.isEmpty
-                    ? Center(child: Text('noData'.tr()))
-                    : Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: ListView.builder(
-                          itemCount: meals.length,
-                          itemBuilder: (context, index) {
-                            Meal meal = meals[index];
+              appBar: AppBar(
+                title: Text('meals'.tr()),
+                automaticallyImplyLeading: false,
+              ),
+              body: meals.isEmpty
+                  ? Center(child: Text('noData'.tr()))
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: ListView.builder(
+                        itemCount: meals.length,
+                        itemBuilder: (context, index) {
+                          Meal meal = meals[index];
 
-                            return MealCard(
-                              id: meal.id,
-                              name: meal.name,
-                              hour: meal.hour,
-                              onTap: () => _showDetails(meal.id),
-                              onEdit: () => _editMeal(meal.id),
-                              onRemove: () => _deleteMealDialog(meal),
-                            );
-                          },
-                        ),
-                      ));
+                          return MealCard(
+                            id: meal.id,
+                            name: meal.name,
+                            hour: meal.hour,
+                            onTap: () => _showDetails(meal.id),
+                            onEdit: () => _editMeal(meal.id),
+                            onRemove: () => _deleteMealDialog(meal),
+                          );
+                        },
+                      ),
+                    ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const NewMealView(),
+                    ),
+                  );
+                },
+                child: Icon(Icons.add),
+              ),
+            );
           },
         );
       },

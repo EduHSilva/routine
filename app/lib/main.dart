@@ -1,6 +1,7 @@
 import 'package:routine/views/auth/register_view.dart';
 import 'package:routine/views/auth/splash_view.dart';
 import 'package:routine/views/categories/category_view.dart';
+import 'package:routine/views/finances/finances_view.dart';
 import 'package:routine/views/health/health_view.dart';
 import 'package:routine/views/tasks/tasks_view.dart';
 import 'package:flutter/material.dart';
@@ -80,6 +81,7 @@ class MyAppState extends State<MyApp> {
         '/tasks': (context) => const TasksView(),
         '/health': (context) => const HealthView(),
         '/categories': (context) => const CategoryView(),
+        '/finances': (context) => const FinancesView(),
       },
     );
   }

@@ -114,5 +114,9 @@
   "transport": "Transporte",
   "profile": "Perfil",
   "editCategory": "Editar categoria",
-  "type": "Tipo"
+  "type": "Tipo",
+  "resume": "Resumo",
+  "newTransaction": "Nova transacao",
+  "income": "Entrada",
+  "value": "Valor"
 }
