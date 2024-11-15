@@ -1,4 +1,4 @@
-package task
+package tasks
 
 import (
 	"github.com/EduHSilva/routine/schemas/tasks"

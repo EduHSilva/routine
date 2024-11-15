@@ -75,19 +75,6 @@ class CategoryViewState extends State<CategoryView> {
             return Scaffold(
               appBar: CustomAppBar(
                 title: 'categories',
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.add),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const NewCategoryView(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
               ),
               drawer: CustomDrawer(currentRoute: "/categories"),
               body: Column(
@@ -153,6 +140,14 @@ class CategoryViewState extends State<CategoryView> {
                     ),
                   ),
                 ],
+              ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const NewCategoryView(),
+                  ));
+                },
+                child: Icon(Icons.add),
               ),
             );
           },

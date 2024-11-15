@@ -1,17 +1,13 @@
 package router
 
 import (
-	"github.com/EduHSilva/routine/docs"
 	"github.com/EduHSilva/routine/handler/category"
 	"github.com/EduHSilva/routine/helper"
 	"github.com/gin-gonic/gin"
 )
 
-func initCategoryRoutes(router *gin.Engine) {
+func initCategoryRoutes(api *gin.RouterGroup) {
 	category.InitHandler()
-	basePath := "/api/v1"
-	docs.SwaggerInfo.BasePath = basePath
-	api := router.Group(basePath)
 
 	api.GET("category", helper.DefaultMiddleware(), category.GetCategoryHandler)
 	api.GET("categories", helper.DefaultMiddleware(), category.GetAllCategoriesHandler)

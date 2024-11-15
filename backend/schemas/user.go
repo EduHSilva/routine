@@ -12,4 +12,5 @@ type User struct {
 	Password       string    `json:"password"`
 	LastLogin      time.Time `json:"lastLogin"`
 	CurrentBalance float64   `json:"current_balance"`
+	Photo          string    `gorm:"size:1000" json:"photo"`
 }

@@ -3,6 +3,7 @@ import 'package:routine/views/auth/splash_view.dart';
 import 'package:routine/views/categories/category_view.dart';
 import 'package:routine/views/finances/finances_view.dart';
 import 'package:routine/views/health/health_view.dart';
+import 'package:routine/views/profile/user_profile.dart';
 import 'package:routine/views/tasks/tasks_view.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -82,6 +83,7 @@ class MyAppState extends State<MyApp> {
         '/health': (context) => const HealthView(),
         '/categories': (context) => const CategoryView(),
         '/finances': (context) => const FinancesView(),
+        '/profile': (context) => const UserProfileView(),
       },
     );
   }

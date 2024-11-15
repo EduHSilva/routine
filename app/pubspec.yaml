@@ -21,9 +21,9 @@ dependencies:
   google_fonts: ^6.2.1
   basic_utils: ^5.7.0
   flutter_markdown: ^0.7.4+1
-
-
+  image_picker: ^1.0.0
   intl: any
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

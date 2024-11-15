@@ -1,17 +1,13 @@
 package router
 
 import (
-	"github.com/EduHSilva/routine/docs"
 	"github.com/EduHSilva/routine/handler/health/diet"
 	"github.com/EduHSilva/routine/helper"
 	"github.com/gin-gonic/gin"
 )
 
-func initDietRoutes(router *gin.Engine) {
+func initDietRoutes(api *gin.RouterGroup) {
 	diet.InitHandler()
-	basePath := "/api/v1/diet"
-	docs.SwaggerInfo.BasePath = basePath
-	api := router.Group(basePath)
 
 	api.GET("meal/food", helper.DefaultMiddleware(), diet.SearchFoodHandler)
 	api.POST("meal", helper.DefaultMiddleware(), diet.CreateMealHandler)

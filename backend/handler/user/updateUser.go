@@ -58,6 +58,10 @@ func UpdateUserHandler(ctx *gin.Context) {
 		user.Name = request.Name
 	}
 
+	if request.Photo != "" {
+		user.Photo = request.Photo
+	}
+
 	if err := db.Save(&user).Error; err != nil {
 		logger.ErrF("error updating: %s", err.Error())
 		helper.SendError(ctx, http.StatusInternalServerError, err.Error())

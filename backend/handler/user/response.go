@@ -14,6 +14,7 @@ type ResponseData struct {
 	Email     string    `json:"email"`
 	Password  string    `json:"password"`
 	LastLogin time.Time `json:"lastLogin,omitempty"`
+	Photo     string    `json:"photo"`
 }
 
 type ResponseUser struct {
@@ -40,5 +41,6 @@ func ConvertUserToUserResponse(user *schemas.User) ResponseData {
 		Name:      user.Name,
 		Email:     user.Email,
 		LastLogin: user.LastLogin,
+		Photo:     user.Photo,
 	}
 }

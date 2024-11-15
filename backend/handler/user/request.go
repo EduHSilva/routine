@@ -9,6 +9,7 @@ type CreateUserRequest struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
+	Photo    string `json:"photo"`
 }
 
 type LoginRequest struct {
@@ -17,7 +18,8 @@ type LoginRequest struct {
 }
 
 type UpdateUserRequest struct {
-	Name string `json:"name"`
+	Name  string `json:"name"`
+	Photo string `json:"photo"`
 }
 
 func (r CreateUserRequest) Validate() error {
@@ -41,7 +43,7 @@ func (r CreateUserRequest) Validate() error {
 }
 
 func (r UpdateUserRequest) Validate() error {
-	if r.Name != "" {
+	if r.Name != "" || r.Photo != "" {
 		return nil
 	}
 

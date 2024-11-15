@@ -1,8 +1,13 @@
 package router
 
 import (
+	"github.com/EduHSilva/routine/docs"
+	"github.com/EduHSilva/routine/helper"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"net/http"
 )
 
 func Init() {
@@ -24,11 +29,22 @@ func Init() {
 }
 
 func initRoutes(router *gin.Engine) {
-	initUserRoutes(router)
-	initCategoryRoutes(router)
-	initTaskRoutes(router)
-	initWorkoutRoutes(router)
-	initDietRoutes(router)
-	initHomeRoutes(router)
-	initFinancesRoutes(router)
+	basePath := "/api/v1"
+	docs.SwaggerInfo.BasePath = basePath
+	api := router.Group(basePath)
+
+	api.GET("/", helper.Middleware(false), func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Hello World",
+		})
+	})
+	api.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+
+	initUserRoutes(api)
+	initCategoryRoutes(api)
+	initTaskRoutes(api)
+	initWorkoutRoutes(api)
+	initDietRoutes(api)
+	initHomeRoutes(api)
+	initFinancesRoutes(api)
 }

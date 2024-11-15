@@ -1,25 +1,21 @@
 package router
 
 import (
-	"github.com/EduHSilva/routine/docs"
-	"github.com/EduHSilva/routine/handler/tasks/task"
+	"github.com/EduHSilva/routine/handler/tasks"
 	"github.com/EduHSilva/routine/helper"
 	"github.com/gin-gonic/gin"
 )
 
-func initTaskRoutes(router *gin.Engine) {
-	task.InitHandler()
-	basePath := "/api/v1"
-	docs.SwaggerInfo.BasePath = basePath
-	api := router.Group(basePath)
+func initTaskRoutes(api *gin.RouterGroup) {
+	tasks.InitHandler()
 
-	api.POST("/task/rule", helper.DefaultMiddleware(), task.CreateTaskRuleHandler)
-	api.DELETE("/task/rule", helper.DefaultMiddleware(), task.DeleteTaskRuleHandler)
-	api.GET("/task/rule", helper.DefaultMiddleware(), task.GetTaskRuleHandler)
-	api.PUT("/task/rule", helper.DefaultMiddleware(), task.UpdateTaskRuleHandler)
+	api.POST("/task/rule", helper.DefaultMiddleware(), tasks.CreateTaskRuleHandler)
+	api.DELETE("/task/rule", helper.DefaultMiddleware(), tasks.DeleteTaskRuleHandler)
+	api.GET("/task/rule", helper.DefaultMiddleware(), tasks.GetTaskRuleHandler)
+	api.PUT("/task/rule", helper.DefaultMiddleware(), tasks.UpdateTaskRuleHandler)
 
-	api.GET("/tasks/rules", helper.DefaultMiddleware(), task.GetAllTasksRulesHandler)
-	api.GET("/tasks/week", helper.DefaultMiddleware(), task.GetWeekTasksHandler)
-	api.PUT("/task", helper.DefaultMiddleware(), task.UpdateTaskStatusHandler)
+	api.GET("/tasks/rules", helper.DefaultMiddleware(), tasks.GetAllTasksRulesHandler)
+	api.GET("/tasks/week", helper.DefaultMiddleware(), tasks.GetWeekTasksHandler)
+	api.PUT("/task", helper.DefaultMiddleware(), tasks.UpdateTaskStatusHandler)
 
 }
