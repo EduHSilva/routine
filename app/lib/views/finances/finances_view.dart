@@ -1,8 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:routine/views/finances/tabs/financial_resume_tab.dart';
 import 'package:routine/views/finances/tabs/financial_rules_tab.dart';
-import 'package:routine/views/health/tabs/diet_tab.dart';
-import 'package:routine/views/health/tabs/workout_tab.dart';
 import 'package:flutter/material.dart';
 
 import '../../config/design_system.dart';

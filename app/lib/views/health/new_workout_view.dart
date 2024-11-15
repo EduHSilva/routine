@@ -40,7 +40,7 @@ class NewWorkoutViewState extends State<NewWorkoutView> {
     if (response?.workout != null) {
       setState(() {
         _nameController.text = response!.workout!.name;
-        _selectedExercises = response.workout!.exercises ?? [];
+        _selectedExercises = response.workout!.exercises;
       });
     }
   }

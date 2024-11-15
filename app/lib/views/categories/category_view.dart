@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import '../../config/design_system.dart';
 import '../../config/helper.dart';
 import '../../models/tasks/category_model.dart';
 import '../../view_models/category_viewmodel.dart';

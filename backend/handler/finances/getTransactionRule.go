@@ -34,7 +34,7 @@ func GetTransactionRuleHandler(ctx *gin.Context) {
 
 	transaction := &finances.TransactionRule{}
 
-	if err := db.First(&transaction, id).Error; err != nil {
+	if err := db.Preload("Category").First(&transaction, id).Error; err != nil {
 		helper.SendErrorDefault(ctx, http.StatusNotFound, getI18n.(*i18n.Localizer))
 		return
 	}

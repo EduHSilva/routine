@@ -1,8 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:routine/config/helper.dart';
+
+import '../../../view_models/finances_viewmodel.dart';
 
 class FinancialResumeTab extends StatefulWidget {
-  const FinancialResumeTab({super.key});
+  final int initialIndex;
+
+  const FinancialResumeTab({super.key, this.initialIndex = 0});
 
   @override
   FinancialResumeTabState createState() => FinancialResumeTabState();
@@ -10,16 +15,20 @@ class FinancialResumeTab extends StatefulWidget {
 
 class FinancialResumeTabState extends State<FinancialResumeTab> {
   DateTime selectedDate = DateTime.now();
+  final FinancesViewmodel _financesViewModel = FinancesViewmodel();
 
-  double currentBalance = 1500.00;
-  double totalIncome = 2000.00;
-  double totalExpenses = 500.00;
+  @override
+  void initState() {
+    super.initState();
+    _fetchData();
+  }
 
-  List<Map<String, dynamic>> transactions = [
-    {'date': '01/11/2024', 'description': 'Aluguel', 'amount': -1200.00},
-    {'date': '03/11/2024', 'description': 'Salário', 'amount': 3000.00},
-    {'date': '05/11/2024', 'description': 'Supermercado', 'amount': -300.00},
-  ];
+
+  _fetchData() async {
+    String formattedMonth = selectedDate.month.toString().padLeft(2, '0');
+
+    await _financesViewModel.fetchMonthData(formattedMonth, selectedDate.year);
+  }
 
   void _changeMonth(int offset) {
     setState(() {
@@ -28,112 +37,190 @@ class FinancialResumeTabState extends State<FinancialResumeTab> {
         selectedDate.month + offset,
       );
     });
+    _fetchData();
   }
-
 
   @override
   Widget build(BuildContext context) {
     String formattedDate = DateFormat.yMMMM('pt_BR').format(selectedDate);
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Resumo Financeiro'),
-      ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_left),
-                  onPressed: () => _changeMonth(-1),
-                ),
-                Text(
-                  formattedDate,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                IconButton(
-                  icon: Icon(Icons.arrow_right),
-                  onPressed: () => _changeMonth(1),
-                ),
-              ],
-            ),
-            SizedBox(height: 16.0),
+        child: ValueListenableBuilder(
+          valueListenable: _financesViewModel.monthData,
+          builder: (context, monthData, child) {
+            if (monthData == null) {
+              return Center(child: Text('noData'.tr()));
+            } else {
+              var totalExpanses = monthData.totalExpanses;
+              var totalIncomes = monthData.totalIncomes;
+              var prevExpanses = monthData.prevExpanses;
+              var prevIncomes = monthData.prevIncomes;
+              var currentBalance = monthData.currentBalance;
+              var prevTotal = monthData.total;
 
-            Card(
-              color: Colors.grey[100],
-              elevation: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    Text(
-                      'Resumo do Mês',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Saldo Atual:', style: TextStyle(fontSize: 16)),
-                        Text('R\$ $currentBalance', style: TextStyle(fontSize: 16)),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Entradas:', style: TextStyle(fontSize: 16)),
-                        Text('R\$ $totalIncome', style: TextStyle(fontSize: 16)),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Saídas:', style: TextStyle(fontSize: 16)),
-                        Text('R\$ $totalExpenses', style: TextStyle(fontSize: 16)),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 16.0),
-
-            Expanded(
-              child: ListView.builder(
-                itemCount: transactions.length,
-                itemBuilder: (context, index) {
-                  final transaction = transactions[index];
-                  return ListTile(
-                    leading: Icon(
-                      transaction['amount'] > 0 ? Icons.arrow_downward : Icons.arrow_upward,
-                      color: transaction['amount'] > 0 ? Colors.green : Colors.red,
-                    ),
-                    title: Text(transaction['description']),
-                    subtitle: Text(transaction['date']),
-                    trailing: Text(
-                      'R\$ ${transaction['amount']}',
-                      style: TextStyle(
-                        color: transaction['amount'] > 0 ? Colors.green : Colors.red,
+              return Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.arrow_left),
+                        onPressed: () => _changeMonth(-1),
                       ),
+                      Text(
+                        formattedDate,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.arrow_right),
+                        onPressed: () => _changeMonth(1),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 16.0),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _buildSummaryCard(
+                        'currentBalance'.tr(),
+                        'R\$ $currentBalance',
+                        Colors.blue
+                      ),
+                      _buildSummaryCard(
+                        'incomes'.tr(),
+                        'R\$ $totalIncomes',
+                        Colors.green,
+                      ),
+                      _buildSummaryCard(
+                        'expanses'.tr(),
+                        'R\$ $totalExpanses',
+                        Colors.red,
+                      ),
+                      _buildSummaryCard(
+                        'prevIncomes'.tr(),
+                        'R\$ $prevIncomes',
+                        Colors.teal,
+                      ),
+                      _buildSummaryCard(
+                        'prevExpanses'.tr(),
+                        'R\$ $prevExpanses',
+                        Colors.purple,
+                      ),
+                      _buildSummaryCard(
+                        'prevTotal'.tr(),
+                        'R\$ $prevTotal',
+                        Colors.blueGrey,
+                      ),
+
+                    ],
+                  )),
+                  SizedBox(height: 16.0),
+
+                  Container(
+                    color: Colors.grey[200],
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: monthData.transactions.length,
+                      itemBuilder: (context, index) {
+                        final transaction = monthData.transactions[index];
+
+                        return Card(
+                          elevation: 2,
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          child: ListTile(
+                            leading: Checkbox(
+                              value: transaction.confirmed ?? false,
+                              onChanged: (value) async {
+                                await _financesViewModel.changeTransactionStatus(transaction);
+                                await _fetchData();
+                              },
+                            ),
+                            title: Text(transaction.title),
+                            subtitle: Text(formatDate(transaction.date)),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  transaction.income
+                                      ? Icons.arrow_upward
+                                      : Icons.arrow_downward,
+                                  color: transaction.income
+                                      ? Colors.green
+                                      : Colors.red,
+                                ),
+                                SizedBox(width: 8),
+                                Text(
+                                  'R\$ ${transaction.value}',
+                                  style: TextStyle(
+                                    color: transaction.income
+                                        ? Colors.green
+                                        : Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
-            ),
-          ],
+                  ),
+                ],
+              );
+            }
+          },
         ),
       ),
-
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Navegar para a tela de registro de nova transação
+          // TODO: Implementar ação
         },
-        tooltip: 'Registrar Nova Transação',
         child: Icon(Icons.add),
+      ),
+    );
+  }
+
+  Widget _buildSummaryCard(String title, String value, Color color) {
+    return SizedBox(
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        color: color,
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  SizedBox(height: 8),
+                  Text(
+                    title,
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 4),
+              Text(
+                value,
+                style: TextStyle(fontSize: 16, color: Colors.white),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

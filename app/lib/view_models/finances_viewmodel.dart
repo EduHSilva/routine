@@ -8,7 +8,21 @@ class FinancesViewmodel {
   ValueNotifier<bool> isLoading = ValueNotifier(false);
   ValueNotifier<String?> errorMessage = ValueNotifier(null);
   ValueNotifier<List<Transaction>> rules = ValueNotifier([]);
+  ValueNotifier<MonthData?> monthData = ValueNotifier(null);
 
+  Future<void> fetchMonthData(String month, int year) async {
+    monthData.value = null;
+    try {
+      isLoading.value = true;
+      MonthData? response = await _financesService.fetchMonthData(month, year);
+      monthData.value = response;
+    } catch (e) {
+      errorMessage.value = "Error fetching month data";
+      AppConfig.getLogger().e(e);
+    } finally {
+      isLoading.value = false;
+    }
+  }
 
   Future<TransactionResponse?> deleteRule(int id) async {
     try {

@@ -7,6 +7,25 @@ import '../config/app_config.dart';
 
 
 class FinancesService {
+  Future<MonthData?> fetchMonthData(String month, int year) async {
+    http.Client client = await AppConfig.getHttpClient();
+    final response =
+    await client.get(Uri.parse('${AppConfig.apiUrl}finances?month=$month&year=$year'));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+
+      if (data['data'] != null) {
+        return MonthData.fromJson(data['data']);
+      }
+
+      return null;
+    } else {
+      throw Exception('Failed to load finances rules');
+    }
+  }
+
   Future<List<Transaction>> fetchFinancesRules() async {
     http.Client client = await AppConfig.getHttpClient();
     final response =
@@ -127,7 +146,7 @@ class FinancesService {
   }
 
   Future<TransactionResponse?> changeTransactionStatus(int id) async {
-    final String apiUrl = '${AppConfig.apiUrl}finances/transaction';
+    final String apiUrl = '${AppConfig.apiUrl}finances';
     http.Client client = await AppConfig.getHttpClient();
 
     try {

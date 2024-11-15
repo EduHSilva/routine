@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:routine/view_models/finances_viewmodel.dart';
 import 'package:routine/views/finances/finances_view.dart';
+import 'package:routine/widgets/custom_button.dart';
 
 import '../../config/helper.dart';
 import '../../models/enums.dart';
@@ -9,6 +10,7 @@ import '../../models/finances/finances_model.dart';
 import '../../models/tasks/category_model.dart';
 import '../../view_models/category_viewmodel.dart';
 import '../../widgets/custom_dropdown.dart';
+import '../../widgets/custom_modal_delete.dart';
 import '../../widgets/custom_text_field.dart';
 
 class NewFinancialRuleView extends StatefulWidget {
@@ -44,9 +46,9 @@ class NewFinancialViewState extends State<NewFinancialRuleView> {
   @override
   initState() {
     super.initState();
-    _categoryViewModel.fetchCategories('finances').then((_) {
+    _categoryViewModel.fetchCategories('finances').then((_) async {
       if (widget.id != null) {
-        _loadTransactionData(widget.id!);
+        await _loadTransactionData(widget.id!);
       }
     });
   }
@@ -57,11 +59,10 @@ class NewFinancialViewState extends State<NewFinancialRuleView> {
     if (response?.transaction != null) {
       setState(() {
         _titleController.text = response!.transaction!.title;
-        _startDateController.text =
-            formatDate(response.transaction!.startDate!);
-        _endDateController.text = formatDate(response.transaction!.endDate!);
+        _startDateController.text = formatDate(response.transaction!.startDate);
+        _endDateController.text = formatDate(response.transaction!.endDate);
         _valueController.text = response.transaction!.value.toString();
-        _income = response.transaction!.income!;
+        _income = response.transaction!.income;
 
         Category? category = _categoryViewModel.categories.value.firstWhere(
             (category) => category.title == response.transaction!.category);
@@ -94,6 +95,36 @@ class NewFinancialViewState extends State<NewFinancialRuleView> {
     }
   }
 
+  _deleteTransaction(int id) async {
+    TransactionResponse? response = await _financesViewModel.deleteRule(id);
+    _handlerResponse(response);
+  }
+
+  _handlerResponse(TransactionResponse? response) {
+    if (response?.transaction != null) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => const FinancesView(initialIndex: 1,),
+      ));
+    } else {
+      if (!mounted) return;
+      showErrorBar(context, response);
+    }
+  }
+
+  _deleteTransactionDialog(id) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return CustomModalDelete(
+          title: "confirmDelete",
+          onConfirm: () {
+            _deleteTransaction(id);
+          },
+        );
+      },
+    );
+  }
+
   _addRule() async {
     if (_formKey.currentState!.validate()) {
       TransactionResponse? response;
@@ -123,20 +154,6 @@ class NewFinancialViewState extends State<NewFinancialRuleView> {
     }
   }
 
-  _handlerResponse(TransactionResponse? response) {
-    if (response?.transaction != null) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => FinancesView(initialIndex: 1),
-        ),
-      );
-    } else {
-      if (!mounted) return;
-      showErrorBar(context, response);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
@@ -155,7 +172,7 @@ class NewFinancialViewState extends State<NewFinancialRuleView> {
 
             return Scaffold(
               appBar: AppBar(
-                title: Text('add'.tr()),
+                title: widget.id == null ? Text('add'.tr()) : Text('edit'.tr()),
               ),
               body: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -164,14 +181,6 @@ class NewFinancialViewState extends State<NewFinancialRuleView> {
                   child: ListView(
                     children: [
                       const SizedBox(height: 16),
-                      Text(
-                        'newTransaction'.tr(),
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                      ),
-                      const SizedBox(height: 24),
                       Row(
                         children: [
                           Expanded(
@@ -264,9 +273,26 @@ class NewFinancialViewState extends State<NewFinancialRuleView> {
                             value == null ? 'selectAValue'.tr() : null,
                       ),
                       const SizedBox(height: 32),
-                      ElevatedButton(
-                        onPressed: _addRule,
-                        child: Text('save'.tr()),
+                      Row(
+                        children: [
+                          widget.id != null
+                              ? Expanded(
+                                  child: CustomButton(
+                                      onPressed: () {
+                                        _deleteTransactionDialog(widget.id);
+                                      },
+                                      isOutlined: true,
+                                      text: 'delete'))
+                              : Column(),
+                          widget.id != null
+                              ? const SizedBox(
+                                  width: 20,
+                                )
+                              : Column(),
+                          Expanded(
+                              child: CustomButton(
+                                  onPressed: _addRule, text: 'save')),
+                        ],
                       ),
                     ],
                   ),

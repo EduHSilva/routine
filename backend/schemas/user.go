@@ -7,9 +7,9 @@ import (
 
 type User struct {
 	gorm.Model
-	Name      string    `json:"name"`
-	Email     string    `gorm:"uniqueIndex" json:"email"`
-	Password  string    `json:"password"`
-	LastLogin time.Time `json:"lastLogin"`
-	InitMoney float32   `json:"initMoney"`
+	Name           string    `json:"name"`
+	Email          string    `gorm:"uniqueIndex" json:"email"`
+	Password       string    `json:"password"`
+	LastLogin      time.Time `json:"lastLogin"`
+	CurrentBalance float64   `json:"current_balance"`
 }

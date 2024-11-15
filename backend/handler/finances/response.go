@@ -5,6 +5,21 @@ import (
 	"time"
 )
 
+type ResponseDataMonth struct {
+	Resume       Resume         `json:"resume"`
+	Transactions []ResponseData `json:"transactions"`
+}
+
+type Resume struct {
+	TotalValue        float64 `json:"total_value"`
+	TotalExpanses     float64 `json:"total_expenses"`
+	TotalIncome       float64 `json:"total_income"`
+	CurrentBalance    float64 `json:"current_balance"`
+	PrevTotalValue    float64 `json:"prev_total_value"`
+	PrevTotalExpanses float64 `json:"prev_total_expanses"`
+	PrevTotalIncome   float64 `json:"prev_total_income"`
+}
+
 type ResponseData struct {
 	ID        uint      `json:"id"`
 	CreateAt  time.Time `json:"createAt"`
@@ -19,16 +34,7 @@ type ResponseData struct {
 	DateStart time.Time `json:"start_date"`
 	Color     string    `json:"color"`
 	Value     float64   `json:"value"`
-}
-
-type ResponseCategory struct {
-	Message string       `json:"message"`
-	Data    ResponseData `json:"data"`
-}
-
-type ResponseCategories struct {
-	Message string         `json:"message"`
-	Data    []ResponseData `json:"data"`
+	Confirmed bool      `json:"confirmed"`
 }
 
 func ConvertTransactionToTransactionResponse(transaction *finances.TransactionRule) ResponseData {

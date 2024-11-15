@@ -118,5 +118,11 @@
   "resume": "Resumo",
   "newTransaction": "Nova transacao",
   "income": "Entrada",
-  "value": "Valor"
+  "value": "Valor",
+  "currentBalance": "Saldo atual",
+  "incomes": "Entradas concluidas",
+  "expanses": "Despesas concluidas",
+  "prevIncomes": "Entradas previstas",
+  "prevExpanses": "Despesas previstas",
+  "prevTotal": "Total previsto"
 }

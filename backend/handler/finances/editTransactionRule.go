@@ -71,7 +71,7 @@ func UpdateTransactionRuleHandler(ctx *gin.Context) {
 
 	if request.Value != 0 {
 		if err := db.Model(&finances.Transaction{}).
-			Where("transaction_rule_id = ? AND status != ?", id, "DONE").
+			Where("transaction_rule_id = ? AND confirmed = false", id).
 			Update("value", request.Value).Error; err != nil {
 			logger.ErrF("error updating transactions: %s", err.Error())
 			helper.SendError(ctx, http.StatusInternalServerError, err.Error())

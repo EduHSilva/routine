@@ -43,11 +43,3 @@ const (
 	Tasks    CategoryType = "tasks"
 	Finances CategoryType = "finances"
 )
-
-type StatusTransaction string
-
-const (
-	Pending StatusTransaction = "pending"
-	Delayed StatusTransaction = "delayed"
-	Done    StatusTransaction = "done"
-)

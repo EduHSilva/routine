@@ -118,5 +118,11 @@
   "resume": "Resume",
   "newTransaction": "New transaction",
   "income": "Income",
-  "value": "Value"
+  "value": "Value",
+  "currentBalance": "Current balance",
+  "incomes": "Incomes",
+  "expanses": "Expanses",
+  "prevIncomes": "Incomes predicted",
+  "prevExpanses": "Expanses predicted",
+  "prevTotal": "Total predicted"
 }

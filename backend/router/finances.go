@@ -9,13 +9,15 @@ import (
 
 func initFinancesRoutes(router *gin.Engine) {
 	finances.InitHandler()
-	basePath := "/api/v1"
+	basePath := "/api/v1/finances"
 	docs.SwaggerInfo.BasePath = basePath
 	api := router.Group(basePath)
 
-	api.POST("finances/rule", helper.DefaultMiddleware(), finances.CreateTransactionRuleHandler)
-	api.DELETE("finances/rule", helper.DefaultMiddleware(), finances.DeleteTransactionRuleHandler)
-	api.PUT("finances/rule", helper.DefaultMiddleware(), finances.UpdateTransactionRuleHandler)
-	api.GET("finances/rule", helper.DefaultMiddleware(), finances.GetTransactionRuleHandler)
-	api.GET("finances/rules", helper.DefaultMiddleware(), finances.GetAllTransactionRulesHandler)
+	api.POST("rule", helper.DefaultMiddleware(), finances.CreateTransactionRuleHandler)
+	api.DELETE("rule", helper.DefaultMiddleware(), finances.DeleteTransactionRuleHandler)
+	api.PUT("rule", helper.DefaultMiddleware(), finances.UpdateTransactionRuleHandler)
+	api.GET("rule", helper.DefaultMiddleware(), finances.GetTransactionRuleHandler)
+	api.GET("rules", helper.DefaultMiddleware(), finances.GetAllTransactionRulesHandler)
+	api.GET("", helper.DefaultMiddleware(), finances.GetMonthDataHandler)
+	api.PUT("", helper.DefaultMiddleware(), finances.ChangeTransactionStatusHandler)
 }

@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:routine/views/tasks/tabs/all_tasks_tab.dart';
-import 'package:routine/views/categories/category_view.dart';
 import 'package:routine/views/tasks/tabs/rules_tab.dart';
 import 'package:flutter/material.dart';
 

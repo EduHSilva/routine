@@ -1,3 +1,4 @@
+
 import '../../config/app_config.dart';
 import '../response.dart';
 
@@ -10,10 +11,11 @@ class Transaction {
   final String startDate;
   final String endDate;
   final String frequency;
-  final String? status;
+  final bool? confirmed;
   final String? createAt;
   final String? updateAt;
   final int id;
+  final String? date;
 
   Transaction(
       {required this.income,
@@ -26,8 +28,9 @@ class Transaction {
       required this.id,
       required this.title,
       this.updateAt,
+      this.date,
       this.color,
-      this.status});
+      this.confirmed});
 
   factory Transaction.fromJson(Map<String, dynamic> json) {
     return Transaction(
@@ -35,17 +38,61 @@ class Transaction {
       createAt: json['createAt'],
       endDate: json['end_date'],
       startDate: json['start_date'],
-      status: json['status'],
+      confirmed: json['confirmed'],
       frequency: json['frequency'],
       id: json['id'],
       title: json['title'],
       updateAt: json['updateAt'],
       color: json['color'],
       income: json['income'],
+      date: json['date'],
       value: json['value'] is int ? json['value'].toDouble() : double.parse(json['value']),
     );
   }
 }
+
+class MonthData {
+  final double total;
+  final double totalIncomes;
+  final double totalExpanses;
+  final double prevExpanses;
+  final double prevIncomes;
+  final double prevTotal;
+  final double currentBalance;
+  final List<Transaction> transactions;
+
+  MonthData(
+      {required this.total, required this.prevTotal,
+        required this.totalExpanses,required this.totalIncomes,
+        required this.prevExpanses,required this.prevIncomes,
+        required this.currentBalance,
+        required this.transactions});
+
+
+  factory MonthData.fromJson(Map<String, dynamic> json) {
+    List<Transaction> transactions = [];
+    if (json['transactions'] != null) {
+      var transactionsFromJson = json['transactions'] as List;
+      transactions = transactionsFromJson
+          .map((exercise) => Transaction.fromJson(exercise))
+          .toList();
+    }
+
+    var resume = json['resume'] ?? {};
+    return MonthData(
+      total: (resume['total_value'] ?? 0).toDouble(),
+      totalExpanses: (resume['total_expanses'] ?? 0).toDouble(),
+      totalIncomes: (resume['total_income'] ?? 0).toDouble(),
+      prevTotal: (resume['prev_total_value'] ?? 0).toDouble(),
+      prevExpanses: (resume['prev_total_expanses'] ?? 0).toDouble(),
+      prevIncomes: (resume['prev_total_income'] ?? 0).toDouble(),
+      currentBalance: (resume['current_balance'] ?? 0).toDouble(),
+      transactions: transactions,
+    );
+  }
+
+}
+
 
 class CreateTransactionRuleRequest {
   final int userID = AppConfig.user!.id;

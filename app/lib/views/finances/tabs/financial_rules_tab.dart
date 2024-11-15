@@ -26,6 +26,7 @@ class FinancialRulesTabState extends State<FinancialRulesTab> {
     return Scaffold(
       appBar: AppBar(
         title: Text('rules'.tr()),
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -61,7 +62,6 @@ class FinancialRulesTabState extends State<FinancialRulesTab> {
             builder: (context) => const NewFinancialRuleView(),
           ));
         },
-        tooltip: 'Registrar Nova Transação',
         child: Icon(Icons.add),
       ),
     );

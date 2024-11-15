@@ -4,7 +4,6 @@ import 'package:routine/view_models/diet_viewmodel.dart';
 import 'package:routine/views/health/meal_details.dart';
 import 'package:routine/views/health/new_meal_view.dart';
 
-import '../../../config/design_system.dart';
 import '../../../config/helper.dart';
 import '../../../models/health/diet_model.dart';
 import '../../../widgets/custom_modal_delete.dart';
@@ -19,7 +18,6 @@ class DietTab extends StatefulWidget {
 
 class DietTabState extends State<DietTab> {
   final DietViewModel _dietViewModel = DietViewModel();
-  final Map<int, bool> _expandedMeal = {};
 
   @override
   initState() {
