@@ -5,12 +5,14 @@ class User {
   final String name;
   final String email;
   final String lastLogin;
+  final String? photo;
 
   User({
     required this.id,
     required this.name,
     required this.email,
     required this.lastLogin,
+    this.photo
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -19,6 +21,7 @@ class User {
       name: json['name'],
       email: json['email'],
       lastLogin: json['lastLogin'],
+      photo: json['photo']
     );
   }
 
@@ -28,6 +31,7 @@ class User {
       'name': name,
       'email': email,
       'lastLogin': lastLogin,
+      'photo': photo
     };
   }
 }
@@ -54,4 +58,13 @@ class CreateUserRequest {
   final String password;
 
   CreateUserRequest({required this.name, required this.email, required this.password});
+}
+
+
+class UpdateUserRequest {
+  final String name;
+  final String email;
+  final String? photo;
+
+  UpdateUserRequest({required this.name, required this.email, this.photo});
 }

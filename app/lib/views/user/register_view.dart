@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../config/design_system.dart';
 import '../../config/helper.dart';
 import '../../models/user/user_model.dart';
-import '../../view_models/auth_viewmodel.dart';
+import '../../view_models/user_viewmodel.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text_field.dart';
 import 'login_view.dart';
@@ -23,7 +23,8 @@ class RegisterViewState extends State<RegisterView> {
   final _passwordController = TextEditingController();
   final _passwordConfirmController = TextEditingController();
 
-  final AuthViewModel _authViewModel = AuthViewModel();
+  final UserViewModel _userViewModel = UserViewModel();
+
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
@@ -62,7 +63,7 @@ class RegisterViewState extends State<RegisterView> {
       return;
     }
 
-    UserResponse? response = await _authViewModel.register(
+    UserResponse? response = await _userViewModel.register(
         _nameController.text, _emailController.text, _passwordController.text);
 
     _handleResponse(response);
@@ -91,7 +92,7 @@ class RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-        valueListenable: _authViewModel.isLoading,
+        valueListenable: _userViewModel.isLoading,
         builder: (context, isLoading, child) {
           if (isLoading) {
             return const Center(child: CircularProgressIndicator());

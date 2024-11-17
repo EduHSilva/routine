@@ -1,10 +1,10 @@
-import 'package:routine/views/auth/register_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:routine/views/user/register_view.dart';
 import '../../config/design_system.dart';
 import '../../config/helper.dart';
 import '../../models/user/login_model.dart';
-import '../../view_models/auth_viewmodel.dart';
+import '../../view_models/user_viewmodel.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text_field.dart';
 
@@ -18,7 +18,7 @@ class LoginView extends StatefulWidget {
 class LoginViewState extends State<LoginView> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  final AuthViewModel _authViewModel = AuthViewModel();
+  final UserViewModel _userViewModel = UserViewModel();
   final _formKey = GlobalKey<FormState>();
 
   bool _validateForm() {
@@ -29,7 +29,7 @@ class LoginViewState extends State<LoginView> {
     if (!_validateForm()) return;
 
     try {
-      LoginResponse? response = await _authViewModel.login(
+      LoginResponse? response = await _userViewModel.login(
           _usernameController.text, _passwordController.text);
       _handleResponse(response);
     } catch (error) {
@@ -49,7 +49,7 @@ class LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-        valueListenable: _authViewModel.isLoading,
+        valueListenable: _userViewModel.isLoading,
         builder: (context, isLoading, child) {
           if (isLoading) {
             return const Center(child: CircularProgressIndicator());
