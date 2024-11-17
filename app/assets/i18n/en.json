@@ -121,8 +121,8 @@
   "value": "Value",
   "currentBalance": "Current balance",
   "incomes": "Incomes",
-  "expanses": "Expanses",
+  "expenses": "Expanses",
   "prevIncomes": "Incomes predicted",
-  "prevExpanses": "Expanses predicted",
+  "prevExpenses": "Expenses predicted",
   "prevTotal": "Total predicted"
 }

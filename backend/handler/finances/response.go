@@ -11,12 +11,11 @@ type ResponseDataMonth struct {
 }
 
 type Resume struct {
-	TotalValue        float64 `json:"total_value"`
-	TotalExpanses     float64 `json:"total_expenses"`
+	TotalExpenses     float64 `json:"total_expenses"`
 	TotalIncome       float64 `json:"total_income"`
 	CurrentBalance    float64 `json:"current_balance"`
 	PrevTotalValue    float64 `json:"prev_total_value"`
-	PrevTotalExpanses float64 `json:"prev_total_expanses"`
+	PrevTotalExpenses float64 `json:"prev_total_expenses"`
 	PrevTotalIncome   float64 `json:"prev_total_income"`
 }
 

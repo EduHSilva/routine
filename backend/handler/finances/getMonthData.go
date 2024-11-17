@@ -53,7 +53,7 @@ func GetMonthDataHandler(ctx *gin.Context) {
 
 	query = getResumeMonthQuery(userID.(uint), month, year)
 
-	if err := query.Scan(&resume).Error; err != nil {
+	if err := query.Find(&resume).Error; err != nil {
 		helper.SendErrorDefault(ctx, http.StatusInternalServerError, getI18n.(*i18n.Localizer))
 		return
 	}
@@ -65,24 +65,19 @@ func GetMonthDataHandler(ctx *gin.Context) {
 }
 
 func getResumeMonthQuery(userID uint, month string, year string) *gorm.DB {
-	query := db.Model(&finances.Transaction{})
-
-	query = query.Select("SUM(transactions.value) AS TotalValue, " +
-		"SUM(CASE WHEN transactions.confirmed = false THEN transactions.value ELSE 0 END) AS PrevTotalValue, " +
-		"SUM(CASE WHEN transactions.confirmed = true AND t.income = true THEN transactions.value ELSE 0 END) AS TotalIncome," +
-		"SUM(CASE WHEN transactions.confirmed = false AND t.income = true THEN transactions.value ELSE 0 END) AS PrevTotalIncome," +
-		"SUM(CASE WHEN transactions.confirmed = true AND t.income = false THEN transactions.value ELSE 0 END) AS TotalExpanses," +
-		"SUM(CASE WHEN transactions.confirmed = false AND t.income = false THEN transactions.value ELSE 0 END) AS PrevTotalExpanses," +
-		"u.current_balance")
-
-	query = query.Joins("INNER JOIN transaction_rules t ON t.id = transactions.transaction_rule_id")
-	query = query.Joins("INNER JOIN categories c ON t.category_id = c.id")
-	query = query.Joins("LEFT JOIN users u ON t.user_id = u.id")
-
-	query = query.Where("u.id = ?", userID)
-	query = query.Where("strftime('%m', transactions.date) = ? AND strftime('%Y', transactions.date) = ?", month, year)
-
-	query = query.Preload("TransactionRule").Preload("TransactionRule.Category")
+	query := db.Table("transactions").
+		Select("SUM(CASE WHEN transactions.confirmed = false THEN transactions.value ELSE 0 END) + u.current_balance AS prev_total_value, "+
+			"SUM(CASE WHEN transactions.confirmed = true AND t.income = true THEN transactions.value ELSE 0 END) AS total_income, "+
+			"SUM(CASE WHEN transactions.confirmed = false AND t.income = true THEN transactions.value ELSE 0 END) AS prev_total_income, "+
+			"SUM(CASE WHEN transactions.confirmed = true AND t.income = false THEN transactions.value ELSE 0 END) AS total_expenses, "+
+			"SUM(CASE WHEN transactions.confirmed = false AND t.income = false THEN transactions.value ELSE 0 END) AS prev_total_expenses, "+
+			"u.current_balance").
+		Joins("INNER JOIN transaction_rules t ON t.id = transactions.transaction_rule_id").
+		Joins("INNER JOIN categories c ON t.category_id = c.id").
+		Joins("LEFT JOIN users u ON t.user_id = u.id").
+		Where("u.id = ?", userID).
+		Where("EXTRACT(MONTH FROM transactions.date) = ? AND EXTRACT(YEAR FROM transactions.date) = ?", month, year).
+		Group("u.current_balance")
 	return query
 }
 
@@ -95,7 +90,7 @@ func getTransactionsMonthQuery(userID uint, month string, year string) *gorm.DB 
 	query = query.Joins("INNER JOIN categories c ON t.category_id = c.id")
 
 	query = query.Where("t.user_id = ?", userID)
-	query = query.Where("strftime('%m', transactions.date) = ? AND strftime('%Y', transactions.date) = ?", month, year)
+	query = query.Where("EXTRACT(MONTH FROM transactions.date) = ? AND EXTRACT(YEAR FROM transactions.date) = ?", month, year)
 
 	query = query.Preload("TransactionRule").Preload("TransactionRule.Category")
 	return query

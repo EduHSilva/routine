@@ -17,7 +17,7 @@ import (
 // @Produce json
 // @Param id query uint64 true "id"
 // @Param request body UpdateTransactionRequest true "Request body"
-// @Success 200 {object} ResponseCategory
+// @Success 200 {object} ResponseData
 // @Failure 400 {object} helper.ErrorResponse
 // @Failure 401 {object} helper.ErrorResponse
 // @Security ApiKeyAuth

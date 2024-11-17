@@ -8,7 +8,6 @@ class TransactionCard extends StatelessWidget {
   final double value;
   final String startDate;
   final String endDate;
-  final String? color;
   final int id;
 
   const TransactionCard({
@@ -19,62 +18,56 @@ class TransactionCard extends StatelessWidget {
     required this.value,
     required this.startDate,
     required this.endDate,
-    this.color,
   });
 
   String _formatDate(String date) {
-    final DateTime parsedDate = DateTime.parse(date);
-    return DateFormat('dd/MM/yyyy').format(parsedDate);
+    try {
+      final DateTime parsedDate = DateTime.parse(date);
+      return DateFormat('dd/MM/yyyy').format(parsedDate);
+    } catch (e) {
+      return 'Invalid date';
+    }
+  }
+
+  Color _getBackgroundColor(BuildContext context) {
+    return income ? Colors.green : Colors.red;
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 3,
       child: ListTile(
-        onTap: () => {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => NewFinancialRuleView(id: id)))
-        },
-        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => NewFinancialRuleView(id: id)),
+        ),
+        contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         leading: CircleAvatar(
-          backgroundColor: income ? Colors.green : Colors.red,
+          backgroundColor: _getBackgroundColor(context),
           child: Icon(
-            income ? Icons.arrow_upward : Icons.arrow_downward_outlined,
+            income ? Icons.arrow_upward : Icons.arrow_downward,
             color: Colors.white,
           ),
         ),
         title: Text(
           title,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
+          style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
         ),
         subtitle: Text(
           "${_formatDate(startDate)} - ${_formatDate(endDate)}",
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.grey[600],
-          ),
+          style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
         ),
-        trailing: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'R\$ ${value.toStringAsFixed(2)}',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: income ? Colors.green : Colors.red,
-                fontSize: 16,
-              ),
-            ),
-          ],
+        trailing: Text(
+          'R\$ ${value.toStringAsFixed(2)}',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: income ? Colors.green : Colors.red,
+            fontSize: 16,
+          ),
         ),
       ),
     );

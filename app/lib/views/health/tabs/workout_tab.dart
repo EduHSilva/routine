@@ -7,6 +7,7 @@ import '../../../config/helper.dart';
 import '../../../view_models/workout_viewmodel.dart';
 import '../../../widgets/custom_modal_delete.dart';
 import '../new_workout_view.dart';
+import '../workout_details_view.dart';
 
 class WorkoutTab extends StatefulWidget {
   const WorkoutTab({super.key});
@@ -17,7 +18,6 @@ class WorkoutTab extends StatefulWidget {
 
 class WorkoutTabState extends State<WorkoutTab> {
   final WorkoutViewModel _workoutViewModel = WorkoutViewModel();
-  final Map<int, bool> _expandedWorkout = {};
 
   @override
   void initState() {
@@ -72,147 +72,69 @@ class WorkoutTabState extends State<WorkoutTab> {
               body: workouts.isEmpty
                   ? Center(child: Text('noData'.tr()))
                   : ListView.builder(
-                      itemCount: workouts.length,
-                      itemBuilder: (context, index) {
-                        Workout workout = workouts[index];
-                        List<Exercise> exercises = workout.exercises;
+                itemCount: workouts.length,
+                itemBuilder: (context, index) {
+                  Workout workout = workouts[index];
 
-                        _expandedWorkout.putIfAbsent(workout.id, () => false);
-
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    _expandedWorkout[workout.id] =
-                                        !_expandedWorkout[workout.id]!;
-                                  });
-                                },
-                                child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        // Nome do treino
-                                        Expanded(
-                                          child: Text(
-                                            workout.name,
-                                            style: const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-
-                                        // Ícone de edição
-                                        IconButton(
-                                          icon: const Icon(
-                                            Icons.edit,
-                                            color: AppColors.primary,
-
-                                            size: 24, //
-                                          ),
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    NewWorkoutView(
-                                                        id: workout.id),
-                                              ),
-                                            );
-                                          },
-                                        ),
-
-                                        const SizedBox(width: 8),
-
-                                        IconButton(
-                                          icon: const Icon(
-                                            Icons.delete,
-                                            color: AppColors.error,
-                                            size: 24,
-                                          ),
-                                          onPressed: () {
-                                            _deleteWorkoutDialog(workout);
-                                          },
-                                        ),
-
-                                        const SizedBox(width: 8),
-                                        Icon(
-                                          _expandedWorkout[workout.id]!
-                                              ? Icons.expand_less
-                                              : Icons.expand_more,
-                                          size: 28,
-                                          color: Colors.grey,
-                                        ),
-                                      ],
-                                    )),
-                              ),
-                              if (_expandedWorkout[workout.id]!)
-                                ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: exercises.length,
-                                  itemBuilder: (context, exerciseIndex) {
-                                    var exercise = exercises[exerciseIndex];
-
-                                    return Card(
-                                      margin: const EdgeInsets.symmetric(
-                                          vertical: 8),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            ListTile(
-                                              title: Text(
-                                                exercise.name,
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 16),
-                                              ),
-                                              subtitle: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                          '${exercise.bodyPart?.toLowerCase()}'
-                                                              .tr()),
-                                                      Text(
-                                                          '${exercise.series}x${exercise.repetitions}'),
-                                                    ],
-                                                  ),
-                                                  Text('${exercise.load} kg'),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
+                  return Card(
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 16.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ListTile(
+                      title: Text(
+                        workout.name,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      subtitle: Text(
+                        '${workout.exercises.length} ${'exercises'.tr()}',
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(
+                              Icons.edit,
+                              color: AppColors.primary,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      NewWorkoutView(id: workout.id),
                                 ),
-                            ],
+                              );
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(
+                              Icons.delete,
+                              color: AppColors.error,
+                            ),
+                            onPressed: () {
+                              _deleteWorkoutDialog(workout);
+                            },
+                          ),
+                        ],
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                WorkoutDetailView(workout: workout),
                           ),
                         );
                       },
                     ),
+                  );
+                },
+              ),
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
                   Navigator.push(
@@ -222,7 +144,7 @@ class WorkoutTabState extends State<WorkoutTab> {
                     ),
                   );
                 },
-                child: Icon(Icons.add),
+                child: const Icon(Icons.add),
               ),
             );
           },

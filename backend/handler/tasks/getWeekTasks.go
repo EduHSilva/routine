@@ -50,7 +50,15 @@ func GetWeekTasksHandler(ctx *gin.Context) {
 
 	taskMap := make(ResponseTaskMap)
 	for _, ts := range task {
-		truncatedDate := ts.Date.Truncate(24 * time.Hour).Format(time.DateOnly)
+		location, _ := time.LoadLocation("America/Sao_Paulo")
+		dateInLocation := ts.Date.In(location)
+		truncatedDate := time.Date(
+			dateInLocation.Year(),
+			dateInLocation.Month(),
+			dateInLocation.Day(),
+			0, 0, 0, 0,
+			location,
+		).Format(time.DateOnly)
 
 		if _, ok := taskMap[truncatedDate]; !ok {
 			taskMap[truncatedDate] = &ResponseDateTasks{

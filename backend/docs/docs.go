@@ -416,6 +416,62 @@ const docTemplate = `{
                 }
             }
         },
+        "/finances/month": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get all transactions of month",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Finances"
+                ],
+                "summary": "Get all transactions of month",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Access token",
+                        "name": "x-access-token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "month",
+                        "name": "month",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/finances.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/helper.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/helper.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/finances/transaction": {
             "get": {
                 "security": [
@@ -495,7 +551,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/finances.CreateTransactionRequest"
+                            "$ref": "#/definitions/finances.CreateTransactionRuleRequest"
                         }
                     },
                     {
@@ -688,7 +744,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/finances.ResponseCategory"
+                            "$ref": "#/definitions/finances.ResponseData"
                         }
                     },
                     "400": {
@@ -1073,7 +1129,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/task.ResponseTask"
+                            "$ref": "#/definitions/tasks.ResponseTask"
                         }
                     },
                     "400": {
@@ -1129,7 +1185,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/task.ResponseTask"
+                            "$ref": "#/definitions/tasks.ResponseTask"
                         }
                     },
                     "400": {
@@ -1177,7 +1233,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/task.UpdateTaskRequest"
+                            "$ref": "#/definitions/tasks.UpdateTaskRequest"
                         }
                     },
                     {
@@ -1192,7 +1248,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/task.ResponseTasks"
+                            "$ref": "#/definitions/tasks.ResponseTasks"
                         }
                     },
                     "400": {
@@ -1233,7 +1289,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/task.CreateTaskRequest"
+                            "$ref": "#/definitions/tasks.CreateTaskRequest"
                         }
                     },
                     {
@@ -1248,7 +1304,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/task.ResponseTask"
+                            "$ref": "#/definitions/tasks.ResponseTask"
                         }
                     },
                     "400": {
@@ -1308,7 +1364,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/task.ResponseTask"
+                            "$ref": "#/definitions/tasks.ResponseTask"
                         }
                     },
                     "400": {
@@ -1363,7 +1419,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/task.ResponseTasks"
+                            "$ref": "#/definitions/tasks.ResponseTasks"
                         }
                     },
                     "400": {
@@ -1419,7 +1475,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/task.ResponseTaskMap"
+                            "$ref": "#/definitions/tasks.ResponseTaskMap"
                         }
                     },
                     "400": {
@@ -2231,13 +2287,13 @@ const docTemplate = `{
                 "Unique"
             ]
         },
-        "finances.CreateTransactionRequest": {
+        "finances.CreateTransactionRuleRequest": {
             "type": "object",
             "properties": {
                 "category_id": {
                     "type": "integer"
                 },
-                "date": {
+                "end_date": {
                     "type": "string"
                 },
                 "frequency": {
@@ -2245,6 +2301,9 @@ const docTemplate = `{
                 },
                 "income": {
                     "type": "boolean"
+                },
+                "start_date": {
+                    "type": "string"
                 },
                 "title": {
                     "type": "string"
@@ -2257,22 +2316,17 @@ const docTemplate = `{
                 }
             }
         },
-        "finances.ResponseCategory": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "$ref": "#/definitions/finances.ResponseData"
-                },
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
         "finances.ResponseData": {
             "type": "object",
             "properties": {
                 "category": {
                     "type": "string"
+                },
+                "color": {
+                    "type": "string"
+                },
+                "confirmed": {
+                    "type": "boolean"
                 },
                 "createAt": {
                     "type": "string"
@@ -2281,6 +2335,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "deletedAt": {
+                    "type": "string"
+                },
+                "end_date": {
                     "type": "string"
                 },
                 "frequency": {
@@ -2292,11 +2349,17 @@ const docTemplate = `{
                 "income": {
                     "type": "boolean"
                 },
+                "start_date": {
+                    "type": "string"
+                },
                 "title": {
                     "type": "string"
                 },
                 "updateAt": {
                     "type": "string"
+                },
+                "value": {
+                    "type": "number"
                 }
             }
         },
@@ -2419,7 +2482,7 @@ const docTemplate = `{
                 }
             }
         },
-        "task.CreateTaskRequest": {
+        "tasks.CreateTaskRequest": {
             "type": "object",
             "properties": {
                 "category_id": {
@@ -2451,7 +2514,7 @@ const docTemplate = `{
                 }
             }
         },
-        "task.ResponseData": {
+        "tasks.ResponseData": {
             "type": "object",
             "properties": {
                 "category": {
@@ -2498,7 +2561,7 @@ const docTemplate = `{
                 }
             }
         },
-        "task.ResponseDataWeekTask": {
+        "tasks.ResponseDataWeekTask": {
             "type": "object",
             "properties": {
                 "category": {
@@ -2530,41 +2593,41 @@ const docTemplate = `{
                 }
             }
         },
-        "task.ResponseDateTasks": {
+        "tasks.ResponseDateTasks": {
             "type": "object",
             "properties": {
                 "tasks": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/task.ResponseDataWeekTask"
+                        "$ref": "#/definitions/tasks.ResponseDataWeekTask"
                     }
                 }
             }
         },
-        "task.ResponseTask": {
+        "tasks.ResponseTask": {
             "type": "object",
             "properties": {
                 "data": {
-                    "$ref": "#/definitions/task.ResponseData"
+                    "$ref": "#/definitions/tasks.ResponseData"
                 },
                 "message": {
                     "type": "string"
                 }
             }
         },
-        "task.ResponseTaskMap": {
+        "tasks.ResponseTaskMap": {
             "type": "object",
             "additionalProperties": {
-                "$ref": "#/definitions/task.ResponseDateTasks"
+                "$ref": "#/definitions/tasks.ResponseDateTasks"
             }
         },
-        "task.ResponseTasks": {
+        "tasks.ResponseTasks": {
             "type": "object",
             "properties": {
                 "data": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/task.ResponseData"
+                        "$ref": "#/definitions/tasks.ResponseData"
                     }
                 },
                 "message": {
@@ -2572,7 +2635,7 @@ const docTemplate = `{
                 }
             }
         },
-        "task.UpdateTaskRequest": {
+        "tasks.UpdateTaskRequest": {
             "type": "object",
             "properties": {
                 "category_id": {
@@ -2596,6 +2659,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                },
+                "photo": {
                     "type": "string"
                 }
             }
@@ -2633,6 +2699,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                },
+                "photo": {
                     "type": "string"
                 },
                 "updateAt": {
@@ -2680,6 +2749,9 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "name": {
+                    "type": "string"
+                },
+                "photo": {
                     "type": "string"
                 }
             }

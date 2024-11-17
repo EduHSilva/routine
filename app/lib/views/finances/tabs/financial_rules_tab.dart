@@ -49,7 +49,6 @@ class FinancialRulesTabState extends State<FinancialRulesTab> {
                           value: transaction.value,
                           startDate: transaction.startDate,
                           endDate: transaction.endDate,
-                          color: transaction.color,
                         );
                       },
                     ),

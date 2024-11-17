@@ -121,8 +121,8 @@
   "value": "Valor",
   "currentBalance": "Saldo atual",
   "incomes": "Entradas concluidas",
-  "expanses": "Despesas concluidas",
+  "expenses": "Despesas concluidas",
   "prevIncomes": "Entradas previstas",
-  "prevExpanses": "Despesas previstas",
+  "prevExpenses": "Despesas previstas",
   "prevTotal": "Total previsto"
 }

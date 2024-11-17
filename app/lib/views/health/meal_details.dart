@@ -73,7 +73,7 @@ class MealDetailViewState extends State<MealDetailView> {
                         CrossAxisAlignment.start,
                         children: [
                           Text(
-                            food.name,
+                            toBeginningOfSentenceCase(food.name),
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,

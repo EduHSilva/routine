@@ -16,7 +16,7 @@ import (
 // @Tags Finances
 // @Accept json
 // @Produce json
-// @Param request body CreateTransactionRequest true "Request body"
+// @Param request body CreateTransactionRuleRequest true "Request body"
 // @Success 200 {object} ResponseData
 // @Failure 400 {object} helper.ErrorResponse
 // @Failure 500 {object} helper.ErrorResponse

@@ -9,7 +9,6 @@ import (
 	"github.com/EduHSilva/routine/schemas/health/workout"
 	"github.com/EduHSilva/routine/schemas/tasks"
 	"github.com/EduHSilva/routine/seeds"
-	"github.com/glebarez/sqlite"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"os"
@@ -27,7 +26,7 @@ func InitDatabase() (*gorm.DB, error) {
 	case "prod":
 		db, err = initPostgres(logger)
 	case "dev":
-		db, err = initSQLite(logger)
+		db, err = initPGLocal(logger)
 	default:
 		return nil, errors.New("environment not specified or invalid")
 	}
@@ -81,31 +80,19 @@ func initPostgres(logger *Logger) (*gorm.DB, error) {
 	return db, nil
 }
 
-func initSQLite(logger *Logger) (*gorm.DB, error) {
-	dbPath := "/media/eduardo/6610C15F4597DD37/Projects/routine/backend/db/test.db"
-	_, err := os.Stat(dbPath)
-	if os.IsNotExist(err) {
-		logger.Info("Creating database ...")
+func initPGLocal(logger *Logger) (*gorm.DB, error) {
+	host := os.Getenv("DB_HOST")
+	user := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASSWORD")
+	dbName := os.Getenv("DB_NAME")
+	port := os.Getenv("DB_PORT")
 
-		err = os.MkdirAll("./db", os.ModePerm)
-		if err != nil {
-			return nil, err
-		}
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", host, user, password, dbName, port)
 
-		file, err := os.Create(dbPath)
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
-		if err != nil {
-			return nil, err
-		}
-		err = file.Close()
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	db, err := gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
 	if err != nil {
-		logger.ErrF("SQLite connection failed: %s", err)
+		logger.ErrF("Postgres connection failed: %s", err)
 		return nil, err
 	}
 	return db, nil

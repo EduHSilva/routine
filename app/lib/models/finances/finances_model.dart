@@ -52,19 +52,18 @@ class Transaction {
 }
 
 class MonthData {
-  final double total;
   final double totalIncomes;
-  final double totalExpanses;
-  final double prevExpanses;
+  final double totalExpenses;
+  final double prevExpenses;
   final double prevIncomes;
   final double prevTotal;
   final double currentBalance;
   final List<Transaction> transactions;
 
   MonthData(
-      {required this.total, required this.prevTotal,
-        required this.totalExpanses,required this.totalIncomes,
-        required this.prevExpanses,required this.prevIncomes,
+      {required this.prevTotal,
+        required this.totalExpenses,required this.totalIncomes,
+        required this.prevExpenses,required this.prevIncomes,
         required this.currentBalance,
         required this.transactions});
 
@@ -80,11 +79,10 @@ class MonthData {
 
     var resume = json['resume'] ?? {};
     return MonthData(
-      total: (resume['total_value'] ?? 0).toDouble(),
-      totalExpanses: (resume['total_expanses'] ?? 0).toDouble(),
+      totalExpenses: (resume['total_expenses'] ?? 0).toDouble(),
       totalIncomes: (resume['total_income'] ?? 0).toDouble(),
       prevTotal: (resume['prev_total_value'] ?? 0).toDouble(),
-      prevExpanses: (resume['prev_total_expanses'] ?? 0).toDouble(),
+      prevExpenses: (resume['prev_total_expenses'] ?? 0).toDouble(),
       prevIncomes: (resume['prev_total_income'] ?? 0).toDouble(),
       currentBalance: (resume['current_balance'] ?? 0).toDouble(),
       transactions: transactions,

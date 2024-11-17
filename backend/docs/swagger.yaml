@@ -157,16 +157,18 @@ definitions:
     - Monthly
     - Yearly
     - Unique
-  finances.CreateTransactionRequest:
+  finances.CreateTransactionRuleRequest:
     properties:
       category_id:
         type: integer
-      date:
+      end_date:
         type: string
       frequency:
         $ref: '#/definitions/enums.Frequency'
       income:
         type: boolean
+      start_date:
+        type: string
       title:
         type: string
       user_id:
@@ -174,22 +176,21 @@ definitions:
       value:
         type: number
     type: object
-  finances.ResponseCategory:
-    properties:
-      data:
-        $ref: '#/definitions/finances.ResponseData'
-      message:
-        type: string
-    type: object
   finances.ResponseData:
     properties:
       category:
         type: string
+      color:
+        type: string
+      confirmed:
+        type: boolean
       createAt:
         type: string
       date:
         type: string
       deletedAt:
+        type: string
+      end_date:
         type: string
       frequency:
         type: string
@@ -197,10 +198,14 @@ definitions:
         type: integer
       income:
         type: boolean
+      start_date:
+        type: string
       title:
         type: string
       updateAt:
         type: string
+      value:
+        type: number
     type: object
   finances.UpdateTransactionRequest:
     properties:
@@ -279,7 +284,7 @@ definitions:
       message:
         type: string
     type: object
-  task.CreateTaskRequest:
+  tasks.CreateTaskRequest:
     properties:
       category_id:
         type: integer
@@ -300,7 +305,7 @@ definitions:
       user_id:
         type: integer
     type: object
-  task.ResponseData:
+  tasks.ResponseData:
     properties:
       category:
         type: string
@@ -331,7 +336,7 @@ definitions:
       updateAt:
         type: string
     type: object
-  task.ResponseDataWeekTask:
+  tasks.ResponseDataWeekTask:
     properties:
       category:
         type: string
@@ -352,34 +357,34 @@ definitions:
       title:
         type: string
     type: object
-  task.ResponseDateTasks:
+  tasks.ResponseDateTasks:
     properties:
       tasks:
         items:
-          $ref: '#/definitions/task.ResponseDataWeekTask'
+          $ref: '#/definitions/tasks.ResponseDataWeekTask'
         type: array
     type: object
-  task.ResponseTask:
+  tasks.ResponseTask:
     properties:
       data:
-        $ref: '#/definitions/task.ResponseData'
+        $ref: '#/definitions/tasks.ResponseData'
       message:
         type: string
     type: object
-  task.ResponseTaskMap:
+  tasks.ResponseTaskMap:
     additionalProperties:
-      $ref: '#/definitions/task.ResponseDateTasks'
+      $ref: '#/definitions/tasks.ResponseDateTasks'
     type: object
-  task.ResponseTasks:
+  tasks.ResponseTasks:
     properties:
       data:
         items:
-          $ref: '#/definitions/task.ResponseData'
+          $ref: '#/definitions/tasks.ResponseData'
         type: array
       message:
         type: string
     type: object
-  task.UpdateTaskRequest:
+  tasks.UpdateTaskRequest:
     properties:
       category_id:
         type: integer
@@ -395,6 +400,8 @@ definitions:
       name:
         type: string
       password:
+        type: string
+      photo:
         type: string
     type: object
   user.LoginRequest:
@@ -419,6 +426,8 @@ definitions:
       name:
         type: string
       password:
+        type: string
+      photo:
         type: string
       updateAt:
         type: string
@@ -449,6 +458,8 @@ definitions:
   user.UpdateUserRequest:
     properties:
       name:
+        type: string
+      photo:
         type: string
     type: object
   workout.CreateWorkoutRequest:
@@ -797,6 +808,42 @@ paths:
       summary: Search food
       tags:
       - Diet
+  /finances/month:
+    get:
+      consumes:
+      - application/json
+      description: Get all transactions of month
+      parameters:
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      - description: month
+        in: query
+        name: month
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/finances.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all transactions of month
+      tags:
+      - Finances
   /finances/transaction:
     delete:
       consumes:
@@ -882,7 +929,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/finances.CreateTransactionRequest'
+          $ref: '#/definitions/finances.CreateTransactionRuleRequest'
       - description: Access token
         in: header
         name: x-access-token
@@ -970,7 +1017,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/finances.ResponseCategory'
+            $ref: '#/definitions/finances.ResponseData'
         "400":
           description: Bad Request
           schema:
@@ -1218,7 +1265,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/task.ResponseTask'
+            $ref: '#/definitions/tasks.ResponseTask'
         "400":
           description: Bad Request
           schema:
@@ -1254,7 +1301,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/task.ResponseTask'
+            $ref: '#/definitions/tasks.ResponseTask'
         "400":
           description: Bad Request
           schema:
@@ -1293,7 +1340,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/task.ResponseTask'
+            $ref: '#/definitions/tasks.ResponseTask'
         "400":
           description: Bad Request
           schema:
@@ -1317,7 +1364,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/task.CreateTaskRequest'
+          $ref: '#/definitions/tasks.CreateTaskRequest'
       - description: Access token
         in: header
         name: x-access-token
@@ -1329,7 +1376,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/task.ResponseTask'
+            $ref: '#/definitions/tasks.ResponseTask'
         "400":
           description: Bad Request
           schema:
@@ -1362,7 +1409,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/task.UpdateTaskRequest'
+          $ref: '#/definitions/tasks.UpdateTaskRequest'
       - description: Access token
         in: header
         name: x-access-token
@@ -1374,7 +1421,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/task.ResponseTasks'
+            $ref: '#/definitions/tasks.ResponseTasks'
         "400":
           description: Bad Request
           schema:
@@ -1405,7 +1452,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/task.ResponseTasks'
+            $ref: '#/definitions/tasks.ResponseTasks'
         "400":
           description: Bad Request
           schema:
@@ -1441,7 +1488,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/task.ResponseTaskMap'
+            $ref: '#/definitions/tasks.ResponseTaskMap'
         "400":
           description: Bad Request
           schema:
