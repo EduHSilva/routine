@@ -98,6 +98,7 @@ func CreateTransactionRuleHandler(ctx *gin.Context) {
 			Date:              date,
 			TransactionRuleID: transactionRule.ID,
 			Confirmed:         false,
+			Title:             transactionRule.Title,
 		}
 		if err := db.Create(&transaction).Error; err != nil {
 			logger.ErrF("Error creating transaction: %s", err.Error())

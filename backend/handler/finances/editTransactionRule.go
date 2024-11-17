@@ -57,19 +57,19 @@ func UpdateTransactionRuleHandler(ctx *gin.Context) {
 
 	if request.Title != "" {
 		transactionRule.Title = request.Title
+
+		if err := db.Model(&finances.Transaction{}).
+			Where("transaction_rule_id = ?", id).
+			Update("title", request.Title).Error; err != nil {
+			logger.ErrF("error updating transactions: %s", err.Error())
+			helper.SendError(ctx, http.StatusInternalServerError, err.Error())
+			return
+		}
 	}
 
 	if request.Value != 0 {
 		transactionRule.Value = request.Value
-	}
 
-	if err := db.Save(&transactionRule).Error; err != nil {
-		logger.ErrF("error updating: %s", err.Error())
-		helper.SendError(ctx, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	if request.Value != 0 {
 		if err := db.Model(&finances.Transaction{}).
 			Where("transaction_rule_id = ? AND confirmed = false", id).
 			Update("value", request.Value).Error; err != nil {
@@ -77,6 +77,12 @@ func UpdateTransactionRuleHandler(ctx *gin.Context) {
 			helper.SendError(ctx, http.StatusInternalServerError, err.Error())
 			return
 		}
+	}
+
+	if err := db.Save(&transactionRule).Error; err != nil {
+		logger.ErrF("error updating: %s", err.Error())
+		helper.SendError(ctx, http.StatusInternalServerError, err.Error())
+		return
 	}
 
 	helper.SendSuccess(ctx, ConvertTransactionToTransactionResponse(transactionRule))

@@ -75,7 +75,9 @@ class UserViewModel {
       UpdateUserRequest userRequest =
           UpdateUserRequest(name: name, email: email, photo: photo);
       UserResponse? response = await _userService.updateUser(userRequest, id);
-
+      if (response?.user != null) {
+        AppConfig.saveUser(response?.user);
+      }
       return response;
     } catch (e) {
       errorMessage.value = "Error on update user";

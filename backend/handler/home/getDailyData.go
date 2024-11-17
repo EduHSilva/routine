@@ -1,7 +1,6 @@
 package home
 
 import (
-	"fmt"
 	"github.com/EduHSilva/routine/helper"
 	"github.com/EduHSilva/routine/schemas/health/diet"
 	"github.com/EduHSilva/routine/schemas/tasks"
@@ -82,13 +81,15 @@ func GetDailyDataHandler(ctx *gin.Context) {
 
 func GetClosestMeal(db *gorm.DB, userID uint) (*diet.Meal, error) {
 	var meal diet.Meal
-	currentTime := time.Now().Format("15:04:05")
+	currentTime := time.Now().Format("15:04:05") // Formato de hora
 
-	err := db.
-		Where("user_id = ?", userID).
-		Order(fmt.Sprintf("ABS(TIMEDIFF(hour, '%s'))", currentTime)).
-		First(&meal).
-		Error
+	err := db.Raw(`
+		SELECT * 
+		FROM meals
+		WHERE user_id = ?
+  		AND meals.deleted_at IS NULL
+		ORDER BY ABS(EXTRACT(EPOCH FROM (TO_TIMESTAMP(meals.hour, 'HH24:MI:SS') - CAST(? AS TIME))) / 3600), meals.id
+		LIMIT 1`, userID, currentTime).Scan(&meal).Error
 
 	if err != nil {
 		return nil, err

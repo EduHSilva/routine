@@ -7,6 +7,7 @@ import (
 
 type Transaction struct {
 	gorm.Model
+	Title             string
 	Income            bool
 	Value             float64
 	Date              time.Time
