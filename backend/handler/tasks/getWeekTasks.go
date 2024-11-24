@@ -91,7 +91,7 @@ func getTaskStatusQuery(userID uint, currentDate time.Time) *gorm.DB {
 	query = query.Joins("INNER JOIN categories c ON t.category_id = c.id")
 
 	query = query.Where("t.user_id = ?", userID)
-	query = query.Where("tasks.date between ? and ?", currentDate, currentDate.AddDate(0, 0, 7))
+	query = query.Where("tasks.date between ? and ?", currentDate.AddDate(0, 0, -1), currentDate.AddDate(0, 0, 7))
 
 	query = query.Preload("TaskRule").Preload("TaskRule.Category")
 	return query

@@ -163,7 +163,7 @@ class HomeViewState extends State<HomeView> {
                               style: TextStyle(fontSize: 16),
                             );
                           }
-                          return ListView.builder(
+                          return SingleChildScrollView(child: ListView.builder(
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: tasks.length,
@@ -183,7 +183,7 @@ class HomeViewState extends State<HomeView> {
                                 },
                               );
                             },
-                          );
+                          ));
                         },
                       ),
                     ),

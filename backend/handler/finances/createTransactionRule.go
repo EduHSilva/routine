@@ -65,6 +65,7 @@ func CreateTransactionRuleHandler(ctx *gin.Context) {
 	generateTransactionDates := func(startDate, endDate time.Time, frequency enums.Frequency) []time.Time {
 		var dates []time.Time
 		currentDate := startDate
+
 		for currentDate.Before(endDate) || currentDate.Equal(endDate) {
 			dates = append(dates, currentDate)
 

@@ -43,3 +43,12 @@ const (
 	Tasks    CategoryType = "tasks"
 	Finances CategoryType = "finances"
 )
+
+type ItemTag string
+
+const (
+	Supermarket ItemTag = "supermarket"
+	Drugstore   ItemTag = "drugstore"
+	Supplements ItemTag = "supplements"
+	Wish        ItemTag = "wish"
+)

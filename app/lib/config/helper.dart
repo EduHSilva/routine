@@ -50,6 +50,9 @@ String colorToHexa(Color color) {
 String formatDate(String? date) {
   if (date == null) return "";
   DateTime dateTime = DateTime.parse(date).toUtc();
+  if(dateTime.year == 0000) {
+    return "-";
+  }
   return '${dateTime.day}/${dateTime.month}/${dateTime.year}';
 }
 

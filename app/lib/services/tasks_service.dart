@@ -147,8 +147,12 @@ class TasksService {
     }
   }
 
-  String formatDate(String date) {
-    return DateTime.parse(date).toUtc().toIso8601String();
+  String? formatDate(String date) {
+    try {
+      return DateTime.parse(date).toUtc().toIso8601String();
+    } catch (e) {
+      return null;
+    }
   }
 
   Future<TaskResponse?> changeTaskStatus(int id) async {

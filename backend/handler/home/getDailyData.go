@@ -33,9 +33,7 @@ func GetDailyDataHandler(ctx *gin.Context) {
 		return
 	}
 
-	currentDate := time.Now()
-
-	query := getTaskStatusQuery(userID.(uint), currentDate)
+	query := getTaskStatusQuery(userID.(uint))
 
 	var task []tasks.Task
 	if err := query.Find(&task).Error; err != nil {
@@ -81,7 +79,7 @@ func GetDailyDataHandler(ctx *gin.Context) {
 
 func GetClosestMeal(db *gorm.DB, userID uint) (*diet.Meal, error) {
 	var meal diet.Meal
-	currentTime := time.Now().Format("15:04:05") // Formato de hora
+	currentTime := time.Now().Format("15:04:05")
 
 	err := db.Raw(`
 		SELECT * 
@@ -97,7 +95,8 @@ func GetClosestMeal(db *gorm.DB, userID uint) (*diet.Meal, error) {
 	return &meal, nil
 }
 
-func getTaskStatusQuery(userID uint, currentDate time.Time) *gorm.DB {
+func getTaskStatusQuery(userID uint) *gorm.DB {
+	currentDate := time.Now()
 	query := db.Model(&tasks.Task{})
 
 	query = query.Select("tasks.id, task_rule_id, t.category_id, t.title, done, tasks.date, t.start_time, t.end_time, t.priority, c.title, c.color")

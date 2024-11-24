@@ -47,4 +47,5 @@ func initRoutes(router *gin.Engine) {
 	initDietRoutes(api)
 	initHomeRoutes(api)
 	initFinancesRoutes(api)
+	initShopRoutes(api)
 }

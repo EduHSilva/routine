@@ -7,6 +7,7 @@ import (
 	"github.com/EduHSilva/routine/schemas/finances"
 	"github.com/EduHSilva/routine/schemas/health/diet"
 	"github.com/EduHSilva/routine/schemas/health/workout"
+	"github.com/EduHSilva/routine/schemas/shop"
 	"github.com/EduHSilva/routine/schemas/tasks"
 	"github.com/EduHSilva/routine/seeds"
 	"gorm.io/driver/postgres"
@@ -50,6 +51,8 @@ func InitDatabase() (*gorm.DB, error) {
 		&diet.Meal{},
 		&diet.Food{},
 		&finances.Transaction{},
+		&shop.Item{},
+		&shop.ItemHistory{},
 	)
 
 	seeds.Load(db)

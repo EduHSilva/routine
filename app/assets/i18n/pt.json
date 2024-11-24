@@ -124,5 +124,6 @@
   "expenses": "Despesas concluidas",
   "prevIncomes": "Entradas previstas",
   "prevExpenses": "Despesas previstas",
-  "prevTotal": "Total previsto"
+  "prevTotal": "Total previsto",
+  "noEndDate": "Sem data final"
 }

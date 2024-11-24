@@ -32,6 +32,7 @@ class NewFinancialViewState extends State<NewFinancialRuleView> {
   final TextEditingController _endDateController = TextEditingController();
   final TextEditingController _valueController = TextEditingController();
   bool _income = false;
+  bool _isEndDateDisabled = false;
 
   DropdownItem<Category>? _selectedCategory;
   DropdownItem<Frequency>? _selectedFrequency;
@@ -235,11 +236,34 @@ class NewFinancialViewState extends State<NewFinancialRuleView> {
                             child: CustomTextField(
                               controller: _endDateController,
                               labelText: 'endDate',
-                              enable: widget.id == null,
+                              enable: !_isEndDateDisabled && widget.id == null,
                               readOnly: true,
-                              onTap: () =>
-                                  _selectDate(context, _endDateController),
+                              onTap: !_isEndDateDisabled
+                                  ? () => _selectDate(context, _endDateController)
+                                  : null,
                             ),
+                          ),
+                          const SizedBox(width: 8),
+                          Column(
+                            children: [
+                              Text(
+                                'noEndDate'.tr(),
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                              Switch(
+                                value: _isEndDateDisabled,
+                                onChanged: widget.id != null
+                                    ? null
+                                    : (value) {
+                                  setState(() {
+                                    _isEndDateDisabled = value;
+                                    if (value) {
+                                      _endDateController.clear();
+                                    }
+                                  });
+                                },
+                              ),
+                            ],
                           ),
                         ],
                       ),

@@ -35,6 +35,8 @@ class NewTaskViewState extends State<NewTaskView> {
   DropdownItem<Priority>? _selectedPriority;
   DropdownItem<Frequency>? _selectedFrequency;
 
+  bool _isEndDateDisabled = false;
+
   final List<DropdownItem<Priority>> _priorities = Priority.values
       .map((priority) => DropdownItem(
             label: priority.label,
@@ -224,8 +226,7 @@ class NewTaskViewState extends State<NewTaskView> {
                               labelText: 'startDate',
                               readOnly: true,
                               enable: widget.id == null,
-                              onTap: () =>
-                                  _selectDate(context, _startDateController),
+                              onTap: () => _selectDate(context, _startDateController),
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -233,11 +234,34 @@ class NewTaskViewState extends State<NewTaskView> {
                             child: CustomTextField(
                               controller: _endDateController,
                               labelText: 'endDate',
-                              enable: widget.id == null,
+                              enable: !_isEndDateDisabled && widget.id == null,
                               readOnly: true,
-                              onTap: () =>
-                                  _selectDate(context, _endDateController),
+                              onTap: !_isEndDateDisabled
+                                  ? () => _selectDate(context, _endDateController)
+                                  : null,
                             ),
+                          ),
+                          const SizedBox(width: 8),
+                          Column(
+                            children: [
+                              Text(
+                                'noEndDate'.tr(),
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                              Switch(
+                                value: _isEndDateDisabled,
+                                onChanged: widget.id != null
+                                    ? null
+                                    : (value) {
+                                  setState(() {
+                                    _isEndDateDisabled = value;
+                                    if (value) {
+                                      _endDateController.clear();
+                                    }
+                                  });
+                                },
+                              ),
+                            ],
                           ),
                         ],
                       ),
