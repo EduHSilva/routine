@@ -75,6 +75,8 @@ class MyAppState extends State<MyApp> {
       themeMode: ThemeMode.light,
       initialRoute: _initialRoute,
       showSemanticsDebugger: false,
+      debugShowCheckedModeBanner: false,
+      debugShowMaterialGrid: false,
       routes: {
         '/splash': (context) => const SplashView(),
         '/login': (context) => const LoginView(),

@@ -69,7 +69,7 @@ func InitDatabase() (*gorm.DB, error) {
 func initDatabase(logger *Logger) (*gorm.DB, error) {
 	dbPath := os.Getenv("DB_PATH")
 	if dbPath == "" {
-		dbPath = "db/database.db"
+		dbPath = "database.db"
 	}
 
 	dsn := fmt.Sprintf("%s", dbPath)
