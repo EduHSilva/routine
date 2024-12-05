@@ -125,5 +125,6 @@
   "prevIncomes": "Entradas previstas",
   "prevExpenses": "Despesas previstas",
   "prevTotal": "Total previsto",
-  "noEndDate": "Sem data final"
+  "noEndDate": "Sem data final",
+  "wishlist": "Lista de desejos"
 }

@@ -284,6 +284,97 @@ definitions:
       message:
         type: string
     type: object
+  shop.CreateGroupRequest:
+    properties:
+      title:
+        type: string
+    type: object
+  shop.CreateItemHistoryRequest:
+    properties:
+      date:
+        type: string
+      done:
+        type: boolean
+      item_id:
+        type: integer
+      quantity:
+        type: integer
+      user_id:
+        type: integer
+      value:
+        type: number
+    type: object
+  shop.CreateItemRequest:
+    properties:
+      title:
+        type: string
+    type: object
+  shop.ResponseData:
+    properties:
+      createAt:
+        type: string
+      date:
+        type: string
+      deletedAt:
+        type: string
+      done:
+        type: boolean
+      id:
+        type: integer
+      quantity:
+        type: integer
+      title:
+        type: string
+      updateAt:
+        type: string
+      value:
+        type: number
+    type: object
+  shop.ResponseDataGroup:
+    properties:
+      createAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+      updateAt:
+        type: string
+    type: object
+  shop.ResponseItem:
+    properties:
+      data:
+        $ref: '#/definitions/shop.ResponseData'
+      message:
+        type: string
+    type: object
+  shop.ResponseItems:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/shop.ResponseData'
+        type: array
+      message:
+        type: string
+    type: object
+  shop.UpdateItemGroupRequest:
+    properties:
+      title:
+        type: string
+    type: object
+  shop.UpdateItemHistoryRequest:
+    properties:
+      date:
+        type: string
+      done:
+        type: boolean
+      quantity:
+        type: integer
+      value:
+        type: number
+    type: object
   tasks.CreateTaskRequest:
     properties:
       category_id:
@@ -1243,6 +1334,314 @@ paths:
       summary: Search
       tags:
       - Home
+  /shop/group:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an item group
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/shop.ResponseDataGroup'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete an item group
+      tags:
+      - Shop
+    post:
+      consumes:
+      - application/json
+      description: Create a new group of items
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/shop.CreateGroupRequest'
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/shop.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create a group
+      tags:
+      - Shop
+  /shop/item:
+    get:
+      consumes:
+      - application/json
+      description: Get item history
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/shop.ResponseItem'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get item history
+      tags:
+      - Shop
+    post:
+      consumes:
+      - application/json
+      description: Create a new item
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/shop.CreateItemRequest'
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/shop.ResponseItem'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create item
+      tags:
+      - Shop
+  /shop/item/history:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an item history
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/shop.ResponseItem'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete an item history
+      tags:
+      - Shop
+    post:
+      consumes:
+      - application/json
+      description: Create a new item history
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/shop.CreateItemHistoryRequest'
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/shop.ResponseItem'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create item history
+      tags:
+      - Shop
+    put:
+      consumes:
+      - application/json
+      description: Update the item history
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/shop.UpdateItemHistoryRequest'
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/shop.ResponseItem'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update item history
+      tags:
+      - Shop
+  /shop/items:
+    get:
+      consumes:
+      - application/json
+      description: Get all items
+      parameters:
+      - description: Access token
+        in: header
+        name: x-access-token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/shop.ResponseItems'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/helper.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get items
+      tags:
+      - Shop
   /task:
     put:
       consumes:

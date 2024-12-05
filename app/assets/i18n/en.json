@@ -125,5 +125,6 @@
   "prevIncomes": "Incomes predicted",
   "prevExpenses": "Expenses predicted",
   "prevTotal": "Total predicted",
-  "noEndDate": "No end date"
+  "noEndDate": "No end date",
+  "wishlist": "Wishlist"
 }

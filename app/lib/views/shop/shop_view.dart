@@ -1,22 +1,21 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:routine/views/finances/tabs/financial_resume_tab.dart';
-import 'package:routine/views/finances/tabs/financial_rules_tab.dart';
 import 'package:flutter/material.dart';
+import 'package:routine/views/shop/tabs/supermarket_tab.dart';
 
 import '../../config/design_system.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/custom_drawer.dart';
 
-class FinancesView extends StatefulWidget {
+class ShopView extends StatefulWidget {
   final int initialIndex;
 
-  const FinancesView({super.key, this.initialIndex = 0});
+  const ShopView({super.key, this.initialIndex = 0});
 
   @override
-  FinancesViewState createState() => FinancesViewState();
+  ShopViewState createState() => ShopViewState();
 }
 
-class FinancesViewState extends State<FinancesView> {
+class ShopViewState extends State<ShopView> {
   @override
   void initState() {
     super.initState();
@@ -29,20 +28,19 @@ class FinancesViewState extends State<FinancesView> {
       initialIndex: widget.initialIndex,
       child: Scaffold(
         appBar: CustomAppBar(
-          title: 'finances',
+          title: 'shop',
           bottom: TabBar(
             labelColor: AppColors.onPrimary,
             tabs: [
-              Tab(child: Text('resume'.tr())),
-              Tab(child: Text('rules'.tr())),
+              Tab(child: Text('supermarket'.tr())),
+              Tab(child: Text('wishlist'.tr())),
             ],
           ),
         ),
-        drawer: CustomDrawer(currentRoute: "/finances"),
+        drawer: CustomDrawer(currentRoute: "/shop"),
         body: TabBarView(
           children: [
-            FinancialResumeTab(),
-            FinancialRulesTab(),
+            SupermarketTab(),
           ],
         ),
       ),

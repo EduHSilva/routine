@@ -1,67 +1,141 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:routine/view_models/finances_viewmodel.dart';
-import 'package:routine/views/finances/new_financial_rule_view.dart';
+import 'package:routine/widgets/custom_text_field.dart';
 
-import '../../../widgets/transaction_card.dart';
-
-class FinancialRulesTab extends StatefulWidget {
-  const FinancialRulesTab({super.key});
+class SupermarketTab extends StatefulWidget {
+  const SupermarketTab({super.key});
 
   @override
-  FinancialRulesTabState createState() => FinancialRulesTabState();
+  SupermarketTabState createState() => SupermarketTabState();
 }
 
-class FinancialRulesTabState extends State<FinancialRulesTab> {
+class SupermarketTabState extends State<SupermarketTab> {
+  final List<Map<String, dynamic>> _items = [];
+  final TextEditingController _titleController = TextEditingController();
+
   @override
-  initState() {
-    super.initState();
-    _financesViewModel.fetchFinancesRules();
+  void dispose() {
+    _titleController.dispose();
+    super.dispose();
   }
 
-  final FinancesViewmodel _financesViewModel = FinancesViewmodel();
+  void _addItem(String title) {
+    setState(() {
+      _items.add({'title': title, 'completed': false});
+    });
+  }
+
+  void _showAddItemModal() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('add'.tr()),
+          content: TextField(
+            controller: _titleController,
+            decoration: const InputDecoration(
+              labelText: 'title',
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('cancel'.tr()),
+            ),
+            TextButton(
+              onPressed: () {
+                if (_titleController.text.trim().isNotEmpty) {
+                  _addItem(_titleController.text.trim());
+                  _titleController.clear();
+                  Navigator.of(context).pop();
+                }
+              },
+              child: Text('add'.tr()),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showPriceModal(int index) {
+    final TextEditingController priceController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('insertPrice'),
+          content: CustomTextField(
+            controller: priceController,
+            keyboardType: TextInputType.number,
+            labelText: 'price',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                if (priceController.text.trim().isNotEmpty) {
+                  setState(() {
+                    _items[index]['completed'] = true;
+                  });
+                  Navigator.of(context).pop();
+                }
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('rules'.tr()),
+        title: const Text('Supermarket'),
         automaticallyImplyLeading: false,
       ),
       body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ValueListenableBuilder(
-              valueListenable: _financesViewModel.rules,
-              builder: (context, rules, child) {
-                if (rules.isEmpty) {
-                  return Center(child: Text('noData'.tr()));
-                } else {
-                  return Scaffold(
-                      body: Expanded(
-                    child: ListView.builder(
-                      itemCount: rules.length,
-                      itemBuilder: (context, index) {
-                        final transaction = rules[index];
-                        return TransactionCard(
-                          id: transaction.id,
-                          title: transaction.title,
-                          income: transaction.income,
-                          value: transaction.value,
-                          startDate: transaction.startDate,
-                          endDate: transaction.endDate,
-                        );
-                      },
-                    ),
-                  ));
-                }
-              })),
+        padding: const EdgeInsets.all(16.0),
+        child: _items.isEmpty
+            ? const Center(child: Text('No items added yet.'))
+            : ListView.builder(
+          itemCount: _items.length,
+          itemBuilder: (context, index) {
+            final item = _items[index];
+            return ListTile(
+              title: Text(
+                item['title'],
+                style: TextStyle(
+                  decoration: item['completed']
+                      ? TextDecoration.lineThrough
+                      : TextDecoration.none,
+                ),
+              ),
+              trailing: Checkbox(
+                value: item['completed'],
+                onChanged: (value) {
+                  if (!item['completed']) {
+                    _showPriceModal(index);
+                  }
+                },
+              ),
+            );
+          },
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const NewFinancialRuleView(),
-          ));
-        },
-        child: Icon(Icons.add),
+        onPressed: _showAddItemModal,
+        child: const Icon(Icons.add),
       ),
     );
   }

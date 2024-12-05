@@ -18,9 +18,4 @@ func initShopRoutes(api *gin.RouterGroup) {
 	api.PUT("shop/items/history", helper.DefaultMiddleware(), shop.UpdateItemHistoryHandler)
 	api.POST("shop/item/history", helper.DefaultMiddleware(), shop.CreateItemHistoryHandler)
 	api.DELETE("shop/item/history", helper.DefaultMiddleware(), shop.DeleteItemHistoryHandler)
-
-	// groups
-	api.POST("shop/group", helper.DefaultMiddleware(), shop.CreateGroupHandler)
-	api.DELETE("shop/group", helper.DefaultMiddleware(), shop.DeleteItemGroupHandler)
-	api.PUT("shop/group", helper.DefaultMiddleware(), shop.UpdateItemGroupHandler)
 }

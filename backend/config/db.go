@@ -10,6 +10,7 @@ import (
 	"github.com/EduHSilva/routine/schemas/shop"
 	"github.com/EduHSilva/routine/schemas/tasks"
 	"github.com/EduHSilva/routine/seeds"
+	"github.com/glebarez/sqlite"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"os"
@@ -25,7 +26,7 @@ func InitDatabase() (*gorm.DB, error) {
 
 	switch env {
 	case "prod":
-		db, err = initPostgres(logger)
+		db, err = initDatabase(logger)
 	case "dev":
 		db, err = initPGLocal(logger)
 	default:
@@ -65,21 +66,21 @@ func InitDatabase() (*gorm.DB, error) {
 	return db, nil
 }
 
-func initPostgres(logger *Logger) (*gorm.DB, error) {
-	host := os.Getenv("DB_HOST")
-	user := os.Getenv("DB_USER")
-	password := os.Getenv("DB_PASSWORD")
-	dbName := os.Getenv("DB_NAME")
-	port := os.Getenv("DB_PORT")
+func initDatabase(logger *Logger) (*gorm.DB, error) {
+	dbPath := os.Getenv("DB_PATH")
+	if dbPath == "" {
+		dbPath = "database.db"
+	}
 
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=require", host, user, password, dbName, port)
+	dsn := fmt.Sprintf("%s", dbPath)
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-
+	db, err := gorm.Open(sqlite.Open(dsn), &gorm.Config{})
 	if err != nil {
-		logger.ErrF("Postgres connection failed: %s", err)
+		logger.ErrF("SQLite connection failed: %s", err)
 		return nil, err
 	}
+
+	logger.InfoF("SQLite database initialized at: %s", dbPath)
 	return db, nil
 }
 
