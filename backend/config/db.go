@@ -10,7 +10,6 @@ import (
 	"github.com/EduHSilva/routine/schemas/shop"
 	"github.com/EduHSilva/routine/schemas/tasks"
 	"github.com/EduHSilva/routine/seeds"
-	"github.com/glebarez/sqlite"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"os"
@@ -67,20 +66,20 @@ func InitDatabase() (*gorm.DB, error) {
 }
 
 func initDatabase(logger *Logger) (*gorm.DB, error) {
-	dbPath := os.Getenv("DB_PATH")
-	if dbPath == "" {
-		dbPath = "database.db"
-	}
+	host := os.Getenv("DB_HOST_PROD")
+	user := os.Getenv("DB_USER_PROD")
+	password := os.Getenv("DB_PASSWORD_PROD")
+	dbName := os.Getenv("DB_NAME_PROD")
+	port := os.Getenv("DB_PORT_PROD")
 
-	dsn := fmt.Sprintf("%s", dbPath)
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", host, user, password, dbName, port)
 
-	db, err := gorm.Open(sqlite.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+
 	if err != nil {
-		logger.ErrF("SQLite connection failed: %s", err)
+		logger.ErrF("Postgres connection failed: %s", err)
 		return nil, err
 	}
-
-	logger.InfoF("SQLite database initialized at: %s", dbPath)
 	return db, nil
 }
 
