@@ -36,7 +36,7 @@ func InitDatabase() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	err = db.AutoMigrate(
+	tables := []interface{}{
 		&schemas.User{},
 		&schemas.Category{},
 		&tasks.TaskRule{},
@@ -53,14 +53,17 @@ func InitDatabase() (*gorm.DB, error) {
 		&finances.Transaction{},
 		&shop.Item{},
 		&shop.ItemHistory{},
-	)
+	}
+
+	for _, table := range tables {
+		if db.Migrator().HasTable(table) {
+			if err = db.AutoMigrate(table); err != nil {
+				return nil, err
+			}
+		}
+	}
 
 	seeds.Load(db)
-
-	if err != nil {
-		logger.ErrF("Auto migration failed: %s", err)
-		return nil, err
-	}
 
 	return db, nil
 }
@@ -74,7 +77,10 @@ func initDatabase(logger *Logger) (*gorm.DB, error) {
 
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", host, user, password, dbName, port)
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.New(postgres.Config{
+		DSN:                  dsn,
+		PreferSimpleProtocol: true,
+	}), &gorm.Config{})
 
 	if err != nil {
 		logger.ErrF("Postgres connection failed: %s", err)
