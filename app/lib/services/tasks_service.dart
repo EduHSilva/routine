@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:http/http.dart' as http;
 
 import '../config/app_config.dart';
@@ -7,10 +8,11 @@ import '../models/tasks/task_model.dart';
 
 
 class TasksService {
-  Future<Map<String, List<Task>>> fetchWeekTasks() async {
+  Future<Map<String, List<Task>>> fetchWeekTasks(DateTime date) async {
     http.Client client = await AppConfig.getHttpClient();
+    String formatedDate =  DateFormat('yyyy-MM-dd').format(date);
     final response = await client.get(Uri.parse(
-        '${AppConfig.apiUrl}tasks/week?currentDate=${DateTime.now()}'));
+        '${AppConfig.apiUrl}tasks/week?currentDate=$formatedDate'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);

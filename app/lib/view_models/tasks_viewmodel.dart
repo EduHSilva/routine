@@ -10,13 +10,15 @@ class TasksViewModel {
   ValueNotifier<List<Task>> tasks = ValueNotifier([]);
   ValueNotifier<Map<String, List<Task>>> weekTasks =
       ValueNotifier(<String, List<Task>>{});
+  ValueNotifier<List<Task>> dailyTasks = ValueNotifier([]);
 
-  Future<void> fetchWeekTasks() async {
+  Future<void> fetchWeekTasks(date) async {
     try {
       weekTasks.value = <String, List<Task>>{};
       isLoading.value = true;
-      Map<String, List<Task>> response = await _tasksService.fetchWeekTasks();
+      Map<String, List<Task>> response = await _tasksService.fetchWeekTasks(date);
       weekTasks.value = response;
+      dailyTasks.value = response.values.first;
     } catch (e) {
       errorMessage.value = "Error fetching tasks of week";
       AppConfig.getLogger().e(e);
@@ -119,7 +121,7 @@ class TasksViewModel {
       isLoading.value = true;
       TaskResponse? response = await _tasksService.changeTaskStatus(task.id);
       if (response?.task != null) {
-        await fetchWeekTasks();
+        await fetchWeekTasks(DateTime.now());
       } else {
         errorMessage.value = errorMessage.value = response?.message;
       }

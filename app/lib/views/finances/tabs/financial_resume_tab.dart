@@ -70,7 +70,7 @@ class FinancialResumeTabState extends State<FinancialResumeTab> {
                   crossAxisCount: 2,
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  childAspectRatio: 1.8,
+                  childAspectRatio: 2,
                   mainAxisSpacing: 8,
                   crossAxisSpacing: 8,
                   children: [
@@ -153,6 +153,8 @@ class FinancialResumeTabState extends State<FinancialResumeTab> {
           children: [
             Text(
               title,
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
             ),
             SizedBox(height: 4),

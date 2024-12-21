@@ -134,112 +134,117 @@ class NewMealViewState extends State<NewMealView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: widget.id == null ? Text('newMeal'.tr()) : Text('editMeal'.tr()),
+        title: Text(widget.id == null ? 'newMeal'.tr() : 'editMeal'.tr()),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              const SizedBox(height: 24),
-              Row(
+      resizeToAvoidBottomInset: true,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(child:
-                  CustomTextField(
-                    controller: _nameController,
-                    labelText: 'name',
-                    validator: requiredFieldValidator,
-                  )),
-                  const SizedBox(width: 10),
-                  Expanded(child:
-                  CustomTextField(
-                    controller: _timeController,
-                    labelText: 'startTime',
-                    readOnly: true,
-                    onTap: () =>
-                        _selectTime(context, _timeController),
-                  ),),
+                  const SizedBox(height: 24),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CustomTextField(
+                          controller: _nameController,
+                          labelText: 'name',
+                          validator: requiredFieldValidator,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: CustomTextField(
+                          controller: _timeController,
+                          labelText: 'startTime',
+                          readOnly: true,
+                          onTap: () => _selectTime(context, _timeController),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  CustomButton(
+                    onPressed: () => _openFoodModal(context),
+                    text: 'addFood',
+                    isOutlined: true,
+                  ),
+                  const SizedBox(height: 16),
+                  if (_selectedFoods.isNotEmpty)
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _selectedFoods.length,
+                      itemBuilder: (context, index) {
+                        final food = _selectedFoods[index];
+                        return Card(
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      food.name,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.remove,
+                                          color: Colors.redAccent),
+                                      onPressed: () => _removeFood(food),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                CustomTextField(
+                                  initialValue: food.quantity?.toString(),
+                                  labelText: 'quantity',
+                                  keyboardType: TextInputType.number,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      food.quantity = int.tryParse(value) ?? 0;
+                                    });
+                                  },
+                                ),
+                                const SizedBox(height: 8),
+                                CustomTextField(
+                                  initialValue: food.observation,
+                                  labelText: 'notes',
+                                  onChanged: (value) {
+                                    setState(() {
+                                      food.observation = value;
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    )
+                  else
+                    Center(child: Text('noData'.tr())),
+                  const SizedBox(height: 16),
+                  CustomButton(
+                    onPressed: _addMeal,
+                    text: 'save',
+                  ),
                 ],
               ),
-              const SizedBox(height: 24),
-              CustomButton(
-                onPressed: () => _openFoodModal(context),
-                text: 'addFood',
-                isOutlined: true,
-              ),
-              const SizedBox(height: 16),
-              Expanded(
-                child: _selectedFoods.isEmpty
-                    ? Center(child: Text('noData'.tr()))
-                    : ListView.builder(
-                        itemCount: _selectedFoods.length,
-                        itemBuilder: (context, index) {
-                          var food = _selectedFoods[index];
-
-                          return Card(
-                            margin: const EdgeInsets.symmetric(vertical: 8),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        food.name,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                        ),
-                                      ),
-                                      IconButton(
-                                        icon: const Icon(Icons.remove,
-                                            color: Colors.redAccent),
-                                        onPressed: () => _removeFood(food),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                  CustomTextField(
-                                    initialValue: food.quantity?.toString(),
-                                    labelText: 'quantity',
-                                    keyboardType: TextInputType.number,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        food.quantity =
-                                            int.tryParse(value) ?? 0;
-                                      });
-                                    },
-                                  ),
-                                  const SizedBox(height: 8),
-                                  CustomTextField(
-                                    initialValue: food.observation,
-                                    labelText: 'notes',
-                                    onChanged: (value) {
-                                      setState(() {
-                                        food.observation = value;
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-              ),
-              const SizedBox(height: 16),
-              CustomButton(
-                onPressed: _addMeal,
-                text: 'save',
-              ),
-            ],
+            ),
           ),
         ),
       ),

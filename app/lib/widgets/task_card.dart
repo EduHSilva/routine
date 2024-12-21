@@ -77,7 +77,7 @@ class TaskCard extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  Text('$startTime - $endTime'),
+                                  Text('$startTime - $endTime', style: TextStyle(fontSize: 12),),
                                 ],
                               ),
                             ),

@@ -83,12 +83,12 @@ class CustomDrawer extends StatelessWidget {
             text: 'finances',
             route: '/finances',
           ),
-          _createDrawerItem(
-            context,
-            icon: Icons.wallet_giftcard_outlined,
-            text: 'shop',
-            route: '/shop',
-          ),
+          // _createDrawerItem(
+          //   context,
+          //   icon: Icons.wallet_giftcard_outlined,
+          //   text: 'shop',
+          //   route: '/shop',
+          // ),
           const Divider(),
           _createDrawerItem(
             context,

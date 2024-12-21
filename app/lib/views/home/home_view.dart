@@ -86,7 +86,6 @@ class HomeViewState extends State<HomeView> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
@@ -111,6 +110,8 @@ class HomeViewState extends State<HomeView> {
                         Expanded(
                           child: TextFormField(
                             controller: _searchController,
+                            maxLines: 3,
+                            minLines: 1,
                             decoration: InputDecoration(
                               labelText: 'enterText'.tr(),
                               border: OutlineInputBorder(
@@ -139,6 +140,7 @@ class HomeViewState extends State<HomeView> {
                     ),
                     const SizedBox(height: 10),
                     Expanded(
+                      flex: 3,
                       child: ValueListenableBuilder<String>(
                         valueListenable: _homeViewModel.searchValue,
                         builder: (context, result, _) {
@@ -154,22 +156,20 @@ class HomeViewState extends State<HomeView> {
                           fontWeight: FontWeight.bold),
                     ),
                     Expanded(
+                      flex: 3,
                       child: ValueListenableBuilder(
                         valueListenable: _homeViewModel.tasks,
                         builder: (context, tasks, child) {
-                          if(tasks.isEmpty) {
+                          if (tasks.isEmpty) {
                             return Text(
                               'noTasksPending'.tr(),
                               style: TextStyle(fontSize: 16),
                             );
                           }
-                          return SingleChildScrollView(child: ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: tasks.length,
+                          return ListView.builder(
+                            itemCount: tasks.length > 5 ? 5 : tasks.length,
                             itemBuilder: (context, taskIndex) {
                               var task = tasks[taskIndex];
-
                               return TaskCard(
                                 title: task.title,
                                 category: task.category.tr(),
@@ -183,7 +183,7 @@ class HomeViewState extends State<HomeView> {
                                 },
                               );
                             },
-                          ));
+                          );
                         },
                       ),
                     ),
