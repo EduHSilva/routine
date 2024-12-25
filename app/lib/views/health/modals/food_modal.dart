@@ -39,7 +39,7 @@ class _FoodModalState extends State<FoodModal> {
       valueListenable: _dietViewModel.foods,
       builder: (context, foods, child) {
         return Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.fromLTRB(16.0, 35.0, 16.0, 16.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

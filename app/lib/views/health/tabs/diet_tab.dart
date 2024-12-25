@@ -5,6 +5,7 @@ import 'package:routine/views/health/meal_details.dart';
 import 'package:routine/views/health/new_meal_view.dart';
 
 import '../../../config/helper.dart';
+import '../../../config/pdf.dart';
 import '../../../models/health/diet_model.dart';
 import '../../../widgets/custom_modal_delete.dart';
 import '../../../widgets/meal_card.dart';
@@ -90,6 +91,15 @@ class DietTabState extends State<DietTab> {
               appBar: AppBar(
                 title: Text('meals'.tr()),
                 automaticallyImplyLeading: false,
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.share),
+                    onPressed: () async {
+                      await generateAndShareDietPDF(
+                          _dietViewModel.meals.value);
+                    },
+                  ),
+                ],
               ),
               body: meals.isEmpty
                   ? Center(child: Text('noData'.tr()))

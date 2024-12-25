@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:routine/widgets/html_text.dart';
 import '../../../models/health/workout_model.dart';
 
 class WorkoutDetailView extends StatelessWidget {
@@ -27,8 +27,8 @@ class WorkoutDetailView extends StatelessWidget {
             child: ListTile(
               title: Text(
                 exercise.name,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 16),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,10 +44,47 @@ class WorkoutDetailView extends StatelessWidget {
                   Text('${exercise.load} kg'),
                 ],
               ),
+              onTap: () {
+                _showExerciseDetails(context, exercise);
+              },
             ),
           );
         },
       ),
+    );
+  }
+
+  void _showExerciseDetails(BuildContext context, Exercise exercise) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(exercise.name),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (exercise.imageUrl != null)
+                  Image.network(exercise.imageUrl!),
+                const SizedBox(height: 16),
+                Text(
+                  'instructions'.tr(),
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                HtmlText(html: exercise.instructions),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('close'.tr()),
+            ),
+          ],
+        );
+      },
     );
   }
 }

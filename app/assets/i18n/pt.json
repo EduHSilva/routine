@@ -81,9 +81,6 @@
   "legs": "Pernas",
   "arms": "Braços",
   "core": "Abdômen",
-  "back": "Costas",
-  "chest": "Peito",
-  "shoulders": "Ombros",
   "all": "Todos",
   "newWorkout": "Novo treino",
   "addExercise": "Adicionar exercício",
@@ -126,5 +123,17 @@
   "prevExpenses": "Despesas previstas",
   "prevTotal": "Total previsto",
   "noEndDate": "Sem data final",
-  "wishlist": "Lista de desejos"
+  "wishlist": "Lista de desejos",
+  "chest": "Peito",
+  "back": "Costas",
+  "cardio": "Cardio",
+  "lower arms": "Antebraço",
+  "waist": "Adbomen",
+  "shoulders": "Ombros",
+  "lower legs": "Panturrilhas",
+  "neck": "Pescoço",
+  "upper arms": "Braço",
+  "upper legs": "Pernas",
+  "exercises": "Exercicios",
+  "instructions": "Instruções"
 }

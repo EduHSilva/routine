@@ -3,7 +3,6 @@ package seeds
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/EduHSilva/routine/schemas/enums"
 	"github.com/EduHSilva/routine/schemas/health/workout"
 	gt "github.com/bas24/googletranslatefree"
 	"html/template"
@@ -13,39 +12,16 @@ import (
 )
 
 type ExerciseInput struct {
-	Name         string                   `json:"name"`
-	BodyPart     string                   `json:"bodyPart"`
-	Instructions []InstructionInput       `json:"instructions"`
-	Muscles      map[string][]MuscleInput `json:"muscles"`
-	Alternatives []AlternativeInput       `json:"alternatives"`
-	Variations   []VariationInput         `json:"variations"`
+	Name         string   `json:"name"`
+	BodyPart     string   `json:"bodyPart"`
+	Instructions []string `json:"instructions"`
+	GifUrl       string   `json:"gifUrl"`
 }
 
-type InstructionInput struct {
-	Description string `json:"description"`
-	Order       int    `json:"order"`
-}
-
-type MuscleInput struct {
-	Name  string   `json:"name"`
-	Group string   `json:"group"`
-	Heads []string `json:"heads"`
-}
-
-type AlternativeInput struct {
-	ID   uint   `json:"id"`
-	Name string `json:"name"`
-}
-
-type VariationInput struct {
-	ID   uint   `json:"id"`
-	Name string `json:"name"`
-}
-
-func instructionsToHTML(instructions []InstructionInput) string {
+func instructionsToHTML(instructions []string) string {
 	var htmlInstructions strings.Builder
 	for _, instr := range instructions {
-		htmlInstructions.WriteString(fmt.Sprintf("<p>%d. %s</p>", instr.Order, template.HTMLEscapeString(instr.Description)))
+		htmlInstructions.WriteString(fmt.Sprintf("<p%s</p>", template.HTMLEscapeString(instr)))
 	}
 	return htmlInstructions.String()
 }
@@ -72,40 +48,10 @@ func loadExercisesFromFile(filePath string) ([]workout.Exercise, error) {
 			BodyPart:       input.BodyPart,
 			Instructions:   htmlInstructions,
 			InstructionsPt: translate(htmlInstructions),
+			GifUrl:         input.GifUrl,
 		}
 
-		for _, alt := range input.Alternatives {
-			exercise.Alternatives = append(exercise.Alternatives, workout.Alternative{
-				Name: alt.Name,
-			})
-		}
-
-		for _, varr := range input.Variations {
-			exercise.Variations = append(exercise.Variations, workout.Variation{
-				Name: varr.Name,
-			})
-		}
-
-		for function, muscles := range input.Muscles {
-			for _, muscle := range muscles {
-				exerciseMuscle := workout.ExerciseMuscle{
-					Muscle: workout.Muscle{
-						Name:  muscle.Name,
-						Group: muscle.Group,
-					},
-					Function: enums.MuscleFunction(strings.Title(function)),
-				}
-
-				for _, head := range muscle.Heads {
-					exerciseMuscle.Muscle.Heads = enums.MuscleHead(strings.Title(head))
-				}
-
-				exercise.Muscles = append(exercise.Muscles, exerciseMuscle)
-			}
-		}
 		exercises = append(exercises, exercise)
-
-		fmt.Printf("Exercise %s saved successfully!\n", input.Name)
 	}
 
 	return exercises, nil
@@ -139,7 +85,7 @@ func translateFromFile(text string, translations map[string]string) string {
 }
 
 func loadExerciseFromFile() *[]workout.Exercise {
-	exercises, err := loadExercisesFromFile("seeds/json/exercises_details.json")
+	exercises, err := loadExercisesFromFile("seeds/json/exercises.json")
 	if err != nil {
 		log.Fatalf("Error loading exercises from JSON: %v", err)
 	}

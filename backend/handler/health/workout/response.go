@@ -19,6 +19,7 @@ type ResponseDataExercise struct {
 	Series       int     `json:"series,omitempty"`
 	RestSeconds  int     `json:"rest_seconds,omitempty"`
 	Repetitions  int     `json:"repetitions,omitempty"`
+	ImageUrl     string  `json:"image_url,omitempty"`
 }
 
 type ResponseData struct {
@@ -54,6 +55,7 @@ func ConvertExerciseToResponse(exercise workout.ExerciseWorkout, locale any) Res
 		Series:       exercise.Series,
 		RestSeconds:  exercise.RestSeconds,
 		Repetitions:  exercise.Repetitions,
+		ImageUrl:     exercise.Exercise.GifUrl,
 	}
 }
 

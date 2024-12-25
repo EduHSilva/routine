@@ -46,6 +46,7 @@ func GetExercisesHandler(ctx *gin.Context) {
 			ID:           exercise.ID,
 			Name:         translatedName,
 			BodyPart:     exercise.BodyPart,
+			ImageUrl:     exercise.GifUrl,
 			Instructions: translatedInstructions,
 		})
 	}

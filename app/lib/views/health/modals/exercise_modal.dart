@@ -56,7 +56,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
             .toList();
 
         return Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.fromLTRB(16.0, 35.0, 16.0, 16.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -72,10 +72,11 @@ class _ExerciseModalState extends State<ExerciseModal> {
                 child: Row(
                   children: [
                     _buildFilterCard('All', 'all'),
-                    _buildFilterCard('Core', 'core'),
-                    _buildFilterCard('Legs', 'legs'),
-                    _buildFilterCard('Chest', 'chest'),
-                    _buildFilterCard('Arms', 'arms'),
+                    _buildFilterCard('waist', 'core'),
+                    _buildFilterCard('upper legs', 'legs'),
+                    _buildFilterCard('chest', 'chest'),
+                    _buildFilterCard('lower arms', 'lower arms'),
+                    _buildFilterCard('lower legs', 'lower legs'),
                   ],
                 ),
               ),

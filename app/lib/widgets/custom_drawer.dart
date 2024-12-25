@@ -42,7 +42,7 @@ class CustomDrawer extends StatelessWidget {
                       radius: 40,
                       backgroundImage: imageFile != null
                           ? FileImage(imageFile)
-                          : const AssetImage('assets/images/default_avatar.png') as ImageProvider,
+                          : const AssetImage('assets/images/profile.png') as ImageProvider,
                     ),
                     const SizedBox(width: 16),
                     Expanded(

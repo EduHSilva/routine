@@ -53,56 +53,58 @@ class AllTasksTabState extends State<AllTasksTab> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Toggle Button and Date Filter
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ValueListenableBuilder<bool>(
-                valueListenable: _isDailyView,
-                builder: (context, isDaily, child) {
-                  return ToggleButtons(
-                    borderRadius: BorderRadius.circular(8),
-                    selectedColor: Colors.white,
-                    fillColor: Theme.of(context).primaryColor,
-                    color: Colors.grey,
-                    isSelected: [isDaily, !isDaily],
-                    onPressed: (index) {
-                      if ((index == 0 && !isDaily) || (index == 1 && isDaily)) {
-                        _toggleView();
-                      }
-                    },
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Text('Daily'.tr()),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Text('Weekly'.tr()),
-                      ),
-                    ],
-                  );
-                },
-              ),
-              ElevatedButton.icon(
-                onPressed: () => _selectDate(context),
-                icon: const Icon(Icons.calendar_today_outlined, size: 18),
-                label: Text(
-                  _selectedDate != null
-                      ? DateFormat.yMd().format(_selectedDate!)
-                      : 'Pick Date'.tr(),
+          child: SizedBox(
+            height: 45,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ValueListenableBuilder<bool>(
+                  valueListenable: _isDailyView,
+                  builder: (context, isDaily, child) {
+                    return ToggleButtons(
+                      borderRadius: BorderRadius.circular(8),
+                      selectedColor: Colors.white,
+                      fillColor: Theme.of(context).primaryColor,
+                      color: Colors.grey,
+                      isSelected: [isDaily, !isDaily],
+                      onPressed: (index) {
+                        if ((index == 0 && !isDaily) || (index == 1 && isDaily)) {
+                          _toggleView();
+                        }
+                      },
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Text('daily'.tr()),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Text('weekly'.tr()),
+                        ),
+                      ],
+                    );
+                  },
                 ),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 8.0, horizontal: 16.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                ElevatedButton.icon(
+                  onPressed: () => _selectDate(context),
+                  icon: const Icon(Icons.calendar_today_outlined, size: 18),
+                  label: Text(
+                    _selectedDate != null
+                        ? DateFormat.yMd().format(_selectedDate!)
+                        : 'Pick Date'.tr(),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 16.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         // Task Views
@@ -117,6 +119,7 @@ class AllTasksTabState extends State<AllTasksTab> {
       ],
     );
   }
+
 
   Widget _buildDailyTasksView() {
     return ValueListenableBuilder(

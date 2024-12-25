@@ -16,9 +16,10 @@ class TasksViewModel {
     try {
       weekTasks.value = <String, List<Task>>{};
       isLoading.value = true;
-      Map<String, List<Task>> response = await _tasksService.fetchWeekTasks(date);
+      Map<String, List<Task>> response =
+          await _tasksService.fetchWeekTasks(date);
       weekTasks.value = response;
-      dailyTasks.value = response.values.first;
+      if (weekTasks.value.isNotEmpty) dailyTasks.value = response.values.first;
     } catch (e) {
       errorMessage.value = "Error fetching tasks of week";
       AppConfig.getLogger().e(e);

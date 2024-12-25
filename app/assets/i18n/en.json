@@ -126,5 +126,14 @@
   "prevExpenses": "Expenses predicted",
   "prevTotal": "Total predicted",
   "noEndDate": "No end date",
-  "wishlist": "Wishlist"
+  "wishlist": "Wishlist",
+  "cardio": "Cardio",
+  "lower arms": "Lower arms",
+  "waist": "Waist",
+  "lower legs": "Lower legs",
+  "neck": "Neck",
+  "upper arms": "Arms",
+  "upper legs": "Legs",
+  "exercises": "Exercises",
+  "instructions": "Instructions"
 }
