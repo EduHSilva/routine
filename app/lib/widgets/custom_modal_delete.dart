@@ -49,32 +49,38 @@ class CustomModalDeleteState extends State<CustomModalDelete> {
         ),
       ),
       actionsAlignment: MainAxisAlignment.spaceBetween,
-      actions: [
-        Row(
-          children: [
-            Expanded(
+      contentPadding: const EdgeInsets.symmetric(vertical: 30, horizontal: 15),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Expanded(
                 child: CustomButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              text: 'cancel',
-              isOutlined: true,
-            )),
-            const SizedBox(width: 10,),
-            Expanded(
-                child: CustomButton(
-              onPressed: () {
-                widget.onConfirm();
-                Navigator.of(context).pop();
-              },
-              text: 'confirm',
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.error,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  text: 'cancel',
+                  isOutlined: true,
+                ),
               ),
-            )),
-          ],
-        )
-      ],
+              const SizedBox(width: 5),
+              Expanded(
+                child: CustomButton(
+                  onPressed: () {
+                    widget.onConfirm();
+                    Navigator.of(context).pop();
+                  },
+                  text: 'confirm',
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.error,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

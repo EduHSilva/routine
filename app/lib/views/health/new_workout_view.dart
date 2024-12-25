@@ -105,9 +105,10 @@ class NewWorkoutViewState extends State<NewWorkoutView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: widget.id == null ? Text('newWorkout'.tr()) : Text('editWorkout'.tr()),
+        title: widget.id == null
+            ? Text('newWorkout'.tr())
+            : Text('editWorkout'.tr()),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -129,77 +130,97 @@ class NewWorkoutViewState extends State<NewWorkoutView> {
                   isOutlined: true,
                 ),
                 const SizedBox(height: 16),
-
-                // List of Selected Exercises
                 _selectedExercises.isEmpty
                     ? Center(child: Text('noData'.tr()))
                     : ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _selectedExercises.length,
-                  itemBuilder: (context, index) {
-                    var exercise = _selectedExercises[index];
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: _selectedExercises.length,
+                        itemBuilder: (context, index) {
+                          var exercise = _selectedExercises[index];
 
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Exercise Name
-                          Text(
-                            exercise.name,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        exercise.name,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        softWrap: true,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.remove, color: Colors.redAccent),
+                                      onPressed: () => _removeExercise(exercise),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: CustomTextField(
+                                        initialValue: exercise.load?.toString(),
+                                        labelText: 'kg',
+                                        keyboardType: TextInputType.number,
+                                        onChanged: (value) {
+                                          exercise.load =
+                                              int.tryParse(value) ?? 0;
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: CustomTextField(
+                                        initialValue:
+                                            exercise.series?.toString(),
+                                        labelText: 'sets',
+                                        keyboardType: TextInputType.number,
+                                        onChanged: (value) {
+                                          exercise.series =
+                                              int.tryParse(value) ?? 0;
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: CustomTextField(
+                                        initialValue:
+                                            exercise.repetitions?.toString(),
+                                        labelText: 'reps',
+                                        keyboardType: TextInputType.number,
+                                        onChanged: (value) {
+                                          exercise.repetitions =
+                                              int.tryParse(value) ?? 0;
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                CustomTextField(
+                                  initialValue: exercise.notes,
+                                  labelText: 'notes',
+                                  onChanged: (value) {
+                                    exercise.notes = value;
+                                  },
+                                ),
+                                const SizedBox(height: 8),
+                              ],
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          // Inputs Row
-                          Row(
-                            children: [
-                              Expanded(
-                                child: CustomTextField(
-                                  initialValue: exercise.load?.toString(),
-                                  labelText: 'kg',
-                                  keyboardType: TextInputType.number,
-                                  onChanged: (value) {
-                                    exercise.load = int.tryParse(value) ?? 0;
-                                  },
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: CustomTextField(
-                                  initialValue: exercise.series?.toString(),
-                                  labelText: 'sets',
-                                  keyboardType: TextInputType.number,
-                                  onChanged: (value) {
-                                    exercise.series = int.tryParse(value) ?? 0;
-                                  },
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: CustomTextField(
-                                  initialValue: exercise.repetitions?.toString(),
-                                  labelText: 'reps',
-                                  keyboardType: TextInputType.number,
-                                  onChanged: (value) {
-                                    exercise.repetitions = int.tryParse(value) ?? 0;
-                                  },
-                                ),
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.remove, color: Colors.redAccent),
-                                onPressed: () => _removeExercise(exercise),
-                              ),
-                            ],
-                          ),
-                        ],
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
                 const SizedBox(height: 16),
                 CustomButton(
                   onPressed: _addWorkout,

@@ -42,6 +42,8 @@ class WorkoutDetailView extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text('${exercise.load} kg'),
+                  const SizedBox(height: 4),
+                  Text(exercise.notes ?? ''),
                 ],
               ),
               onTap: () {
@@ -58,32 +60,48 @@ class WorkoutDetailView extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(exercise.name),
-          content: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (exercise.imageUrl != null)
-                  Image.network(exercise.imageUrl!),
-                const SizedBox(height: 16),
-                Text(
-                  'instructions'.tr(),
-                  style: TextStyle(fontWeight: FontWeight.bold),
+        return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: SingleChildScrollView(
+              child: Container(
+                width: MediaQuery.of(context).size.width * 1,
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      exercise.name,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                    const SizedBox(height: 16),
+                    if (exercise.imageUrl != null)
+                      Image.network(exercise.imageUrl!),
+                    const SizedBox(height: 16),
+                    Text(
+                      'instructions'.tr(),
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    HtmlText(html: exercise.instructions),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('close'.tr()),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                HtmlText(html: exercise.instructions),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('close'.tr()),
-            ),
-          ],
-        );
+              ),
+            ));
       },
     );
   }

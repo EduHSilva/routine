@@ -72,6 +72,7 @@ func UpdateWorkoutHandler(ctx *gin.Context) {
 				Load:        ex.Load,
 				RestSeconds: ex.RestSeconds,
 				Repetitions: ex.Repetitions,
+				Notes:       ex.Notes,
 			}
 			if err := db.Create(&newExercise).Error; err != nil {
 				logger.ErrF("error updating exercises: %s", err.Error())

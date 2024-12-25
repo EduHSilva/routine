@@ -70,16 +70,25 @@ class _ExerciseModalState extends State<ExerciseModal> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    _buildFilterCard('All', 'all'),
-                    _buildFilterCard('waist', 'core'),
-                    _buildFilterCard('upper legs', 'legs'),
-                    _buildFilterCard('chest', 'chest'),
-                    _buildFilterCard('lower arms', 'lower arms'),
-                    _buildFilterCard('lower legs', 'lower legs'),
+                    ...[
+                      {'value': 'All', 'label': 'all'},
+                      {'value': 'waist', 'label': 'core'},
+                      {'value': 'upper legs', 'label': 'legs'},
+                      {'value': 'chest', 'label': 'chest'},
+                      {'value': 'lower arms', 'label': 'lower arms'},
+                      {'value': 'lower legs', 'label': 'lower legs'},
+                    ].map((filter) {
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 16.0),
+                        child: _buildFilterCard(filter['value']!, filter['label']!),
+                      );
+                    }),
                   ],
                 ),
               ),
+
               const SizedBox(height: 16),
 
               Expanded(

@@ -9,5 +9,5 @@ type Exercise struct {
 	BodyPart       string `json:"body_part"`
 	Instructions   string `json:"instructions" gorm:"size:1000"`
 	InstructionsPt string `json:"instructions_pt" gorm:"size:1000"`
-	GifUrl         string `json:"gif_url" gorm:"size:1000"`
+	ExternalID     string `json:"external_id" gorm:"unique"`
 }

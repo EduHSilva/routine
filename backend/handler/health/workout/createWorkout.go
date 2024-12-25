@@ -69,6 +69,7 @@ func CreateWorkoutHandler(ctx *gin.Context) {
 			Load:        e.Load,
 			RestSeconds: e.RestSeconds,
 			Repetitions: e.Repetitions,
+			Notes:       e.Notes,
 		})
 	}
 

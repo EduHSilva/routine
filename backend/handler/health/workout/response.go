@@ -1,7 +1,13 @@
 package workout
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/EduHSilva/routine/schemas/health/workout"
+	"io"
+	"log"
+	"net/http"
+	"os"
 	"time"
 )
 
@@ -20,6 +26,7 @@ type ResponseDataExercise struct {
 	RestSeconds  int     `json:"rest_seconds,omitempty"`
 	Repetitions  int     `json:"repetitions,omitempty"`
 	ImageUrl     string  `json:"image_url,omitempty"`
+	Notes        string  `json:"notes,omitempty"`
 }
 
 type ResponseData struct {
@@ -46,6 +53,9 @@ func ConvertExerciseToResponse(exercise workout.ExerciseWorkout, locale any) Res
 		name = exercise.Exercise.Name
 		instructions = exercise.Exercise.Instructions
 	}
+
+	imageUrl := getImageUrl(exercise.Exercise.ExternalID)
+
 	return ResponseDataExercise{
 		ID:           exercise.ExerciseID,
 		Name:         name,
@@ -55,8 +65,52 @@ func ConvertExerciseToResponse(exercise workout.ExerciseWorkout, locale any) Res
 		Series:       exercise.Series,
 		RestSeconds:  exercise.RestSeconds,
 		Repetitions:  exercise.Repetitions,
-		ImageUrl:     exercise.Exercise.GifUrl,
+		ImageUrl:     imageUrl,
+		Notes:        exercise.Notes,
 	}
+}
+
+func getImageUrl(externalID string) string {
+	url := fmt.Sprintf("https://exercisedb.p.rapidapi.com/exercises/exercise/%s", externalID)
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	host := os.Getenv("EXERCISES_API_HOST")
+	token := os.Getenv("EXERCISES_API_KEY")
+
+	req.Header.Add("x-rapidapi-host", host)
+	req.Header.Add("x-rapidapi-key", token)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func(Body io.ReadCloser) {
+		err = Body.Close()
+		if err != nil {
+
+		}
+	}(resp.Body)
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var data map[string]interface{}
+	if err = json.Unmarshal(body, &data); err != nil {
+		log.Fatal(err)
+	}
+
+	if gifUrl, ok := data["gifUrl"].(string); ok {
+		return gifUrl
+	}
+
+	return ""
 }
 
 func ConvertWorkoutToWorkoutResponse(workout *workout.Workout, locale any) ResponseData {

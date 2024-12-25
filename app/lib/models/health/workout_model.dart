@@ -39,6 +39,7 @@ class Exercise {
   late int? repetitions;
   final int? restSeconds;
   final String? imageUrl;
+  late String? notes;
 
   Exercise({
     required this.id,
@@ -49,7 +50,8 @@ class Exercise {
     this.restSeconds,
     this.series,
     this.repetitions,
-    this.imageUrl
+    this.imageUrl,
+    this.notes,
   });
 
   Map<String, dynamic> toJson() {
@@ -59,21 +61,22 @@ class Exercise {
       'series': series,
       'load': load,
       'rest_seconds': restSeconds,
+      'notes': notes,
     };
   }
 
   factory Exercise.fromJson(Map<String, dynamic> json) {
     return Exercise(
-      id: json['id'],
-      name: json['name'],
-      bodyPart: json['body_part'],
-      instructions: json['instructions'],
-      load: json['load'],
-      restSeconds: json['rest_seconds'],
-      series: json['series'],
-      repetitions: json['repetitions'],
-      imageUrl: json['image_url']
-    );
+        id: json['id'],
+        name: json['name'],
+        bodyPart: json['body_part'],
+        instructions: json['instructions'],
+        load: json['load'],
+        restSeconds: json['rest_seconds'],
+        series: json['series'],
+        repetitions: json['repetitions'],
+        imageUrl: json['image_url'],
+        notes: json['notes']);
   }
 }
 

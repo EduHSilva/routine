@@ -21,6 +21,6 @@ func Load(db *gorm.DB) {
 
 	db.Model(&workout.Exercise{}).Count(&count)
 	if count == 0 {
-		db.Create(loadExerciseFromFile())
+		loadExerciseFromFile(db)
 	}
 }

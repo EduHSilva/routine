@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/EduHSilva/routine/schemas/health/workout"
 	gt "github.com/bas24/googletranslatefree"
+	"gorm.io/gorm"
 	"html/template"
 	"io/ioutil"
 	"log"
@@ -16,27 +17,27 @@ type ExerciseInput struct {
 	BodyPart     string   `json:"bodyPart"`
 	Instructions []string `json:"instructions"`
 	GifUrl       string   `json:"gifUrl"`
+	ID           string   `json:"id"`
 }
 
 func instructionsToHTML(instructions []string) string {
 	var htmlInstructions strings.Builder
 	for _, instr := range instructions {
-		htmlInstructions.WriteString(fmt.Sprintf("<p%s</p>", template.HTMLEscapeString(instr)))
+		htmlInstructions.WriteString(fmt.Sprintf("<p>%s</p>", template.HTMLEscapeString(instr)))
 	}
 	return htmlInstructions.String()
 }
 
-func loadExercisesFromFile(filePath string) ([]workout.Exercise, error) {
+func loadExercisesFromFile(db *gorm.DB, filePath string) error {
 	file, err := ioutil.ReadFile(filePath)
-	var exercises []workout.Exercise
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	var inputs []ExerciseInput
 	err = json.Unmarshal(file, &inputs)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	for _, input := range inputs {
@@ -48,13 +49,12 @@ func loadExercisesFromFile(filePath string) ([]workout.Exercise, error) {
 			BodyPart:       input.BodyPart,
 			Instructions:   htmlInstructions,
 			InstructionsPt: translate(htmlInstructions),
-			GifUrl:         input.GifUrl,
+			ExternalID:     input.ID,
 		}
-
-		exercises = append(exercises, exercise)
+		db.Create(&exercise)
 	}
 
-	return exercises, nil
+	return nil
 }
 
 func translate(text string) string {
@@ -84,10 +84,9 @@ func translateFromFile(text string, translations map[string]string) string {
 	return text
 }
 
-func loadExerciseFromFile() *[]workout.Exercise {
-	exercises, err := loadExercisesFromFile("seeds/json/exercises.json")
+func loadExerciseFromFile(db *gorm.DB) {
+	err := loadExercisesFromFile(db, "seeds/json/exercises.json")
 	if err != nil {
 		log.Fatalf("Error loading exercises from JSON: %v", err)
 	}
-	return &exercises
 }

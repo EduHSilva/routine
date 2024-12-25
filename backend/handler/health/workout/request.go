@@ -17,6 +17,7 @@ type ExerciseWorkoutRequest struct {
 	Load        float64 `json:"load"`
 	RestSeconds int     `json:"rest_seconds"`
 	Repetitions int     `json:"repetitions"`
+	Notes       string  `json:"notes"`
 }
 
 func (r CreateWorkoutRequest) Validate() error {

@@ -10,7 +10,6 @@ import 'package:pdf/widgets.dart' as pw;
 
 import '../models/health/diet_model.dart';
 
-
 Future<void> generateAndShareDietPDF(List<Meal> meals) async {
   final pdf = pw.Document();
 
@@ -61,13 +60,20 @@ Future<void> generateAndShareDietPDF(List<Meal> meals) async {
                           child: pw.Row(
                             crossAxisAlignment: pw.CrossAxisAlignment.start,
                             children: [
-                              pw.Expanded(
-                                child: pw.Text(
-                                  "${food.name} - ${food.quantity}",
-                                  style: pw.TextStyle(
-                                    fontSize: 12,
-                                    color: PdfColors.black,
-                                  ),
+                              pw.Expanded(child:
+                              pw.Text(
+                                "${food.name} - ${food.quantity} g",
+                                style: pw.TextStyle(
+                                  fontSize: 12,
+                                  color: PdfColors.black,
+                                ),
+                              )),
+                              pw.SizedBox(width: 8),
+                              pw.Text(
+                                food.observation ?? '',
+                                style: pw.TextStyle(
+                                  fontSize: 12,
+                                  color: PdfColors.black,
                                 ),
                               ),
                             ],
@@ -88,11 +94,11 @@ Future<void> generateAndShareDietPDF(List<Meal> meals) async {
 
   try {
     final tempDir = await getTemporaryDirectory();
-    final file = File("${tempDir.path}/workouts.pdf");
+    final file = File("${tempDir.path}/diet.pdf");
     await file.writeAsBytes(await pdf.save());
 
     final xFile = XFile(file.path);
-    await Share.shareXFiles([xFile], text: "Check out my workout plan!");
+    await Share.shareXFiles([xFile], text: "Check out my diet plan!");
   } catch (e) {
     AppConfig.getLogger().e("Error generating or sharing PDF: $e");
   }
@@ -156,6 +162,14 @@ Future<void> generateAndShareWorkoutPDF(List<Workout> workouts) async {
                                     fontSize: 12,
                                     color: PdfColors.black,
                                   ),
+                                ),
+                              ),
+                              pw.SizedBox(width: 8),
+                              pw.Text(
+                                exercise.notes ?? '',
+                                style: pw.TextStyle(
+                                  fontSize: 12,
+                                  color: PdfColors.black,
                                 ),
                               ),
                             ],
