@@ -41,24 +41,13 @@ func ChangeTransactionStatusHandler(ctx *gin.Context) {
 
 	transaction.Confirmed = !transaction.Confirmed
 
-	user := &transaction.TransactionRule.User
-	if transaction.Confirmed {
-		user.CurrentBalance += transaction.Value
-	} else {
-		user.CurrentBalance -= transaction.Value
-	}
-
 	if err := db.Save(&transaction).Error; err != nil {
 		logger.ErrF("error updating transaction: %s", err.Error())
 		helper.SendError(ctx, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	if err := db.Save(user).Error; err != nil {
-		logger.ErrF("error updating user balance: %s", err.Error())
-		helper.SendError(ctx, http.StatusInternalServerError, err.Error())
-		return
-	}
+	helper.UpdateUserCurrentBalance(ctx, db, transaction, true)
 
 	helper.SendSuccess(ctx, transaction)
 }

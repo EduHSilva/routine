@@ -35,9 +35,9 @@ class NewFinancialViewState extends State<NewFinancialRuleView> {
   bool _isEndDateDisabled = false;
 
   DropdownItem<Category>? _selectedCategory;
-  DropdownItem<Frequency>? _selectedFrequency;
+  DropdownItem<FrequencyTransaction>? _selectedFrequency;
 
-  final List<DropdownItem<Frequency>> _frequencies = Frequency.values
+  final List<DropdownItem<FrequencyTransaction>> _frequencies = FrequencyTransaction.values
       .map((frequency) => DropdownItem(
             label: frequency.label,
             value: frequency,

@@ -19,6 +19,31 @@ extension PriorityExtension on Priority {
   }
 }
 
+enum FrequencyTransaction {
+  weekly,
+  monthly,
+  yearly,
+  unique
+}
+
+
+extension FrequencyTransactionExtension on FrequencyTransaction {
+  String get label {
+    switch (this) {
+      case FrequencyTransaction.weekly:
+        return 'weekly';
+      case FrequencyTransaction.monthly:
+        return 'monthly';
+      case FrequencyTransaction.yearly:
+        return 'yearly';
+      case FrequencyTransaction.unique:
+        return 'unique';
+      default:
+        return '';
+    }
+  }
+}
+
 enum Frequency {
   daily,
   mondayToFriday,

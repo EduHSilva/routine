@@ -2,6 +2,7 @@ package finances
 
 import (
 	"github.com/EduHSilva/routine/helper"
+	"github.com/EduHSilva/routine/schemas/enums"
 	"github.com/EduHSilva/routine/schemas/finances"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
@@ -32,7 +33,7 @@ func GetAllTransactionRulesHandler(ctx *gin.Context) {
 		return
 	}
 
-	query := db.Where("user_id = ?", userID).Model(&finances.TransactionRule{})
+	query := db.Where("user_id = ? and frequency != ?", userID, enums.Unique).Model(&finances.TransactionRule{})
 
 	if err := query.Scan(&transactionResponse).Error; err != nil {
 		helper.SendErrorDefault(ctx, http.StatusInternalServerError, getI18n.(*i18n.Localizer))

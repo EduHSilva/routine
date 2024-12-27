@@ -10,8 +10,8 @@ type CreateTransactionRuleRequest struct {
 	Title      string          `json:"title"`
 	Income     bool            `json:"income"`
 	Value      float64         `json:"value"`
-	StartDate  time.Time       `json:"start_date"`
-	EndDate    time.Time       `json:"end_date"`
+	StartDate  *time.Time      `json:"start_date"`
+	EndDate    *time.Time      `json:"end_date"`
 	Frequency  enums.Frequency `json:"frequency"`
 	UserID     uint            `json:"user_id"`
 	CategoryID uint            `json:"category_id"`

@@ -5,6 +5,7 @@ import (
 	"github.com/EduHSilva/routine/schemas/enums"
 	"github.com/EduHSilva/routine/schemas/finances"
 	"github.com/gin-gonic/gin"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"net/http"
 	"time"
 )
@@ -23,9 +24,10 @@ import (
 // @Failure 401 {object} helper.ErrorResponse
 // @Security ApiKeyAuth
 // @Param x-access-token header string true "Access token"
-// @Router /finances/transaction [POST]
+// @Router /finances/rule [POST]
 func CreateTransactionRuleHandler(ctx *gin.Context) {
 	request := CreateTransactionRuleRequest{}
+	getI18n, _ := ctx.Get("i18n")
 
 	if err := ctx.BindJSON(&request); err != nil {
 		logger.ErrF("validation error: %v", err.Error())
@@ -44,10 +46,18 @@ func CreateTransactionRuleHandler(ctx *gin.Context) {
 		UserID:     request.UserID,
 		CategoryID: request.CategoryID,
 		Income:     request.Income,
-		DateStart:  request.StartDate,
-		DateEnd:    request.EndDate,
 		Value:      request.Value,
 		Frequency:  request.Frequency,
+		DateStart:  time.Now(),
+		DateEnd:    time.Now(),
+	}
+
+	if request.StartDate != nil {
+		transactionRule.DateStart = *request.StartDate
+	}
+
+	if request.EndDate != nil {
+		transactionRule.DateEnd = *request.EndDate
 	}
 
 	if err := db.Create(&transactionRule).Error; err != nil {
@@ -70,6 +80,8 @@ func CreateTransactionRuleHandler(ctx *gin.Context) {
 			dates = append(dates, currentDate)
 
 			switch frequency {
+			case enums.Unique:
+				return []time.Time{startDate}
 			case enums.Weekly:
 				currentDate = currentDate.AddDate(0, 0, 7)
 			case enums.Monthly:
@@ -98,14 +110,22 @@ func CreateTransactionRuleHandler(ctx *gin.Context) {
 			Value:             transactionRule.Value,
 			Date:              date,
 			TransactionRuleID: transactionRule.ID,
-			Confirmed:         false,
+			Confirmed:         transactionRule.Frequency == enums.Unique,
 			Title:             transactionRule.Title,
 		}
+
 		if err := db.Create(&transaction).Error; err != nil {
 			logger.ErrF("Error creating transaction: %s", err.Error())
 			helper.SendError(ctx, http.StatusInternalServerError, err.Error())
 			return
 		}
+
+		if err := db.Preload("TransactionRule.User").First(&transaction, transaction.TransactionRuleID).Error; err != nil {
+			helper.SendErrorDefault(ctx, http.StatusNotFound, getI18n.(*i18n.Localizer))
+			return
+		}
+
+		helper.UpdateUserCurrentBalance(ctx, db, &transaction, false)
 	}
 
 	helper.SendSuccess(ctx, ConvertTransactionToTransactionResponse(&transactionRule))

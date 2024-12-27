@@ -91,6 +91,7 @@ func getTransactionsMonthQuery(userID uint, month string, year string) *gorm.DB 
 
 	query = query.Where("t.user_id = ?", userID)
 	query = query.Where("EXTRACT(MONTH FROM transactions.date) = ? AND EXTRACT(YEAR FROM transactions.date) = ?", month, year)
+	query = query.Order("confirmed, date")
 
 	query = query.Preload("TransactionRule").Preload("TransactionRule.Category")
 	return query

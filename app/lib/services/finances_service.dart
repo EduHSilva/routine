@@ -5,16 +5,14 @@ import 'package:routine/models/finances/finances_model.dart';
 
 import '../config/app_config.dart';
 
-
 class FinancesService {
   Future<MonthData?> fetchMonthData(String month, int year) async {
     http.Client client = await AppConfig.getHttpClient();
-    final response =
-    await client.get(Uri.parse('${AppConfig.apiUrl}finances?month=$month&year=$year'));
+    final response = await client
+        .get(Uri.parse('${AppConfig.apiUrl}finances?month=$month&year=$year'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
-
 
       if (data['data'] != null) {
         return MonthData.fromJson(data['data']);
@@ -37,8 +35,8 @@ class FinancesService {
       List<Transaction> transactions = [];
 
       if (data['data'] != null) {
-        transactions =
-            List<Transaction>.from(data['data'].map((t) => Transaction.fromJson(t)));
+        transactions = List<Transaction>.from(
+            data['data'].map((t) => Transaction.fromJson(t)));
       }
 
       return transactions;
@@ -47,7 +45,8 @@ class FinancesService {
     }
   }
 
-  Future<TransactionResponse?> addRule(CreateTransactionRuleRequest createRequest) async {
+  Future<TransactionResponse?> addRule(
+      CreateTransactionRuleRequest createRequest) async {
     final String apiUrl = '${AppConfig.apiUrl}finances/rule';
     http.Client client = await AppConfig.getHttpClient();
 
@@ -65,7 +64,6 @@ class FinancesService {
           "user_id": createRequest.userID
         }),
       );
-
 
       final Map<String, dynamic> jsonResponse = json.decode(response.body);
 
@@ -88,7 +86,8 @@ class FinancesService {
     if (response.statusCode == 200) {
       final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
 
-      TransactionResponse? transactionResponse = TransactionResponse.fromJson(jsonResponse);
+      TransactionResponse? transactionResponse =
+          TransactionResponse.fromJson(jsonResponse);
 
       return transactionResponse;
     } else {
@@ -96,7 +95,8 @@ class FinancesService {
     }
   }
 
-  Future<TransactionResponse?> editTransactionRule(int id, UpdateTransactionRuleRequest request) async {
+  Future<TransactionResponse?> editTransactionRule(
+      int id, UpdateTransactionRuleRequest request) async {
     final String apiUrl = '${AppConfig.apiUrl}finances/rule';
     http.Client client = await AppConfig.getHttpClient();
 
@@ -141,7 +141,8 @@ class FinancesService {
     }
   }
 
-  String formatDate(String date) {
+  String? formatDate(String? date) {
+    if (date == null) return null;
     return DateTime.parse(date).toUtc().toIso8601String();
   }
 

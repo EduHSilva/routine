@@ -1,4 +1,3 @@
-
 import '../../config/app_config.dart';
 import '../response.dart';
 
@@ -11,7 +10,7 @@ class Transaction {
   final String startDate;
   final String endDate;
   final String frequency;
-  final bool? confirmed;
+  final bool confirmed;
   final String? createAt;
   final String? updateAt;
   final int id;
@@ -30,7 +29,7 @@ class Transaction {
       this.updateAt,
       this.date,
       this.color,
-      this.confirmed});
+      this.confirmed = false});
 
   factory Transaction.fromJson(Map<String, dynamic> json) {
     return Transaction(
@@ -46,7 +45,9 @@ class Transaction {
       color: json['color'],
       income: json['income'],
       date: json['date'],
-      value: json['value'] is int ? json['value'].toDouble() : double.parse(json['value']),
+      value: json['value'] is int
+          ? json['value'].toDouble()
+          : double.parse(json['value']),
     );
   }
 }
@@ -62,11 +63,12 @@ class MonthData {
 
   MonthData(
       {required this.prevTotal,
-        required this.totalExpenses,required this.totalIncomes,
-        required this.prevExpenses,required this.prevIncomes,
-        required this.currentBalance,
-        required this.transactions});
-
+      required this.totalExpenses,
+      required this.totalIncomes,
+      required this.prevExpenses,
+      required this.prevIncomes,
+      required this.currentBalance,
+      required this.transactions});
 
   factory MonthData.fromJson(Map<String, dynamic> json) {
     List<Transaction> transactions = [];
@@ -88,15 +90,13 @@ class MonthData {
       transactions: transactions,
     );
   }
-
 }
-
 
 class CreateTransactionRuleRequest {
   final int userID = AppConfig.user!.id;
   final int categoryID;
-  final String startDate;
-  final String endDate;
+  final String? startDate;
+  final String? endDate;
   final String frequency;
   final bool income;
   final double value;
@@ -108,8 +108,8 @@ class CreateTransactionRuleRequest {
       required this.value,
       required this.income,
       required this.frequency,
-      required this.startDate,
-      required this.endDate});
+      this.startDate,
+      this.endDate});
 }
 
 class UpdateTransactionRuleRequest {

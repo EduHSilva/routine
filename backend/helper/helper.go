@@ -2,11 +2,37 @@ package helper
 
 import (
 	"fmt"
+	"github.com/EduHSilva/routine/config"
+	"github.com/EduHSilva/routine/schemas/finances"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 	"net/http"
 )
+
+func UpdateUserCurrentBalance(ctx *gin.Context, db *gorm.DB, transaction *finances.Transaction, isChange bool) {
+	user := &transaction.TransactionRule.User
+	if transaction.Income {
+		if transaction.Confirmed {
+			user.CurrentBalance += transaction.Value
+		} else if isChange {
+			user.CurrentBalance -= transaction.Value
+		}
+	} else {
+		if transaction.Confirmed {
+			user.CurrentBalance -= transaction.Value
+		} else if isChange {
+			user.CurrentBalance += transaction.Value
+		}
+	}
+
+	if err := db.Save(user).Error; err != nil {
+		config.GetLogger("").ErrF("error updating user balance: %s", err.Error())
+		SendError(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+}
 
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)

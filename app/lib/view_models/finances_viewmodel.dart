@@ -42,6 +42,22 @@ class FinancesViewmodel {
     return null;
   }
 
+  Future<TransactionResponse?> deleteTransaction(int id) async {
+    try {
+      isLoading.value = true;
+      TransactionResponse? response = await _financesService.deleteTransactionRule(id);
+      if (response?.transaction== null) {
+        errorMessage.value = response?.message;
+      }
+      return response;
+    } catch (e) {
+      AppConfig.getLogger().e(e);
+    } finally {
+      isLoading.value = false;
+    }
+    return null;
+  }
+
   Future<void> fetchFinancesRules() async {
     rules.value = [];
     try {

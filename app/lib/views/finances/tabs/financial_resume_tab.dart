@@ -1,8 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:routine/config/helper.dart';
+import 'package:routine/models/finances/finances_model.dart';
 
 import '../../../view_models/finances_viewmodel.dart';
+import '../../../widgets/custom_modal_delete.dart';
+import '../modals/transaction_modal.dart';
 
 class FinancialResumeTab extends StatefulWidget {
   final int initialIndex;
@@ -21,6 +24,31 @@ class FinancialResumeTabState extends State<FinancialResumeTab> {
   void initState() {
     super.initState();
     _fetchData();
+  }
+
+  _deleteTransaction(transaction) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return CustomModalDelete(
+          title: "confirmDelete",
+          onConfirm: () {
+            _financesViewModel.deleteTransaction(transaction.id).then((response) {
+              _handleResponse(response);
+            });
+          },
+        );
+      },
+    );
+  }
+
+  _handleResponse(TransactionResponse? response) {
+    if (response?.transaction != null) {
+      _fetchData();
+    } else {
+      if (!mounted) return;
+      showErrorBar(context, response);
+    }
   }
 
   _fetchData() async {
@@ -74,12 +102,12 @@ class FinancialResumeTabState extends State<FinancialResumeTab> {
                   mainAxisSpacing: 8,
                   crossAxisSpacing: 8,
                   children: [
-                    _buildSummaryCard('currentBalance'.tr(), 'R\$ ${monthData.currentBalance}', Colors.blue),
                     _buildSummaryCard('prevTotal'.tr(), 'R\$ ${monthData.prevTotal}', Colors.blueGrey),
-                    _buildSummaryCard('incomes'.tr(), 'R\$ ${monthData.totalIncomes}', Colors.green),
-                    _buildSummaryCard('expenses'.tr(), 'R\$ ${monthData.totalExpenses}', Colors.red),
+                    _buildSummaryCard('currentBalance'.tr(), 'R\$ ${monthData.currentBalance}', Colors.blue),
                     _buildSummaryCard('prevIncomes'.tr(), 'R\$ ${monthData.prevIncomes}', Colors.teal),
+                    _buildSummaryCard('incomes'.tr(), 'R\$ ${monthData.totalIncomes}', Colors.green),
                     _buildSummaryCard('prevExpenses'.tr(), 'R\$ ${monthData.prevExpenses}', Colors.purple),
+                    _buildSummaryCard('expenses'.tr(), 'R\$ ${monthData.totalExpenses}', Colors.red),
                   ],
                 ),
               ),
@@ -88,51 +116,80 @@ class FinancialResumeTabState extends State<FinancialResumeTab> {
               Expanded(
                 child: ListView.separated(
                   itemCount: monthData.transactions.length,
-                  separatorBuilder: (context, index) => Divider(height: 1),
+                  separatorBuilder: (context, index) => Divider(height: 1, color: Colors.grey[300]),
                   itemBuilder: (context, index) {
                     final transaction = monthData.transactions[index];
                     return Card(
                       elevation: 2,
                       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                       child: ListTile(
-                        leading: Checkbox(
-                          value: transaction.confirmed ?? false,
-                          onChanged: (value) async {
-                            await _financesViewModel.changeTransactionStatus(transaction);
-                            await _fetchData();
-                          },
+                        contentPadding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                        leading: Icon(
+                          transaction.confirmed ?? false ? Icons.check_circle : Icons.circle_outlined,
+                          color: transaction.confirmed ?? false ? Colors.green : Colors.grey,
+                          size: 20,
                         ),
-                        title: Text(transaction.title),
-                        subtitle: Text(formatDate(transaction.date)),
+                        title: Text(
+                          transaction.title,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        subtitle: Text(
+                          formatDate(transaction.date),
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: 12,
+                          ),
+                        ),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(
                               transaction.income ? Icons.arrow_upward : Icons.arrow_downward,
                               color: transaction.income ? Colors.green : Colors.red,
+                              size: 20,
                             ),
-                            SizedBox(width: 8),
+                            SizedBox(width: 6),
                             Text(
-                              'R\$ ${transaction.value}',
+                              'R\$ ${transaction.value.toStringAsFixed(2)}',
                               style: TextStyle(
                                 color: transaction.income ? Colors.green : Colors.red,
                                 fontWeight: FontWeight.bold,
+                                fontSize: 14,
                               ),
                             ),
                           ],
                         ),
+                        onTap: () async {
+                          await _financesViewModel.changeTransactionStatus(transaction);
+                          await _fetchData();
+                        },
+                        onLongPress: () async {
+                          if(!transaction.confirmed) await _deleteTransaction(transaction);
+                        },
                       ),
                     );
                   },
                 ),
-              ),
+              )
             ],
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // TODO: Implementar ação
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            builder: (_) => AddTransactionModal(
+              onSave: () => _fetchData(),
+            ),
+          );
         },
         child: Icon(Icons.add),
       ),
