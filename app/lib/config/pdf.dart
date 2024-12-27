@@ -104,16 +104,16 @@ Future<void> generateAndShareDietPDF(List<Meal> meals) async {
   }
 }
 
-
 Future<void> generateAndShareWorkoutPDF(List<Workout> workouts) async {
   final pdf = pw.Document();
 
   pdf.addPage(
-    pw.Page(
+    pw.MultiPage(
+      pageFormat: PdfPageFormat.a4,
+      margin: const pw.EdgeInsets.all(16),
       build: (context) {
-        return pw.Padding(
-          padding: const pw.EdgeInsets.all(16),
-          child: pw.Column(
+        return [
+          pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: workouts.map((workout) {
               return pw.Padding(
@@ -121,25 +121,9 @@ Future<void> generateAndShareWorkoutPDF(List<Workout> workouts) async {
                 child: pw.Column(
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
-                    pw.Text(
-                      "workout".tr(),
-                      style: pw.TextStyle(
-                        fontSize: 22,
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColors.blue,
-                      ),
-                    ),
-                    pw.Text(
-                      AppConfig.user!.name,
-                      style: pw.TextStyle(
-                        fontSize: 18,
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColors.black,
-                      ),
-                    ),
                     pw.SizedBox(height: 8),
                     pw.Text(
-                      workout.name,
+                      '${workout.name} - ${workout.exercises.length} exercicios',
                       style: pw.TextStyle(
                         fontSize: 16,
                         fontWeight: pw.FontWeight.bold,
@@ -157,7 +141,7 @@ Future<void> generateAndShareWorkoutPDF(List<Workout> workouts) async {
                             children: [
                               pw.Expanded(
                                 child: pw.Text(
-                                  "${exercise.name} - ${exercise.series}x${exercise.repetitions}",
+                                  "${exercise.name} - ${exercise.series ?? '-'}x${exercise.repetitions ?? '-'}",
                                   style: pw.TextStyle(
                                     fontSize: 12,
                                     color: PdfColors.black,
@@ -183,7 +167,7 @@ Future<void> generateAndShareWorkoutPDF(List<Workout> workouts) async {
               );
             }).toList(),
           ),
-        );
+        ];
       },
     ),
   );

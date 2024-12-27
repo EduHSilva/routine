@@ -37,11 +37,12 @@ class WorkoutDetailView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('${exercise.bodyPart?.toLowerCase()}'.tr()),
-                      Text('${exercise.series}x${exercise.repetitions}'),
+                      Text(
+                          '${exercise.series ?? '-'}x${exercise.repetitions ?? '-'}'),
                     ],
                   ),
                   const SizedBox(height: 4),
-                  Text('${exercise.load} kg'),
+                  Text('${exercise.load ?? '-'} kg'),
                   const SizedBox(height: 4),
                   Text(exercise.notes ?? ''),
                 ],

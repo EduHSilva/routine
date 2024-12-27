@@ -33,7 +33,7 @@ func GetMealsHandler(ctx *gin.Context) {
 		return
 	}
 
-	if err := db.Where("user_id = ?", userID).Order("name").Preload("Foods").Find(&meals).Error; err != nil {
+	if err := db.Where("user_id = ?", userID).Order("hour").Preload("Foods").Find(&meals).Error; err != nil {
 		helper.SendErrorDefault(ctx, http.StatusInternalServerError, getI18n.(*i18n.Localizer))
 		return
 	}

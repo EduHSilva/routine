@@ -8,11 +8,10 @@ import '../models/tasks/task_model.dart';
 
 
 class TasksService {
-  Future<Map<String, List<Task>>> fetchWeekTasks(DateTime date) async {
+  Future<Map<String, List<Task>>> fetchWeekTasks(String date) async {
     http.Client client = await AppConfig.getHttpClient();
-    String formatedDate =  DateFormat('yyyy-MM-dd').format(date);
     final response = await client.get(Uri.parse(
-        '${AppConfig.apiUrl}tasks/week?currentDate=$formatedDate'));
+        '${AppConfig.apiUrl}tasks/week?currentDate=$date'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);

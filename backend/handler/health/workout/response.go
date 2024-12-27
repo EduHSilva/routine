@@ -20,6 +20,7 @@ type ResponseDataExercise struct {
 	ID           uint    `json:"id"`
 	Name         string  `json:"name"`
 	BodyPart     string  `json:"body_part"`
+	Target       string  `json:"target"`
 	Instructions string  `json:"instructions"`
 	Load         float64 `json:"load,omitempty"`
 	Series       int     `json:"series,omitempty"`

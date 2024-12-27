@@ -26177,5 +26177,78 @@
       "Pause for a moment at the top, then slowly lower the dumbbells back down to the starting position.",
       "Repeat for the desired number of repetitions."
     ]
+  },
+  {
+    "bodyPart": "upper arms",
+    "equipment": "dumbbell",
+    "gifUrl": null,
+    "id": null,
+    "name": "dumbbell french press",
+    "target": "triceps",
+    "secondaryMuscles": [
+      "shoulders"
+    ],
+    "instructions": [
+      "Hold a dumbbell with both hands and raise it above your head, keeping your arms fully extended.",
+      "Slowly bend your elbows, lowering the dumbbell behind your head.",
+      "Pause at the bottom of the movement, then extend your arms back to the starting position.",
+      "Keep your elbows fixed in place throughout the exercise.",
+      "Repeat for the desired number of repetitions."
+    ]
+  },
+  {
+    "bodyPart": "upper arms",
+    "equipment": "cable",
+    "gifUrl": null,
+    "id": null,
+    "name": "cable french press",
+    "target": "triceps",
+    "secondaryMuscles": [
+      "shoulders"
+    ],
+    "instructions": [
+      "Attach a rope or straight bar to the cable machine at the top position.",
+      "Grip the attachment with both hands and raise it above your head, keeping your arms extended.",
+      "Slowly bend your elbows, lowering the attachment behind your head.",
+      "Pause at the bottom, then extend your arms back to the starting position.",
+      "Repeat for the desired number of repetitions."
+    ]
+  },
+  {
+    "bodyPart": "upper arms",
+    "equipment": "dumbbell",
+    "gifUrl": null,
+    "id": null,
+    "name": "dumbbell triceps skullcrusher",
+    "target": "triceps",
+    "secondaryMuscles": [
+      "shoulders"
+    ],
+    "instructions": [
+      "Lie on a flat bench holding a dumbbell in each hand with your arms fully extended above your chest.",
+      "Slowly bend your elbows, lowering the dumbbells towards your forehead.",
+      "Pause at the bottom, then extend your arms back to the starting position.",
+      "Keep your elbows fixed in place throughout the movement.",
+      "Repeat for the desired number of repetitions."
+    ]
+  },
+  {
+    "bodyPart": "upper arms",
+    "equipment": "cable",
+    "gifUrl": null,
+    "id": null,
+    "name": "cable triceps skullcrusher",
+    "target": "triceps",
+    "secondaryMuscles": [
+      "shoulders"
+    ],
+    "instructions": [
+      "Attach a straight bar to the cable machine at the top position.",
+      "Grip the bar with both hands and stand facing away from the machine.",
+      "Bend your elbows, lowering the bar towards your forehead.",
+      "Pause at the bottom, then extend your arms back to the starting position.",
+      "Keep your elbows fixed in place throughout the movement.",
+      "Repeat for the desired number of repetitions."
+    ]
   }
 ]

@@ -40,6 +40,7 @@ class Exercise {
   final int? restSeconds;
   final String? imageUrl;
   late String? notes;
+  final String? target;
 
   Exercise({
     required this.id,
@@ -52,6 +53,7 @@ class Exercise {
     this.repetitions,
     this.imageUrl,
     this.notes,
+    this.target
   });
 
   Map<String, dynamic> toJson() {
@@ -76,7 +78,8 @@ class Exercise {
         series: json['series'],
         repetitions: json['repetitions'],
         imageUrl: json['image_url'],
-        notes: json['notes']);
+        notes: json['notes'],
+        target: json['target']);
   }
 }
 

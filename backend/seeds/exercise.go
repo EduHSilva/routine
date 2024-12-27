@@ -18,6 +18,7 @@ type ExerciseInput struct {
 	Instructions []string `json:"instructions"`
 	GifUrl       string   `json:"gifUrl"`
 	ID           string   `json:"id"`
+	Target       string   `json:"target"`
 }
 
 func instructionsToHTML(instructions []string) string {
@@ -50,6 +51,7 @@ func loadExercisesFromFile(db *gorm.DB, filePath string) error {
 			Instructions:   htmlInstructions,
 			InstructionsPt: translate(htmlInstructions),
 			ExternalID:     input.ID,
+			Target:         input.Target,
 		}
 		db.Create(&exercise)
 	}

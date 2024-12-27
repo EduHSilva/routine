@@ -132,20 +132,32 @@ class NewWorkoutViewState extends State<NewWorkoutView> {
                 const SizedBox(height: 16),
                 _selectedExercises.isEmpty
                     ? Center(child: Text('noData'.tr()))
-                    : ListView.builder(
+                    : ReorderableListView(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: _selectedExercises.length,
-                        itemBuilder: (context, index) {
-                          var exercise = _selectedExercises[index];
+                        onReorder: (oldIndex, newIndex) {
+                          setState(() {
+                            if (newIndex > oldIndex) {
+                              newIndex -= 1;
+                            }
+                            final exercise =
+                                _selectedExercises.removeAt(oldIndex);
+                            _selectedExercises.insert(newIndex, exercise);
+                          });
+                        },
+                        children:
+                            _selectedExercises.asMap().entries.map((entry) {
+                          Exercise exercise = entry.value;
 
                           return Padding(
+                            key: ValueKey(exercise),
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Expanded(
                                       child: Text(
@@ -160,8 +172,10 @@ class NewWorkoutViewState extends State<NewWorkoutView> {
                                       ),
                                     ),
                                     IconButton(
-                                      icon: const Icon(Icons.remove, color: Colors.redAccent),
-                                      onPressed: () => _removeExercise(exercise),
+                                      icon: const Icon(Icons.remove,
+                                          color: Colors.redAccent),
+                                      onPressed: () =>
+                                          _removeExercise(exercise),
                                     ),
                                   ],
                                 ),
@@ -219,7 +233,7 @@ class NewWorkoutViewState extends State<NewWorkoutView> {
                               ],
                             ),
                           );
-                        },
+                        }).toList(),
                       ),
                 const SizedBox(height: 16),
                 CustomButton(

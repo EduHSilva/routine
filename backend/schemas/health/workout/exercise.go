@@ -10,4 +10,5 @@ type Exercise struct {
 	Instructions   string `json:"instructions" gorm:"size:1000"`
 	InstructionsPt string `json:"instructions_pt" gorm:"size:1000"`
 	ExternalID     string `json:"external_id" gorm:"unique"`
+	Target         string `json:"target"`
 }

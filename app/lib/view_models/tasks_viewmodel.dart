@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import '../config/app_config.dart';
 import '../models/tasks/task_model.dart';
@@ -14,12 +15,17 @@ class TasksViewModel {
 
   Future<void> fetchWeekTasks(date) async {
     try {
+      String formatedDate = DateFormat('yyyy-MM-dd').format(date);
+
       weekTasks.value = <String, List<Task>>{};
       isLoading.value = true;
       Map<String, List<Task>> response =
-          await _tasksService.fetchWeekTasks(date);
+          await _tasksService.fetchWeekTasks(formatedDate);
       weekTasks.value = response;
-      if (weekTasks.value.isNotEmpty) dailyTasks.value = response.values.first;
+      if (weekTasks.value.isNotEmpty &&
+          weekTasks.value.keys.contains(formatedDate)) {
+        dailyTasks.value = response.values.first;
+      }
     } catch (e) {
       errorMessage.value = "Error fetching tasks of week";
       AppConfig.getLogger().e(e);
