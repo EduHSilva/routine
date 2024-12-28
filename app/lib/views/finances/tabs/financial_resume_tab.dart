@@ -111,21 +111,23 @@ class FinancialResumeTabState extends State<FinancialResumeTab> {
                         crossAxisSpacing: 8,
                         children: [
                           _buildSummaryCard('prevTotal'.tr(),
-                              'R\$ ${monthData.prevTotal}', Colors.blueGrey),
+                              monthData.prevTotal, Colors.blueGrey),
                           _buildSummaryCard('currentBalance'.tr(),
-                              'R\$ ${monthData.currentBalance}', Colors.blue),
+                              monthData.currentBalance, Colors.blue),
                           _buildSummaryCard('prevIncomes'.tr(),
-                              'R\$ ${monthData.prevIncomes}', Colors.teal),
+                              monthData.prevIncomes, Colors.teal),
                           _buildSummaryCard('incomes'.tr(),
-                              'R\$ ${monthData.totalIncomes}', Colors.green),
+                              monthData.totalIncomes, Colors.green),
                           _buildSummaryCard('prevExpenses'.tr(),
-                              'R\$ ${monthData.prevExpenses}', Colors.purple),
+                              monthData.prevExpenses, Colors.purple),
                           _buildSummaryCard('expenses'.tr(),
-                              'R\$ ${monthData.totalExpenses}', Colors.red),
-                          _buildSummaryCard('savings'.tr(),
-                              'R\$ ${monthData.saving}', Colors.lightGreen),
-                          _buildSummaryCard('box'.tr(),
-                              'R\$ ${monthData.currentBalance - monthData.saving}', Colors.orange)
+                              monthData.totalExpenses, Colors.red),
+                          _buildSummaryCard('savings'.tr(), monthData.saving,
+                              Colors.lightGreen),
+                          _buildSummaryCard(
+                              'box'.tr(),
+                              monthData.currentBalance - monthData.saving,
+                              Colors.orange)
                         ],
                       ),
                     ),
@@ -160,10 +162,11 @@ class FinancialResumeTabState extends State<FinancialResumeTab> {
                               title: Text(
                                 transaction.title,
                                 style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  fontStyle: transaction.saving ? FontStyle.italic : FontStyle.normal
-                                ),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    fontStyle: transaction.saving
+                                        ? FontStyle.italic
+                                        : FontStyle.normal),
                               ),
                               subtitle: Text(
                                 formatDate(transaction.date),
@@ -186,7 +189,11 @@ class FinancialResumeTabState extends State<FinancialResumeTab> {
                                   ),
                                   SizedBox(width: 6),
                                   Text(
-                                    'R\$ ${transaction.value.toStringAsFixed(2)}',
+                                    NumberFormat.currency(
+                                      locale: 'pt_BR',
+                                      symbol: 'R\$',
+                                      decimalDigits: 2,
+                                    ).format(transaction.value),
                                     style: TextStyle(
                                       color: transaction.income
                                           ? Colors.green
@@ -232,7 +239,12 @@ class FinancialResumeTabState extends State<FinancialResumeTab> {
     );
   }
 
-  Widget _buildSummaryCard(String title, String value, Color color) {
+  Widget _buildSummaryCard(String title, double value, Color color) {
+    final formattedValue = NumberFormat.currency(
+      locale: 'pt_BR',
+      symbol: 'R\$',
+      decimalDigits: 2,
+    ).format(value);
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
@@ -255,7 +267,7 @@ class FinancialResumeTabState extends State<FinancialResumeTab> {
             ),
             SizedBox(height: 4),
             Text(
-              value,
+              formattedValue,
               style: TextStyle(fontSize: 16, color: Colors.white),
             ),
           ],
