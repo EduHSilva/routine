@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"net/http"
-	"time"
 )
 
 // DeleteTransactionRuleHandler
@@ -42,7 +41,7 @@ func DeleteTransactionRuleHandler(ctx *gin.Context) {
 		return
 	}
 
-	if err := db.Where("transaction_rule_id = ? AND date > ? AND confirmed = false", id, time.Now()).
+	if err := db.Where("transaction_rule_id = ? AND confirmed = false", id).
 		Delete(&finances.Transaction{}).Error; err != nil {
 		helper.SendError(ctx, http.StatusInternalServerError, err.Error())
 		return
