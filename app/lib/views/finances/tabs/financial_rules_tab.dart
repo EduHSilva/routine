@@ -29,32 +29,40 @@ class FinancialRulesTabState extends State<FinancialRulesTab> {
         automaticallyImplyLeading: false,
       ),
       body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ValueListenableBuilder(
-              valueListenable: _financesViewModel.rules,
-              builder: (context, rules, child) {
-                if (rules.isEmpty) {
-                  return Center(child: Text('noData'.tr()));
-                } else {
-                  return Scaffold(
-                      body: Expanded(
-                    child: ListView.builder(
-                      itemCount: rules.length,
-                      itemBuilder: (context, index) {
-                        final transaction = rules[index];
-                        return TransactionCard(
-                          id: transaction.id,
-                          title: transaction.title,
-                          income: transaction.income,
-                          value: transaction.value,
-                          startDate: transaction.startDate,
-                          endDate: transaction.endDate,
-                        );
-                      },
-                    ),
-                  ));
-                }
-              })),
+        padding: const EdgeInsets.all(16.0),
+        child: ValueListenableBuilder(
+            valueListenable: _financesViewModel.isLoading,
+            builder: (context, isLoading, child) {
+              if (isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return ValueListenableBuilder(
+                  valueListenable: _financesViewModel.rules,
+                  builder: (context, rules, child) {
+                    if (rules.isEmpty) {
+                      return Center(child: Text('noData'.tr()));
+                    } else {
+                      return Scaffold(
+                          body: Expanded(
+                        child: ListView.builder(
+                          itemCount: rules.length,
+                          itemBuilder: (context, index) {
+                            final transaction = rules[index];
+                            return TransactionCard(
+                              id: transaction.id,
+                              title: transaction.title,
+                              income: transaction.income,
+                              value: transaction.value,
+                              startDate: transaction.startDate,
+                              endDate: transaction.endDate,
+                            );
+                          },
+                        ),
+                      ));
+                    }
+                  });
+            }),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(

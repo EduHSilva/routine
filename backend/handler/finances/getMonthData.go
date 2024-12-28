@@ -84,7 +84,7 @@ func getResumeMonthQuery(userID uint, month string, year string) *gorm.DB {
 func getTransactionsMonthQuery(userID uint, month string, year string) *gorm.DB {
 	query := db.Model(&finances.Transaction{})
 
-	query = query.Select("transactions.id, t.category_id, transactions.income, date, t.frequency, transactions.value, t.title, c.color, confirmed")
+	query = query.Select("transactions.id, t.id as rule_id, t.category_id, transactions.income, date, t.frequency, transactions.value, t.title, c.color, confirmed")
 
 	query = query.Joins("INNER JOIN transaction_rules t ON t.id = transactions.transaction_rule_id")
 	query = query.Joins("INNER JOIN categories c ON t.category_id = c.id")

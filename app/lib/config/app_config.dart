@@ -10,6 +10,7 @@ import '../models/user/user_model.dart';
 
 class AppConfig {
   static User? user;
+
   static String get apiUrl =>
       dotenv.env['URL_API'] ?? 'http://default-url.com/';
 
@@ -45,14 +46,14 @@ class AppConfig {
     }
   }
 
-static Future<void> getUser() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? userJson = prefs.getString('user');
+  static Future<void> getUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userJson = prefs.getString('user');
 
-  if (userJson != null) {
-    user = User.fromJson(jsonDecode(userJson));
+    if (userJson != null) {
+      user = User.fromJson(jsonDecode(userJson));
+    }
   }
-}
 
   static Future<void> cleanStorage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -75,7 +76,6 @@ class _HttpClientWithBearerToken extends http.BaseClient {
 
     request.headers['Content-Type'] = 'application/json; charset=UTF-8';
     request.headers['Accept-Language'] = Platform.localeName;
-
 
     return _client.send(request);
   }

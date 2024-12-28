@@ -14,6 +14,7 @@ class Transaction {
   final String? createAt;
   final String? updateAt;
   final int id;
+  final int? ruleID;
   final String? date;
 
   Transaction(
@@ -29,6 +30,7 @@ class Transaction {
       this.updateAt,
       this.date,
       this.color,
+      this.ruleID,
       this.confirmed = false});
 
   factory Transaction.fromJson(Map<String, dynamic> json) {
@@ -45,6 +47,7 @@ class Transaction {
       color: json['color'],
       income: json['income'],
       date: json['date'],
+      ruleID: json['rule_id'],
       value: json['value'] is int
           ? json['value'].toDouble()
           : double.parse(json['value']),
