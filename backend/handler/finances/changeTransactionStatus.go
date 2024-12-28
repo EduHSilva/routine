@@ -47,7 +47,10 @@ func ChangeTransactionStatusHandler(ctx *gin.Context) {
 		return
 	}
 
-	helper.UpdateUserCurrentBalance(ctx, db, transaction, true)
+	err := helper.UpdateUserCurrentBalance(db, transaction, true)
+	if err != nil {
+		return
+	}
 
 	helper.SendSuccess(ctx, transaction)
 }

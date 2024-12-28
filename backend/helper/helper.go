@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-func UpdateUserCurrentBalance(ctx *gin.Context, db *gorm.DB, transaction *finances.Transaction, isChange bool) error {
+func UpdateUserCurrentBalance(db *gorm.DB, transaction *finances.Transaction, isChange bool) error {
 	user := &transaction.TransactionRule.User
 	if transaction.Income {
 		if transaction.Confirmed {

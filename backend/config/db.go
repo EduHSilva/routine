@@ -12,7 +12,10 @@ import (
 	"github.com/EduHSilva/routine/seeds"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	dblogger "gorm.io/gorm/logger"
+	"log"
 	"os"
+	"time"
 )
 
 func InitDatabase() (*gorm.DB, error) {
@@ -71,12 +74,24 @@ func initDatabase(logger *Logger) (*gorm.DB, error) {
 	dbName := os.Getenv("DB_NAME_PROD")
 	port := os.Getenv("DB_PORT_PROD")
 
+	newLogger := dblogger.New(
+		log.New(os.Stdout, "\r\n", log.LstdFlags),
+		dblogger.Config{
+			SlowThreshold:             time.Second,
+			LogLevel:                  dblogger.Warn,
+			IgnoreRecordNotFoundError: true,
+			Colorful:                  true,
+		},
+	)
+
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", host, user, password, dbName, port)
 
 	db, err := gorm.Open(postgres.New(postgres.Config{
 		DSN:                  dsn,
 		PreferSimpleProtocol: true,
-	}), &gorm.Config{})
+	}), &gorm.Config{
+		Logger: newLogger,
+	})
 
 	if err != nil {
 		logger.ErrF("Postgres connection failed: %s", err)

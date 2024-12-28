@@ -124,7 +124,7 @@ func CreateTransactionRuleHandler(ctx *gin.Context) {
 				return err
 			}
 
-			if err := helper.UpdateUserCurrentBalance(ctx, tx, &transaction, false); err != nil {
+			if err := helper.UpdateUserCurrentBalance(tx, &transaction, false); err != nil {
 				logger.ErrF("Error updating user balance: %s", err.Error())
 				return err
 			}
