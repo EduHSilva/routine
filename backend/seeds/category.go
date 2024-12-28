@@ -133,6 +133,13 @@ var categories = []schemas.Category{
 		Type:   enums.Finances,
 	},
 	{
+		Title:  "savings",
+		Color:  "#72b1a4",
+		System: true,
+		UserID: 1,
+		Type:   enums.Finances,
+	},
+	{
 		Title:  "others",
 		Color:  "#9E9E9E",
 		System: true,

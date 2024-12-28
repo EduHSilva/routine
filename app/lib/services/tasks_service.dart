@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:http/http.dart' as http;
 
 import '../config/app_config.dart';

@@ -122,6 +122,10 @@ class FinancialResumeTabState extends State<FinancialResumeTab> {
                               'R\$ ${monthData.prevExpenses}', Colors.purple),
                           _buildSummaryCard('expenses'.tr(),
                               'R\$ ${monthData.totalExpenses}', Colors.red),
+                          _buildSummaryCard('savings'.tr(),
+                              'R\$ ${monthData.saving}', Colors.lightGreen),
+                          _buildSummaryCard('box'.tr(),
+                              'R\$ ${monthData.currentBalance - monthData.saving}', Colors.orange)
                         ],
                       ),
                     ),
@@ -198,8 +202,9 @@ class FinancialResumeTabState extends State<FinancialResumeTab> {
                                 await _fetchData();
                               },
                               onLongPress: () async {
-                                if (!transaction.confirmed)
+                                if (!transaction.confirmed) {
                                   await _deleteTransaction(transaction);
+                                }
                               },
                             ),
                           );

@@ -75,7 +75,7 @@ class NewFinancialViewState extends State<NewFinancialRuleView> {
 
         _selectedFrequency = _frequencies.firstWhere((item) =>
             item.value ==
-            Frequency.values.firstWhere((frequency) =>
+            FrequencyTransaction.values.firstWhere((frequency) =>
                 frequency.label == response.transaction!.frequency));
       });
     }

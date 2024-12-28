@@ -48,7 +48,7 @@ func CreateTransactionRuleHandler(ctx *gin.Context) {
 		Value:      request.Value,
 		Frequency:  request.Frequency,
 		DateStart:  time.Now(),
-		DateEnd:    time.Now(),
+		Saving:     request.Saving,
 	}
 
 	if request.StartDate != nil {

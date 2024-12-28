@@ -142,7 +142,7 @@ class FinancesService {
   }
 
   String? formatDate(String? date) {
-    if (date == null) return null;
+    if (date == null || date.trim().isEmpty) return null;
     return DateTime.parse(date).toUtc().toIso8601String();
   }
 

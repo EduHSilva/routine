@@ -15,6 +15,7 @@ type TransactionRule struct {
 	Value      float64
 	DateStart  time.Time
 	DateEnd    time.Time
+	Saving     bool
 	CategoryID uint             `gorm:"not null"`
 	Category   schemas.Category `gorm:"foreignKey:CategoryID"`
 	UserID     uint             `gorm:"not null"`

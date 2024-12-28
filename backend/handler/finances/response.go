@@ -17,6 +17,7 @@ type Resume struct {
 	PrevTotalValue    float64 `json:"prev_total_value"`
 	PrevTotalExpenses float64 `json:"prev_total_expenses"`
 	PrevTotalIncome   float64 `json:"prev_total_income"`
+	Saving            float64 `json:"saving"`
 }
 
 type ResponseData struct {

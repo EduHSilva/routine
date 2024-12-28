@@ -17,21 +17,20 @@ class Transaction {
   final int? ruleID;
   final String? date;
 
-  Transaction(
-      {required this.income,
-      required this.value,
-      required this.category,
-      this.createAt,
-      required this.startDate,
-      required this.endDate,
-      required this.frequency,
-      required this.id,
-      required this.title,
-      this.updateAt,
-      this.date,
-      this.color,
-      this.ruleID,
-      this.confirmed = false});
+  Transaction({required this.income,
+    required this.value,
+    required this.category,
+    this.createAt,
+    required this.startDate,
+    required this.endDate,
+    required this.frequency,
+    required this.id,
+    required this.title,
+    this.updateAt,
+    this.date,
+    this.color,
+    this.ruleID,
+    this.confirmed = false});
 
   factory Transaction.fromJson(Map<String, dynamic> json) {
     return Transaction(
@@ -62,16 +61,19 @@ class MonthData {
   final double prevIncomes;
   final double prevTotal;
   final double currentBalance;
+  final double saving;
+
+
   final List<Transaction> transactions;
 
-  MonthData(
-      {required this.prevTotal,
-      required this.totalExpenses,
-      required this.totalIncomes,
-      required this.prevExpenses,
-      required this.prevIncomes,
-      required this.currentBalance,
-      required this.transactions});
+  MonthData({required this.prevTotal,
+    required this.totalExpenses,
+    required this.totalIncomes,
+    required this.prevExpenses,
+    required this.prevIncomes,
+    required this.currentBalance,
+    required this.saving,
+    required this.transactions});
 
   factory MonthData.fromJson(Map<String, dynamic> json) {
     List<Transaction> transactions = [];
@@ -90,6 +92,7 @@ class MonthData {
       prevExpenses: (resume['prev_total_expenses'] ?? 0).toDouble(),
       prevIncomes: (resume['prev_total_income'] ?? 0).toDouble(),
       currentBalance: (resume['current_balance'] ?? 0).toDouble(),
+      saving: (resume['saving'] ?? 0).toDouble(),
       transactions: transactions,
     );
   }
@@ -105,14 +108,13 @@ class CreateTransactionRuleRequest {
   final double value;
   final String title;
 
-  CreateTransactionRuleRequest(
-      {required this.title,
-      required this.categoryID,
-      required this.value,
-      required this.income,
-      required this.frequency,
-      this.startDate,
-      this.endDate});
+  CreateTransactionRuleRequest({required this.title,
+    required this.categoryID,
+    required this.value,
+    required this.income,
+    required this.frequency,
+    this.startDate,
+    this.endDate});
 }
 
 class UpdateTransactionRuleRequest {

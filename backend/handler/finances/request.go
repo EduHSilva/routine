@@ -15,6 +15,7 @@ type CreateTransactionRuleRequest struct {
 	Frequency  enums.Frequency `json:"frequency"`
 	UserID     uint            `json:"user_id"`
 	CategoryID uint            `json:"category_id"`
+	Saving     bool            `json:"saving"`
 }
 
 func (r CreateTransactionRuleRequest) Validate() error {

@@ -55,10 +55,8 @@ func InitDatabase() (*gorm.DB, error) {
 	}
 
 	for _, table := range tables {
-		if !db.Migrator().HasTable(table) {
-			if err = db.AutoMigrate(table); err != nil {
-				return nil, err
-			}
+		if err = db.AutoMigrate(table); err != nil {
+			return nil, err
 		}
 	}
 

@@ -66,11 +66,12 @@ func GetMonthDataHandler(ctx *gin.Context) {
 
 func getResumeMonthQuery(userID uint, month string, year string) *gorm.DB {
 	query := db.Table("transactions").
-		Select("SUM(CASE WHEN transactions.confirmed = false THEN transactions.value ELSE 0 END) + u.current_balance AS prev_total_value, "+
-			"SUM(CASE WHEN transactions.confirmed = true AND t.income = true THEN transactions.value ELSE 0 END) AS total_income, "+
-			"SUM(CASE WHEN transactions.confirmed = false AND t.income = true THEN transactions.value ELSE 0 END) AS prev_total_income, "+
-			"SUM(CASE WHEN transactions.confirmed = true AND t.income = false THEN transactions.value ELSE 0 END) AS total_expenses, "+
-			"SUM(CASE WHEN transactions.confirmed = false AND t.income = false THEN transactions.value ELSE 0 END) AS prev_total_expenses, "+
+		Select("SUM(CASE WHEN transactions.confirmed = false AND t.saving = false THEN transactions.value ELSE 0 END) + u.current_balance AS prev_total_value, "+
+			"SUM(CASE WHEN transactions.confirmed = true AND t.income = true AND t.saving = false THEN transactions.value ELSE 0 END) AS total_income, "+
+			"SUM(CASE WHEN transactions.confirmed = false AND t.income = true AND t.saving = false THEN transactions.value ELSE 0 END) AS prev_total_income, "+
+			"SUM(CASE WHEN transactions.confirmed = true AND t.income = false AND t.saving = false THEN transactions.value ELSE 0 END) AS total_expenses, "+
+			"SUM(CASE WHEN transactions.confirmed = false AND t.income = false AND t.saving = false THEN transactions.value ELSE 0 END) AS prev_total_expenses, "+
+			"SUM(CASE WHEN transactions.confirmed = true AND t.saving = true THEN transactions.value ELSE 0 END) AS saving, "+
 			"u.current_balance").
 		Joins("INNER JOIN transaction_rules t ON t.id = transactions.transaction_rule_id").
 		Joins("INNER JOIN categories c ON t.category_id = c.id").
