@@ -71,6 +71,11 @@ func CreateTransactionRuleHandler(ctx *gin.Context) {
 		return
 	}
 
+	dateEnd := transactionRule.DateEnd
+	if dateEnd.IsZero() {
+		dateEnd = transactionRule.DateStart.AddDate(2, 0, 0)
+	}
+
 	generateTransactionDates := func(startDate, endDate time.Time, frequency enums.Frequency) []time.Time {
 		var dates []time.Time
 		currentDate := startDate
@@ -93,12 +98,8 @@ func CreateTransactionRuleHandler(ctx *gin.Context) {
 				return nil
 			}
 		}
-		return dates
-	}
 
-	dateEnd := transactionRule.DateEnd
-	if dateEnd.IsZero() {
-		dateEnd = transactionRule.DateStart.AddDate(2, 0, 0)
+		return dates
 	}
 
 	transactionDates := generateTransactionDates(transactionRule.DateStart, dateEnd, transactionRule.Frequency)
