@@ -162,6 +162,7 @@ class FinancialResumeTabState extends State<FinancialResumeTab> {
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
+                                  fontStyle: transaction.saving ? FontStyle.italic : FontStyle.normal
                                 ),
                               ),
                               subtitle: Text(

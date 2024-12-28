@@ -61,7 +61,8 @@ class FinancesService {
           "value": createRequest.value,
           "income": createRequest.income,
           "title": createRequest.title,
-          "user_id": createRequest.userID
+          "user_id": createRequest.userID,
+          "saving": createRequest.saving
         }),
       );
 

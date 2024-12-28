@@ -36,6 +36,7 @@ type ResponseData struct {
 	Value     float64   `json:"value"`
 	Confirmed bool      `json:"confirmed"`
 	RuleID    uint      `json:"rule_id"`
+	Saving    bool      `json:"saving"`
 }
 
 func ConvertTransactionToTransactionResponse(transaction *finances.TransactionRule) ResponseData {

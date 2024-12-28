@@ -139,6 +139,7 @@ class NewFinancialViewState extends State<NewFinancialRuleView> {
             frequency: _selectedFrequency!.value.label,
             value: double.parse(_valueController.text),
             income: _income,
+            saving: false
           ),
         );
       } else {

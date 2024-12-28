@@ -16,6 +16,7 @@ class Transaction {
   final int id;
   final int? ruleID;
   final String? date;
+  final bool saving;
 
   Transaction({required this.income,
     required this.value,
@@ -30,6 +31,7 @@ class Transaction {
     this.date,
     this.color,
     this.ruleID,
+    required this.saving,
     this.confirmed = false});
 
   factory Transaction.fromJson(Map<String, dynamic> json) {
@@ -47,6 +49,7 @@ class Transaction {
       income: json['income'],
       date: json['date'],
       ruleID: json['rule_id'],
+      saving: json['saving'],
       value: json['value'] is int
           ? json['value'].toDouble()
           : double.parse(json['value']),
@@ -107,12 +110,14 @@ class CreateTransactionRuleRequest {
   final bool income;
   final double value;
   final String title;
+  final bool saving;
 
   CreateTransactionRuleRequest({required this.title,
     required this.categoryID,
     required this.value,
     required this.income,
     required this.frequency,
+    required this.saving,
     this.startDate,
     this.endDate});
 }
