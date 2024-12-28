@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:routine/models/finances/finances_model.dart';
+import 'package:routine/models/response.dart';
 
 import '../config/app_config.dart';
 
@@ -147,7 +148,7 @@ class FinancesService {
     return DateTime.parse(date).toUtc().toIso8601String();
   }
 
-  Future<TransactionResponse?> changeTransactionStatus(int id) async {
+  Future<DefaultResponse?> changeTransactionStatus(int id) async {
     final String apiUrl = '${AppConfig.apiUrl}finances';
     http.Client client = await AppConfig.getHttpClient();
 

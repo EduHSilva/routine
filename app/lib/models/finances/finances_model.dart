@@ -16,7 +16,7 @@ class Transaction {
   final int id;
   final int? ruleID;
   final String? date;
-  final bool saving;
+  final bool? saving;
 
   Transaction({required this.income,
     required this.value,
@@ -31,7 +31,7 @@ class Transaction {
     this.date,
     this.color,
     this.ruleID,
-    required this.saving,
+    this.saving = false,
     this.confirmed = false});
 
   factory Transaction.fromJson(Map<String, dynamic> json) {

@@ -52,5 +52,5 @@ func ChangeTransactionStatusHandler(ctx *gin.Context) {
 		return
 	}
 
-	helper.SendSuccess(ctx, transaction)
+	helper.SendSuccess(ctx, ConvertTransactionToTransactionResponse(&transaction.TransactionRule))
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart';
 import 'package:routine/models/finances/finances_model.dart';
 import 'package:routine/services/finances_service.dart';
 import '../config/app_config.dart';
+import '../models/response.dart';
 
 class FinancesViewmodel {
   final FinancesService _financesService = FinancesService();
@@ -136,12 +138,12 @@ class FinancesViewmodel {
     return null;
   }
 
-  Future<TransactionResponse?> changeTransactionStatus(Transaction t) async {
+  Future<DefaultResponse?> changeTransactionStatus(Transaction t) async {
     try {
       isLoading.value = true;
-      TransactionResponse? response =
+      DefaultResponse? response =
           await _financesService.changeTransactionStatus(t.id);
-      if (response?.transaction != null) {
+      if (response != null) {
         await fetchFinancesRules();
       } else {
         errorMessage.value = errorMessage.value = response?.message;

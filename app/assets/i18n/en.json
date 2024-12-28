@@ -157,5 +157,7 @@
   "spine": "Spine",
   "savings": "Savings",
   "saving": "Saving",
-  "box": "Box"
+  "box": "Box",
+  "dashboard": "Dashboard",
+  "transactions": "Transactions"
 }
