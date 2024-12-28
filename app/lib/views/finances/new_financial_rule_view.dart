@@ -159,7 +159,7 @@ class NewFinancialViewState extends State<NewFinancialRuleView> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable: _categoryViewModel.isLoading,
+      valueListenable: _financesViewModel.isLoading,
       builder: (context, isLoading, child) {
         if (isLoading) {
           return const Center(child: CircularProgressIndicator());

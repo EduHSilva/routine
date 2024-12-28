@@ -66,19 +66,21 @@ func GetMonthDataHandler(ctx *gin.Context) {
 
 func getResumeMonthQuery(userID uint, month string, year string) *gorm.DB {
 	query := db.Table("transactions").
-		Select("SUM(CASE WHEN transactions.confirmed = false AND t.saving = false THEN transactions.value ELSE 0 END) + u.current_balance AS prev_total_value, "+
-			"SUM(CASE WHEN transactions.confirmed = true AND t.income = true AND t.saving = false THEN transactions.value ELSE 0 END) AS total_income, "+
-			"SUM(CASE WHEN transactions.confirmed = false AND t.income = true AND t.saving = false THEN transactions.value ELSE 0 END) AS prev_total_income, "+
-			"SUM(CASE WHEN transactions.confirmed = true AND t.income = false AND t.saving = false THEN transactions.value ELSE 0 END) AS total_expenses, "+
-			"SUM(CASE WHEN transactions.confirmed = false AND t.income = false AND t.saving = false THEN transactions.value ELSE 0 END) AS prev_total_expenses, "+
-			"SUM(CASE WHEN transactions.confirmed = true AND t.saving = true THEN transactions.value ELSE 0 END) AS saving, "+
-			"u.current_balance").
+		Select(`
+			SUM(CASE WHEN transactions.confirmed = false AND t.saving = false THEN transactions.value ELSE 0 END) + u.current_balance AS prev_total_value,
+			SUM(CASE WHEN transactions.confirmed = true AND t.income = true AND t.saving = false THEN transactions.value ELSE 0 END) AS total_income,
+			SUM(CASE WHEN transactions.confirmed = false AND t.income = true AND t.saving = false THEN transactions.value ELSE 0 END) AS prev_total_income,
+			SUM(CASE WHEN transactions.confirmed = true AND t.income = false AND t.saving = false THEN transactions.value ELSE 0 END) AS total_expenses,
+			SUM(CASE WHEN transactions.confirmed = false AND t.income = false AND t.saving = false THEN transactions.value ELSE 0 END) AS prev_total_expenses,
+			SUM(CASE WHEN t.saving = true THEN transactions.value ELSE 0 END) AS saving, 
+			u.current_balance
+		`).
 		Joins("INNER JOIN transaction_rules t ON t.id = transactions.transaction_rule_id").
 		Joins("INNER JOIN categories c ON t.category_id = c.id").
 		Joins("LEFT JOIN users u ON t.user_id = u.id").
 		Where("u.id = ?", userID).
-		Where("EXTRACT(MONTH FROM transactions.date) = ? AND EXTRACT(YEAR FROM transactions.date) = ?", month, year).
 		Where("transactions.deleted_at IS NULL").
+		Where("t.saving = true OR (EXTRACT(MONTH FROM transactions.date) = ? AND EXTRACT(YEAR FROM transactions.date) = ?)", month, year).
 		Group("u.current_balance")
 	return query
 }
