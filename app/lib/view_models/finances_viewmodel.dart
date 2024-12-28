@@ -27,7 +27,8 @@ class FinancesViewmodel {
   Future<TransactionResponse?> deleteRule(int id) async {
     try {
       isLoading.value = true;
-      TransactionResponse? response = await _financesService.deleteTransactionRule(id);
+      TransactionResponse? response =
+          await _financesService.deleteTransactionRule(id);
       if (response?.transaction != null) {
         await fetchFinancesRules();
       } else {
@@ -42,11 +43,13 @@ class FinancesViewmodel {
     return null;
   }
 
-  Future<TransactionResponse?> deleteTransaction(int id) async {
+  Future<TransactionResponse?> deleteTransaction(int? id) async {
     try {
+      if (id == null) return null;
       isLoading.value = true;
-      TransactionResponse? response = await _financesService.deleteTransactionRule(id);
-      if (response?.transaction== null) {
+      TransactionResponse? response =
+          await _financesService.deleteTransactionRule(id);
+      if (response?.transaction == null) {
         errorMessage.value = response?.message;
       }
       return response;
@@ -72,7 +75,8 @@ class FinancesViewmodel {
     }
   }
 
-  Future<TransactionResponse?>? addRule(CreateTransactionRuleRequest req) async {
+  Future<TransactionResponse?>? addRule(
+      CreateTransactionRuleRequest req) async {
     try {
       isLoading.value = true;
       TransactionResponse? response = await _financesService.addRule(req);
@@ -96,7 +100,8 @@ class FinancesViewmodel {
     try {
       isLoading.value = true;
 
-      TransactionResponse? response = await _financesService.getTransactionRule(id);
+      TransactionResponse? response =
+          await _financesService.getTransactionRule(id);
 
       if (response.transaction == null) {
         errorMessage.value = response.message;
@@ -111,10 +116,12 @@ class FinancesViewmodel {
     return null;
   }
 
-  Future<TransactionResponse?> editRule(int id, UpdateTransactionRuleRequest request) async {
+  Future<TransactionResponse?> editRule(
+      int id, UpdateTransactionRuleRequest request) async {
     try {
       isLoading.value = true;
-      TransactionResponse? response = await _financesService.editTransactionRule(id, request);
+      TransactionResponse? response =
+          await _financesService.editTransactionRule(id, request);
       if (response?.transaction != null) {
         await fetchFinancesRules();
       } else {
@@ -132,7 +139,8 @@ class FinancesViewmodel {
   Future<TransactionResponse?> changeTransactionStatus(Transaction t) async {
     try {
       isLoading.value = true;
-      TransactionResponse? response = await _financesService.changeTransactionStatus(t.id);
+      TransactionResponse? response =
+          await _financesService.changeTransactionStatus(t.id);
       if (response?.transaction != null) {
         await fetchFinancesRules();
       } else {

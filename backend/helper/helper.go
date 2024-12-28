@@ -1,8 +1,8 @@
 package helper
 
 import (
+	"errors"
 	"fmt"
-	"github.com/EduHSilva/routine/config"
 	"github.com/EduHSilva/routine/schemas/finances"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
@@ -11,7 +11,7 @@ import (
 	"net/http"
 )
 
-func UpdateUserCurrentBalance(ctx *gin.Context, db *gorm.DB, transaction *finances.Transaction, isChange bool) {
+func UpdateUserCurrentBalance(ctx *gin.Context, db *gorm.DB, transaction *finances.Transaction, isChange bool) error {
 	user := &transaction.TransactionRule.User
 	if transaction.Income {
 		if transaction.Confirmed {
@@ -28,10 +28,10 @@ func UpdateUserCurrentBalance(ctx *gin.Context, db *gorm.DB, transaction *financ
 	}
 
 	if err := db.Save(user).Error; err != nil {
-		config.GetLogger("").ErrF("error updating user balance: %s", err.Error())
-		SendError(ctx, http.StatusInternalServerError, err.Error())
-		return
+		return errors.New("error updating user balance: %s\", err.Error()")
 	}
+
+	return nil
 }
 
 func HashPassword(password string) (string, error) {

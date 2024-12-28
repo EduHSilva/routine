@@ -5,7 +5,7 @@ import (
 	"github.com/EduHSilva/routine/schemas/enums"
 	"github.com/EduHSilva/routine/schemas/finances"
 	"github.com/gin-gonic/gin"
-	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"gorm.io/gorm"
 	"net/http"
 	"time"
 )
@@ -27,7 +27,6 @@ import (
 // @Router /finances/rule [POST]
 func CreateTransactionRuleHandler(ctx *gin.Context) {
 	request := CreateTransactionRuleRequest{}
-	getI18n, _ := ctx.Get("i18n")
 
 	if err := ctx.BindJSON(&request); err != nil {
 		logger.ErrF("validation error: %v", err.Error())
@@ -114,18 +113,29 @@ func CreateTransactionRuleHandler(ctx *gin.Context) {
 			Title:             transactionRule.Title,
 		}
 
-		if err := db.Create(&transaction).Error; err != nil {
-			logger.ErrF("Error creating transaction: %s", err.Error())
+		err := db.Transaction(func(tx *gorm.DB) error {
+			if err := tx.Create(&transaction).Error; err != nil {
+				logger.ErrF("Error creating transaction: %s", err.Error())
+				return err
+			}
+
+			if err := tx.Preload("TransactionRule.User").First(&transaction, transaction.ID).Error; err != nil {
+				logger.ErrF("Error loading TransactionRule.User: %s", err.Error())
+				return err
+			}
+
+			if err := helper.UpdateUserCurrentBalance(ctx, tx, &transaction, false); err != nil {
+				logger.ErrF("Error updating user balance: %s", err.Error())
+				return err
+			}
+
+			return nil
+		})
+
+		if err != nil {
 			helper.SendError(ctx, http.StatusInternalServerError, err.Error())
 			return
 		}
-
-		if err := db.Preload("TransactionRule.User").First(&transaction, transaction.TransactionRuleID).Error; err != nil {
-			helper.SendErrorDefault(ctx, http.StatusNotFound, getI18n.(*i18n.Localizer))
-			return
-		}
-
-		helper.UpdateUserCurrentBalance(ctx, db, &transaction, false)
 	}
 
 	helper.SendSuccess(ctx, ConvertTransactionToTransactionResponse(&transactionRule))
