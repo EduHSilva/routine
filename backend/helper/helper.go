@@ -1,7 +1,6 @@
 package helper
 
 import (
-	"errors"
 	"fmt"
 	"github.com/EduHSilva/routine/schemas/finances"
 	"github.com/gin-gonic/gin"
@@ -27,8 +26,8 @@ func UpdateUserCurrentBalance(ctx *gin.Context, db *gorm.DB, transaction *financ
 		}
 	}
 
-	if err := db.Save(user).Error; err != nil {
-		return errors.New("error updating user balance: %s\", err.Error()")
+	if err := db.Model(user).Update("current_balance", user.CurrentBalance).Error; err != nil {
+		return fmt.Errorf("error updating user balance: %s", err.Error())
 	}
 
 	return nil
