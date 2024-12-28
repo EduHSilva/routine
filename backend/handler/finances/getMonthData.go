@@ -63,11 +63,14 @@ func GetMonthDataHandler(ctx *gin.Context) {
 		Transactions: transactions,
 	})
 }
-
 func getResumeMonthQuery(userID uint, month string, year string) *gorm.DB {
 	query := db.Table("transactions").
 		Select(`
-			SUM(CASE WHEN transactions.confirmed = false AND t.saving = false THEN transactions.value ELSE 0 END) + u.current_balance AS prev_total_value,
+			SUM(CASE 
+				WHEN transactions.confirmed = false AND t.saving = false AND t.income = true THEN transactions.value 
+				WHEN transactions.confirmed = false AND t.saving = false AND t.income = false THEN -transactions.value 
+				ELSE 0 
+			END) + u.current_balance AS prev_total_value,
 			SUM(CASE WHEN transactions.confirmed = true AND t.income = true AND t.saving = false THEN transactions.value ELSE 0 END) AS total_income,
 			SUM(CASE WHEN transactions.confirmed = false AND t.income = true AND t.saving = false THEN transactions.value ELSE 0 END) AS prev_total_income,
 			SUM(CASE WHEN transactions.confirmed = true AND t.income = false AND t.saving = false THEN transactions.value ELSE 0 END) AS total_expenses,
