@@ -77,6 +77,7 @@ func getResumeMonthQuery(userID uint, month string, year string) *gorm.DB {
 		Joins("LEFT JOIN users u ON t.user_id = u.id").
 		Where("u.id = ?", userID).
 		Where("EXTRACT(MONTH FROM transactions.date) = ? AND EXTRACT(YEAR FROM transactions.date) = ?", month, year).
+		Where("transactions.deleted_at IS NULL").
 		Group("u.current_balance")
 	return query
 }
