@@ -50,9 +50,7 @@ class Transaction {
       date: json['date'],
       ruleID: json['rule_id'],
       saving: json['saving'],
-      value: json['value'] is int
-          ? json['value'].toDouble()
-          : double.parse(json['value']),
+      value: _toDouble(json['value']),
     );
   }
 }
@@ -83,22 +81,36 @@ class MonthData {
     if (json['transactions'] != null) {
       var transactionsFromJson = json['transactions'] as List;
       transactions = transactionsFromJson
-          .map((exercise) => Transaction.fromJson(exercise))
+          .map((transaction) => Transaction.fromJson(transaction))
           .toList();
     }
 
     var resume = json['resume'] ?? {};
     return MonthData(
-      totalExpenses: (resume['total_expenses'] ?? 0).toDouble(),
-      totalIncomes: (resume['total_income'] ?? 0).toDouble(),
-      prevTotal: (resume['prev_total_value'] ?? 0).toDouble(),
-      prevExpenses: (resume['prev_total_expenses'] ?? 0).toDouble(),
-      prevIncomes: (resume['prev_total_income'] ?? 0).toDouble(),
-      currentBalance: (resume['current_balance'] ?? 0).toDouble(),
-      saving: (resume['saving'] ?? 0).toDouble(),
+      totalExpenses: _toDouble(resume['total_expenses']),
+      totalIncomes: _toDouble(resume['total_income']),
+      prevTotal: _toDouble(resume['prev_total_value']),
+      prevExpenses: _toDouble(resume['prev_total_expenses']),
+      prevIncomes: _toDouble(resume['prev_total_income']),
+      currentBalance: _toDouble(resume['current_balance']),
+      saving: _toDouble(resume['saving']),
       transactions: transactions,
     );
   }
+}
+
+double _toDouble(dynamic value) {
+  if (value == null) {
+    return 0.0;
+  }
+  if (value is String) {
+    try {
+      return double.parse(value);
+    } catch (e) {
+      return 0.0;
+    }
+  }
+  return value.toDouble();
 }
 
 class CreateTransactionRuleRequest {
