@@ -24,7 +24,7 @@ Este projeto consiste em um aplicativo com o propósito de auxiliar na rotina co
 - [Licença](#licença)
 
 ## Funcionalidades
-[Exemplo de Uso](imgs/example_use.mp4)
+[Exemplo de Uso](https://drive.google.com/file/d/1EfTyxuxlEq2NYcaUkMWHMvtN3nAQaYhr/view?usp=drive_link)
 
 ### Início
 <div style="display: flex; gap: 10px;">
