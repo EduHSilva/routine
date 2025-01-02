@@ -1,11 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:routine/views/tasks/tabs/all_tasks_tab.dart';
-import 'package:routine/views/tasks/tabs/rules_tab.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../config/design_system.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/custom_drawer.dart';
+import 'tabs/all_tasks_tab.dart';
+import 'tabs/rules_tab.dart';
 
 class TasksView extends StatefulWidget {
   final int initialIndex;

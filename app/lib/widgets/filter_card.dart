@@ -26,6 +26,7 @@ class FilterCard extends StatelessWidget {
           boxShadow: [
             if (isSelected)
               BoxShadow(
+                // ignore: deprecated_member_use
                 color: Colors.blueAccent.withOpacity(0.4),
                 blurRadius: 8.0,
                 offset: Offset(0, 4),

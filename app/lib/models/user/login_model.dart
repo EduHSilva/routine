@@ -1,7 +1,6 @@
 
-import 'package:routine/models/user/user_model.dart';
-
 import '../response.dart';
+import 'user_model.dart';
 
 class LoginResponse extends DefaultResponse {
   final User? user;

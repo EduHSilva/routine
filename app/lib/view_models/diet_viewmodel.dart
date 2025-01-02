@@ -1,8 +1,8 @@
-import 'package:routine/services/diet_service.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../config/app_config.dart';
 import '../models/health/diet_model.dart';
+import '../services/diet_service.dart';
 
 class DietViewModel {
   final DietService _dietService = DietService();

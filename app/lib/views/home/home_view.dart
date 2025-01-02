@@ -1,18 +1,19 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:routine/view_models/diet_viewmodel.dart';
-import 'package:routine/view_models/tasks_viewmodel.dart';
-import 'package:routine/views/health/meal_details.dart';
-import 'package:routine/widgets/task_card.dart';
+
 
 import '../../config/helper.dart';
 import '../../models/health/diet_model.dart';
+import '../../view_models/diet_viewmodel.dart';
 import '../../view_models/home_viewmodel.dart';
+import '../../view_models/tasks_viewmodel.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/custom_drawer.dart';
 import '../../widgets/custom_modal_delete.dart';
 import '../../widgets/meal_card.dart';
+import '../../widgets/task_card.dart';
+import '../health/meal_details.dart';
 import '../health/new_meal_view.dart';
 
 class HomeView extends StatefulWidget {

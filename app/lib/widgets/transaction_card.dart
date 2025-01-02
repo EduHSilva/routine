@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:routine/views/finances/new_financial_rule_view.dart';
+
+import '../views/finances/new_financial_rule_view.dart';
 
 class TransactionCard extends StatelessWidget {
   final String title;

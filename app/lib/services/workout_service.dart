@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:routine/models/health/workout_model.dart';
 import 'package:http/http.dart' as http;
 
 import '../config/app_config.dart';
+import '../models/health/workout_model.dart';
 
 
 class WorkoutService {

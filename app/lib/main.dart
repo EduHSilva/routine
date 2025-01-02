@@ -1,23 +1,25 @@
-import 'package:routine/views/categories/category_view.dart';
-import 'package:routine/views/finances/finances_view.dart';
-import 'package:routine/views/health/health_view.dart';
-import 'package:routine/views/user/user_profile.dart';
-import 'package:routine/views/tasks/tasks_view.dart';
 import 'package:flutter/material.dart';
-import 'package:routine/views/user/login_view.dart';
-import 'package:routine/views/user/register_view.dart';
-import 'package:routine/views/user/splash_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'config/app_config.dart';
 import 'config/design_system.dart';
+import 'views/categories/category_view.dart';
+import 'views/finances/finances_view.dart';
+import 'views/health/health_view.dart';
 import 'views/home/home_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import 'views/tasks/tasks_view.dart';
+import 'views/user/login_view.dart';
+import 'views/user/register_view.dart';
+import 'views/user/splash_view.dart';
+import 'views/user/user_profile.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-  await dotenv.load();
+  await dotenv.load(fileName: ".env");
+
 
   runApp(
     EasyLocalization(

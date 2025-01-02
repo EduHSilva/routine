@@ -44,6 +44,7 @@ Color hexaToColor(String? hexColor) {
 }
 
 String colorToHexa(Color color) {
+  // ignore: deprecated_member_use
   return '#${color.value.toRadixString(16).substring(2, 8).toUpperCase()}';
 }
 

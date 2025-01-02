@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:routine/models/health/workout_model.dart';
 
 import '../../../config/design_system.dart';
 import '../../../config/helper.dart';
 import '../../../config/pdf.dart';
+import '../../../models/health/workout_model.dart';
 import '../../../view_models/workout_viewmodel.dart';
 import '../../../widgets/custom_modal_delete.dart';
 import '../new_workout_view.dart';

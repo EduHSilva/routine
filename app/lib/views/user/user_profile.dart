@@ -4,12 +4,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:routine/widgets/custom_appbar.dart';
-import 'package:routine/widgets/custom_button.dart';
-import 'package:routine/widgets/custom_drawer.dart';
-import 'package:routine/widgets/custom_text_field.dart';
 
 import '../../view_models/user_viewmodel.dart';
+import '../../widgets/custom_appbar.dart';
+import '../../widgets/custom_button.dart';
+import '../../widgets/custom_drawer.dart';
+import '../../widgets/custom_text_field.dart';
 
 class UserProfileView extends StatefulWidget {
   const UserProfileView({super.key, required this.id});

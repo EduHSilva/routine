@@ -146,6 +146,7 @@ class CustomDrawer extends StatelessWidget {
         }
       },
       selected: isActive,
+      // ignore: deprecated_member_use
       selectedTileColor: AppColors.primaryVariant.withOpacity(0.1),
     );
   }

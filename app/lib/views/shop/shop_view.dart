@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:routine/views/shop/tabs/supermarket_tab.dart';
 
 import '../../config/design_system.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/custom_drawer.dart';
+import 'tabs/supermarket_tab.dart';
 
 class ShopView extends StatefulWidget {
   final int initialIndex;

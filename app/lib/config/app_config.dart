@@ -50,10 +50,8 @@ class AppConfig {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? userJson = prefs.getString('user');
 
-    if (userJson != null) {
-      user = User.fromJson(jsonDecode(userJson));
+      user = User.fromJson(jsonDecode(userJson!));
     }
-  }
 
   static Future<void> cleanStorage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -1,14 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:routine/view_models/diet_viewmodel.dart';
-import 'package:routine/views/health/meal_details.dart';
-import 'package:routine/views/health/new_meal_view.dart';
+
 
 import '../../../config/helper.dart';
 import '../../../config/pdf.dart';
 import '../../../models/health/diet_model.dart';
+import '../../../view_models/diet_viewmodel.dart';
 import '../../../widgets/custom_modal_delete.dart';
 import '../../../widgets/meal_card.dart';
+import '../meal_details.dart';
+import '../new_meal_view.dart';
 
 class DietTab extends StatefulWidget {
   const DietTab({super.key});

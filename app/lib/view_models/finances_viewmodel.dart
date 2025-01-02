@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart';
-import 'package:routine/models/finances/finances_model.dart';
-import 'package:routine/services/finances_service.dart';
 import '../config/app_config.dart';
+import '../models/finances/finances_model.dart';
 import '../models/response.dart';
+import '../services/finances_service.dart';
 
 class FinancesViewmodel {
   final FinancesService _financesService = FinancesService();
@@ -143,12 +142,8 @@ class FinancesViewmodel {
       isLoading.value = true;
       DefaultResponse? response =
           await _financesService.changeTransactionStatus(t.id);
-      if (response != null) {
-        await fetchFinancesRules();
-      } else {
-        errorMessage.value = errorMessage.value = response?.message;
-      }
-      return response;
+      await fetchFinancesRules();
+          return response;
     } catch (e) {
       AppConfig.getLogger().e(e);
     } finally {

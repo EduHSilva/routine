@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:routine/config/design_system.dart';
+
+import '../config/design_system.dart';
 
 class MealCard extends StatelessWidget {
   final int id;

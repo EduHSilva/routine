@@ -1,4 +1,3 @@
-import 'package:routine/views/categories/category_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -9,6 +8,7 @@ import '../../models/tasks/category_model.dart';
 import '../../view_models/category_viewmodel.dart';
 import '../../widgets/custom_dropdown.dart';
 import '../../widgets/custom_text_field.dart';
+import 'category_view.dart';
 
 class NewCategoryView extends StatefulWidget {
   final int? id;

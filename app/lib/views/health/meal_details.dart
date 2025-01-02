@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:routine/view_models/diet_viewmodel.dart';
 import '../../models/health/diet_model.dart';
+import '../../view_models/diet_viewmodel.dart';
 
 class MealDetailView extends StatefulWidget {
   final int id;

@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:routine/widgets/custom_text_field.dart';
+
+import '../../../widgets/custom_text_field.dart';
 
 class SupermarketTab extends StatefulWidget {
   const SupermarketTab({super.key});

@@ -1,11 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:routine/views/health/tabs/diet_tab.dart';
-import 'package:routine/views/health/tabs/workout_tab.dart';
 import 'package:flutter/material.dart';
 
 import '../../config/design_system.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/custom_drawer.dart';
+import 'tabs/diet_tab.dart';
+import 'tabs/workout_tab.dart';
 class HealthView extends StatefulWidget {
   final int initialIndex;
 

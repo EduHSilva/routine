@@ -1,4 +1,3 @@
-import 'package:routine/views/tasks/tasks_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +9,7 @@ import '../../models/tasks/task_model.dart';
 import '../../view_models/category_viewmodel.dart';
 import '../../widgets/custom_dropdown.dart';
 import '../../widgets/custom_text_field.dart';
+import 'tasks_view.dart';
 
 class NewTaskView extends StatefulWidget {
   final int? id;
@@ -101,12 +101,10 @@ class NewTaskViewState extends State<NewTaskView> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
-    if (pickedDate != null) {
-      setState(() {
-        controller.text = DateFormat('yyyy-MM-dd').format(pickedDate);
-      });
+    setState(() {
+      controller.text = DateFormat('yyyy-MM-dd').format(pickedDate!);
+    });
     }
-  }
 
   Future<void> _selectTime(
       BuildContext context, TextEditingController controller) async {

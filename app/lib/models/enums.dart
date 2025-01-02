@@ -13,9 +13,7 @@ extension PriorityExtension on Priority {
         return 'normal';
       case Priority.low:
         return 'low';
-      default:
-        return '';
-    }
+      }
   }
 }
 
@@ -38,8 +36,7 @@ extension FrequencyTransactionExtension on FrequencyTransaction {
         return 'yearly';
       case FrequencyTransaction.unique:
         return 'unique';
-      default:
-        return '';
+
     }
   }
 }
@@ -68,8 +65,6 @@ extension FrequencyExtension on Frequency {
         return 'yearly';
       case Frequency.unique:
         return 'unique';
-      default:
-        return '';
     }
   }
 }

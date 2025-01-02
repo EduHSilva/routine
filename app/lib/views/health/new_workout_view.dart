@@ -1,12 +1,12 @@
-import 'package:routine/models/health/workout_model.dart';
-import 'package:routine/view_models/workout_viewmodel.dart';
-import 'package:routine/views/health/health_view.dart';
-import 'package:routine/widgets/custom_button.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../config/helper.dart';
+import '../../models/health/workout_model.dart';
+import '../../view_models/workout_viewmodel.dart';
+import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text_field.dart';
+import 'health_view.dart';
 import 'modals/exercise_modal.dart';
 
 class NewWorkoutView extends StatefulWidget {

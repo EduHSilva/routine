@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
-import 'package:routine/config/app_config.dart';
-import 'package:routine/models/health/workout_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 import '../models/health/diet_model.dart';
+import '../models/health/workout_model.dart';
+import 'app_config.dart';
 
 Future<void> generateAndShareDietPDF(List<Meal> meals) async {
   final pdf = pw.Document();

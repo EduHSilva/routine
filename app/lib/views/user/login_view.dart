@@ -1,12 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:routine/views/user/register_view.dart';
 import '../../config/design_system.dart';
 import '../../config/helper.dart';
 import '../../models/user/login_model.dart';
 import '../../view_models/user_viewmodel.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text_field.dart';
+import 'register_view.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});

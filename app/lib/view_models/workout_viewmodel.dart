@@ -1,8 +1,8 @@
-import 'package:routine/models/health/workout_model.dart';
-import 'package:routine/services/workout_service.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../config/app_config.dart';
+import '../models/health/workout_model.dart';
+import '../services/workout_service.dart';
 
 class WorkoutViewModel {
   final WorkoutService _workoutService = WorkoutService();

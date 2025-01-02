@@ -1,11 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:routine/config/helper.dart';
-import 'package:routine/view_models/finances_viewmodel.dart';
-import 'package:routine/widgets/custom_modal_delete.dart';
-import 'package:routine/models/finances/finances_model.dart';
 
+
+import '../../../config/helper.dart';
+import '../../../models/finances/finances_model.dart';
+import '../../../view_models/finances_viewmodel.dart';
+import '../../../widgets/custom_modal_delete.dart';
 import '../modals/transaction_modal.dart';
 
 class FinancialResumeTab extends StatefulWidget {
@@ -40,7 +40,7 @@ class _FinancialResumeTabState extends State<FinancialResumeTab> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _screens = [
+    final List<Widget> screens = [
       DashboardScreen(
         financesViewModel: _financesViewModel,
         selectedDate: selectedDate,
@@ -54,7 +54,7 @@ class _FinancialResumeTabState extends State<FinancialResumeTab> {
     ];
 
     return Scaffold(
-      body: _screens[_currentIndex],
+      body: screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
@@ -255,10 +255,10 @@ class TransactionsScreen extends StatelessWidget {
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 6, horizontal: 12),
                   leading: Icon(
-                    transaction.confirmed ?? false
+                    transaction.confirmed
                         ? Icons.check_circle
                         : Icons.circle_outlined,
-                    color: transaction.confirmed ?? false
+                    color: transaction.confirmed
                         ? Colors.green
                         : Colors.grey,
                     size: 20,

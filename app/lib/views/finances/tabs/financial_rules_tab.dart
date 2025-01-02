@@ -1,9 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:routine/view_models/finances_viewmodel.dart';
-import 'package:routine/views/finances/new_financial_rule_view.dart';
 
+import '../../../view_models/finances_viewmodel.dart';
 import '../../../widgets/transaction_card.dart';
+import '../new_financial_rule_view.dart';
 
 class FinancialRulesTab extends StatefulWidget {
   const FinancialRulesTab({super.key});

@@ -1,11 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:routine/views/finances/tabs/financial_resume_tab.dart';
-import 'package:routine/views/finances/tabs/financial_rules_tab.dart';
 import 'package:flutter/material.dart';
 
 import '../../config/design_system.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/custom_drawer.dart';
+import 'tabs/financial_resume_tab.dart';
+import 'tabs/financial_rules_tab.dart';
 
 class FinancesView extends StatefulWidget {
   final int initialIndex;

@@ -1,12 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:routine/views/health/health_view.dart';
-import 'package:routine/widgets/custom_button.dart';
 
 import '../../config/helper.dart';
 import '../../models/health/diet_model.dart';
 import '../../view_models/diet_viewmodel.dart';
+import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text_field.dart';
+import 'health_view.dart';
 import 'modals/food_modal.dart';
 
 class NewMealView extends StatefulWidget {

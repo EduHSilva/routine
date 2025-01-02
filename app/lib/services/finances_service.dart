@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:routine/models/finances/finances_model.dart';
-import 'package:routine/models/response.dart';
 
 import '../config/app_config.dart';
+import '../models/finances/finances_model.dart';
+import '../models/response.dart';
 
 class FinancesService {
   Future<MonthData?> fetchMonthData(String month, int year) async {
