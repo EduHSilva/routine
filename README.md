@@ -24,7 +24,7 @@ Este projeto consiste em um aplicativo com o propósito de auxiliar na rotina co
 - [Licença](#licença)
 
 ## Funcionalidades
-<video controls src="imgs/example_use.mp4" title="Title"></video>+
+[Exemplo de Uso](imgs/example_use.mp4)
 
 ### Início
 <div style="display: flex; gap: 10px;">
