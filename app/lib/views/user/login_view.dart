@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../../config/design_system.dart';
+import '../../config/app_config.dart';
 import '../../config/helper.dart';
 import '../../models/user/login_model.dart';
 import '../../view_models/user_viewmodel.dart';
@@ -34,6 +36,26 @@ class LoginViewState extends State<LoginView> {
       _handleResponse(response);
     } catch (error) {
       //
+    }
+  }
+
+  Future<void> _loginWithGoogle() async {
+    try {
+      final googleUser = await GoogleSignIn(
+        scopes: const ['email'],
+        serverClientId: AppConfig.googleClientId,
+      ).signIn();
+      if (googleUser == null) return;
+      final response = await _userViewModel.loginWithGoogle(
+        googleUser.email,
+        googleUser.id,
+      );
+      _handleResponse(response);
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Não foi possível entrar com o Google.')),
+      );
     }
   }
 
@@ -93,6 +115,12 @@ class LoginViewState extends State<LoginView> {
                               CustomButton(
                                 text: 'login'.tr(),
                                 onPressed: _login,
+                              ),
+                              const SizedBox(height: 10),
+                              OutlinedButton.icon(
+                                onPressed: _loginWithGoogle,
+                                icon: const Icon(Icons.g_mobiledata),
+                                label: const Text('Entrar com Google'),
                               ),
                               const SizedBox(height: 10),
                               CustomButton(

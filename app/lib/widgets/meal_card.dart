@@ -6,9 +6,10 @@ class MealCard extends StatelessWidget {
   final int id;
   final String name;
   final String hour;
-  final VoidCallback onTap;
-  final VoidCallback onEdit;
-  final VoidCallback onRemove;
+  final VoidCallback? onTap;
+  final VoidCallback? onEdit;
+  final VoidCallback? onRemove;
+  final VoidCallback? onCreateSubstitution;
 
   const MealCard({
     super.key,
@@ -18,6 +19,7 @@ class MealCard extends StatelessWidget {
     required this.onTap,
     required this.onEdit,
     required this.onRemove,
+    required this.onCreateSubstitution,
   });
 
   @override
@@ -32,6 +34,12 @@ class MealCard extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
+            IconButton(
+              icon: const Icon(Icons.swap_horiz),
+              color: AppColors.primaryVariant,
+              onPressed: onCreateSubstitution,
+              tooltip: 'Criar substituição',
+            ),
             IconButton(
               icon: const Icon(Icons.edit),
               color: AppColors.primary,

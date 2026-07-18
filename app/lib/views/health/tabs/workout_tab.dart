@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../config/design_system.dart';
+import '../../../config/app_config.dart';
 import '../../../config/helper.dart';
 import '../../../config/pdf.dart';
 import '../../../models/health/workout_model.dart';
@@ -9,6 +10,7 @@ import '../../../view_models/workout_viewmodel.dart';
 import '../../../widgets/custom_modal_delete.dart';
 import '../new_workout_view.dart';
 import '../workout_details_view.dart';
+import '../workout_plan_view.dart';
 
 class WorkoutTab extends StatefulWidget {
   const WorkoutTab({super.key});
@@ -54,6 +56,17 @@ class WorkoutTabState extends State<WorkoutTab> {
     }
   }
 
+  void _showPlanActions() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => SafeArea(child: Wrap(children: [
+        ListTile(leading: const Icon(Icons.fitness_center), title: const Text('Criar treino'), onTap: () { Navigator.pop(context); Navigator.push(context, MaterialPageRoute(builder: (_) => const NewWorkoutView())); }),
+        ListTile(leading: const Icon(Icons.edit_note), title: const Text('Criar plano manual'), onTap: () { Navigator.pop(context); Navigator.push(context, MaterialPageRoute(builder: (_) => const WorkoutPlanView())); }),
+        ListTile(leading: const Icon(Icons.auto_awesome), title: const Text('Criar plano por IA'), subtitle: const Text('Em breve: geração pelo seu objetivo.'), onTap: () { Navigator.pop(context); ScaffoldMessenger.of(this.context).showSnackBar(const SnackBar(content: Text('A geração por IA será disponibilizada pela API.'))); }),
+      ])),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
@@ -65,6 +78,7 @@ class WorkoutTabState extends State<WorkoutTab> {
         return ValueListenableBuilder<List<Workout>>(
           valueListenable: _workoutViewModel.workouts,
           builder: (context, workouts, child) {
+            final offline = AppConfig.isOffline.value;
             return Scaffold(
               appBar: AppBar(
                 title: Text('workout'.tr()),
@@ -73,13 +87,15 @@ class WorkoutTabState extends State<WorkoutTab> {
                   IconButton(
                     icon: const Icon(Icons.share),
                     onPressed: () async {
-                      await generateAndShareWorkoutPDF(
-                          _workoutViewModel.workouts.value);
+                      // await generateAndShareWorkoutPDF(
+                      //     _workoutViewModel.workouts.value);
                     },
                   ),
                 ],
               ),
-              body: workouts.isEmpty
+              body: Column(children: [
+                if (offline) const MaterialBanner(content: Text('Modo offline: exibindo o último treino salvo. Alterações estão indisponíveis.'), actions: []),
+                Expanded(child: workouts.isEmpty
                   ? Center(child: Text('noData'.tr()))
                   : ListView.builder(
                       itemCount: workouts.length,
@@ -111,7 +127,7 @@ class WorkoutTabState extends State<WorkoutTab> {
                                     Icons.edit,
                                     color: AppColors.primary,
                                   ),
-                                  onPressed: () {
+                                  onPressed: offline ? null : () {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -126,13 +142,13 @@ class WorkoutTabState extends State<WorkoutTab> {
                                     Icons.delete,
                                     color: AppColors.error,
                                   ),
-                                  onPressed: () {
+                                  onPressed: offline ? null : () {
                                     _deleteWorkoutDialog(workout);
                                   },
                                 ),
                               ],
                             ),
-                            onTap: () {
+                            onTap: offline ? null : () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -144,16 +160,10 @@ class WorkoutTabState extends State<WorkoutTab> {
                           ),
                         );
                       },
-                    ),
+                    )),
+              ]),
               floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const NewWorkoutView(),
-                    ),
-                  );
-                },
+                onPressed: offline ? null : _showPlanActions,
                 child: const Icon(Icons.add),
               ),
             );

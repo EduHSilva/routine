@@ -1,12 +1,23 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../config/app_config.dart';
 import '../models/health/workout_model.dart';
 
 
 class WorkoutService {
+  String get _workoutsCacheKey => 'cached_workouts_${AppConfig.user?.id ?? 'guest'}';
+
+  Future<List<Workout>> _cachedWorkouts() async {
+    final saved = (await SharedPreferences.getInstance()).getString(_workoutsCacheKey);
+    if (saved == null) return [];
+    final data = jsonDecode(saved) as Map<String, dynamic>;
+    final workouts = data['data'] as List? ?? [];
+    return workouts.map((workout) => Workout.fromJson(workout as Map<String, dynamic>)).toList();
+  }
+
   Future<List<Exercise>> fetchExercises() async {
     http.Client client = await AppConfig.getHttpClient();
     final response = await client.get(Uri.parse(
@@ -29,23 +40,22 @@ class WorkoutService {
   }
 
   Future<List<Workout>> fetchWorkouts() async {
-    http.Client client = await AppConfig.getHttpClient();
-    final response =
-        await client.get(Uri.parse('${AppConfig.apiUrl}/fitness/workouts'));
-
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> data = jsonDecode(response.body);
-
-      List<Workout> workouts = [];
-
-      if (data['data'] != null) {
-        workouts =
-            List<Workout>.from(data['data'].map((w) => Workout.fromJson(w)));
+    try {
+      final client = await AppConfig.getHttpClient();
+      final response = await client.get(Uri.parse('${AppConfig.apiUrl}/fitness/workouts'));
+      if (response.statusCode != 200) throw Exception('Failed to load workouts');
+      final data = jsonDecode(response.body) as Map<String, dynamic>;
+      await (await SharedPreferences.getInstance()).setString(_workoutsCacheKey, response.body);
+      AppConfig.isOffline.value = false;
+      final workouts = data['data'] as List? ?? [];
+      return workouts.map((workout) => Workout.fromJson(workout as Map<String, dynamic>)).toList();
+    } catch (_) {
+      final cached = await _cachedWorkouts();
+      if (cached.isNotEmpty) {
+        AppConfig.isOffline.value = true;
+        return cached;
       }
-
-      return workouts;
-    } else {
-      throw Exception('Failed to load workouts');
+      rethrow;
     }
   }
 

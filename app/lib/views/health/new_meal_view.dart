@@ -11,8 +11,9 @@ import 'modals/food_modal.dart';
 
 class NewMealView extends StatefulWidget {
   final int? id;
+  final Meal? substitutionFor;
 
-  const NewMealView({super.key, this.id});
+  const NewMealView({super.key, this.id, this.substitutionFor});
 
   @override
   NewMealViewState createState() => NewMealViewState();
@@ -24,14 +25,18 @@ class NewMealViewState extends State<NewMealView> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
 
-
-  List<Food> _selectedFoods = [];
+  List<MealFood> _selectedFoods = [];
 
   @override
   initState() {
     super.initState();
     if (widget.id != null) {
       _loadMealData(widget.id!);
+    } else if (widget.substitutionFor != null) {
+      final meal = widget.substitutionFor!;
+      _nameController.text = '${meal.name} (substituição)';
+      _timeController.text = meal.hour;
+      _selectedFoods = List<MealFood>.from(meal.foods ?? const []);
     }
   }
 
@@ -48,10 +53,17 @@ class NewMealViewState extends State<NewMealView> {
     }
   }
 
-  _removeFood(Food food) {
+  void _removeFood(MealFood food) {
     setState(() {
       _selectedFoods.remove(food);
     });
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _timeController.dispose();
+    super.dispose();
   }
 
   _loadMealData(int id) async {
@@ -61,7 +73,7 @@ class NewMealViewState extends State<NewMealView> {
       setState(() {
         _nameController.text = response!.meal!.name;
         _timeController.text = response.meal!.hour;
-        _selectedFoods = response.meal!.foods ?? [];
+        // _selectedFoods = response.meal!.foods ?? [];
       });
     }
   }
@@ -168,12 +180,11 @@ class NewMealViewState extends State<NewMealView> {
                     ],
                   ),
                   const SizedBox(height: 24),
-                  CustomButton(
-                    onPressed: () => _openFoodModal(context),
-                    text: 'addFood',
-                    isOutlined: true,
-                  ),
+                  SizedBox(width: double.infinity, child: OutlinedButton.icon(onPressed: () => _openFoodModal(context), icon: const Icon(Icons.add), label: const Text('Adicionar alimentos'))),
                   const SizedBox(height: 16),
+                  if (_selectedFoods.isNotEmpty)
+                    Text('${_selectedFoods.length} alimento(s) selecionado(s)', style: Theme.of(context).textTheme.titleSmall),
+                  if (_selectedFoods.isNotEmpty) const SizedBox(height: 8),
                   if (_selectedFoods.isNotEmpty)
                     ListView.builder(
                       shrinkWrap: true,
@@ -192,13 +203,17 @@ class NewMealViewState extends State<NewMealView> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      food.name,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
+                                    Expanded(
+                                      child: Text(
+                                        food.foodName ??
+                                            'Alimento #${food.foodId}',
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                        ),
                                       ),
                                     ),
                                     IconButton(
@@ -209,15 +224,16 @@ class NewMealViewState extends State<NewMealView> {
                                   ],
                                 ),
                                 const SizedBox(height: 8),
-                                CustomTextField(
-                                  initialValue: food.quantity?.toString(),
-                                  labelText: 'quantity',
+                                TextFormField(
+                                  initialValue: food.quantity.toString(),
                                   keyboardType: TextInputType.number,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      food.quantity = int.tryParse(value) ?? 0;
-                                    });
-                                  },
+                                  onChanged: (value) =>
+                                      food.quantity = int.tryParse(value) ?? 0,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Quantidade (g)',
+                                    prefixIcon: Icon(Icons.scale_outlined),
+                                    suffixText: 'g',
+                                  ),
                                 ),
                                 const SizedBox(height: 8),
                                 CustomTextField(

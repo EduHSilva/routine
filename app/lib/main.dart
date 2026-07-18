@@ -11,6 +11,8 @@ import 'views/user/register_view.dart';
 import 'views/user/splash_view.dart';
 import 'views/user/user_profile.dart';
 
+final appNavigatorKey = GlobalKey<NavigatorState>();
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
@@ -40,7 +42,21 @@ class MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    AppConfig.onUnauthorized = _redirectToLogin;
     _checkLoginStatus();
+  }
+
+  @override
+  void dispose() {
+    AppConfig.onUnauthorized = null;
+    super.dispose();
+  }
+
+  Future<void> _redirectToLogin() async {
+    final navigator = appNavigatorKey.currentState;
+    if (navigator != null) {
+      navigator.pushNamedAndRemoveUntil('/login', (route) => false);
+    }
   }
 
   Future<void> _checkLoginStatus() async {
@@ -73,6 +89,7 @@ class MyAppState extends State<MyApp> {
     }
 
     return MaterialApp(
+      navigatorKey: appNavigatorKey,
       title: 'Fitness',
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,

@@ -29,6 +29,24 @@ class UserViewModel {
     return null;
   }
 
+  Future<LoginResponse?> loginWithGoogle(String email, String googleAccountId) async {
+    try {
+      isLoading.value = true;
+      final response = await _userService.login(
+        LoginRequest(email: email, idContaGoogle: googleAccountId),
+      );
+      await AppConfig.saveToken(response?.token);
+      await AppConfig.saveUser(response?.user);
+      return response;
+    } catch (e) {
+      errorMessage.value = 'Error on Google login';
+      AppConfig.getLogger().e(e);
+    } finally {
+      isLoading.value = false;
+    }
+    return null;
+  }
+
   Future<UserResponse?> register(
       String name, String email, String password) async {
     try {

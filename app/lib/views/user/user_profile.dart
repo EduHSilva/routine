@@ -1,14 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:easy_localization/easy_localization.dart';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../config/app_config.dart';
 import '../../view_models/user_viewmodel.dart';
 import '../../widgets/custom_appbar.dart';
-import '../../widgets/custom_button.dart';
-import '../../widgets/custom_text_field.dart';
 
 class UserProfileView extends StatefulWidget {
   const UserProfileView({super.key, required this.id});
@@ -16,145 +15,147 @@ class UserProfileView extends StatefulWidget {
   final String id;
 
   @override
-  UserProfileViewState createState() => UserProfileViewState();
+  State<UserProfileView> createState() => _UserProfileViewState();
 }
 
-class UserProfileViewState extends State<UserProfileView> {
-  File? _imageFile;
-  String? _imageBase64;
-
+class _UserProfileViewState extends State<UserProfileView> {
+  final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
-
-  final ImagePicker _picker = ImagePicker();
-
-  final UserViewModel _userViewModel = UserViewModel();
+  final _picker = ImagePicker();
+  final _userViewModel = UserViewModel();
+  File? _imageFile;
+  String? _imageBase64;
+  bool _saving = false;
 
   @override
   void initState() {
     super.initState();
-    _userViewModel.getUser(widget.id).then((r) async {
-      _nameController.text = r!.user!.name;
-      _emailController.text = r.user!.email;
-
-      if (r.user!.photo!.isNotEmpty) {
-        final bytes = base64Decode(r.user!.photo!);
-        final tempDir = await getTemporaryDirectory();
-        final imagePath = '${tempDir.path}/user_image.png';
-        _imageFile = await File(imagePath).writeAsBytes(bytes);
-      }
-
-      setState(() {});
-    });
+    final user = AppConfig.user;
+    _nameController.text = user?.name ?? '';
+    _emailController.text = user?.email ?? '';
+    _loadSavedPhoto(user?.photo);
   }
 
-  Future<void> _pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _imageFile = File(pickedFile.path);
-        _imageBase64 = base64Encode(_imageFile!.readAsBytesSync());
-      });
-    }
-  }
-
-  Future<void> _captureImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.camera);
-    if (pickedFile != null) {
-      setState(() {
-        _imageFile = File(pickedFile.path);
-        _imageBase64 = base64Encode(_imageFile!.readAsBytesSync());
-      });
+  Future<void> _loadSavedPhoto(String? photo) async {
+    if (photo == null || photo.isEmpty) return;
+    try {
+      final bytes = base64Decode(photo);
+      final directory = await getTemporaryDirectory();
+      final image = await File('${directory.path}/profile_${widget.id}.png')
+          .writeAsBytes(bytes);
+      if (mounted) setState(() => _imageFile = image);
+    } on FormatException {
+      // A foto antiga pode ser uma URL; nesse caso mantém-se o avatar padrão.
     }
   }
 
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-        valueListenable: _userViewModel.isLoading,
-        builder: (context, isLoading, child) {
-          if (isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else {
-            return Scaffold(
-              appBar: CustomAppBar(title: "profile"),
-              body: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () => _showImagePickerDialog(context),
-                      child: CircleAvatar(
-                        radius: 60,
-                        backgroundImage: _imageFile != null
-                            ? FileImage(_imageFile!)
-                            : const AssetImage('assets/images/profile.png')
-                                as ImageProvider,
-                        child: _imageFile == null
-                            ? const Icon(Icons.camera_alt,
-                                size: 40, color: Colors.white)
-                            : null,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    CustomTextField(
-                      prefixIcon: Icons.email_outlined,
-                      controller: _emailController,
-                    ),
-                    const SizedBox(height: 10),
-                    CustomTextField(
-                      prefixIcon: Icons.person_off_outlined,
-                      controller: _nameController,
-                    ),
-                    const SizedBox(height: 20),
-                    CustomButton(text: 'save', onPressed: _save)
-                  ],
-                ),
-              ),
-            );
-          }
-        });
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    super.dispose();
   }
 
-  void _save() {
-    _userViewModel.updateUser(
+  Future<void> _chooseImage(ImageSource source) async {
+    final picked = await _picker.pickImage(source: source, imageQuality: 80);
+    if (picked == null) return;
+    final image = File(picked.path);
+    final encoded = base64Encode(await image.readAsBytes());
+    if (mounted) setState(() {
+      _imageFile = image;
+      _imageBase64 = encoded;
+    });
+  }
+
+  Future<void> _save() async {
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+    setState(() => _saving = true);
+    final response = await _userViewModel.updateUser(
       widget.id,
-      _nameController.text,
-      _emailController.text,
-      _imageBase64
+      _nameController.text.trim(),
+      _emailController.text.trim(),
+      _imageBase64,
     );
+    if (!mounted) return;
+    setState(() => _saving = false);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(
+      response?.user != null ? 'Perfil atualizado.' : (response?.message
+          .isNotEmpty ?? false)
+          ? response!.message
+          : 'Não foi possível atualizar o perfil.',
+    )));
   }
 
-  void _showImagePickerDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("selectPhoto".tr()),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: const Icon(Icons.photo),
-                title: Text("phone".tr()),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  _pickImage();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.camera_alt),
-                title: Text("cam".tr()),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  _captureImage();
-                },
-              ),
-            ],
+  void _showPhotoOptions() =>
+      showModalBottomSheet<void>(
+        context: context,
+        builder: (sheetContext) =>
+            SafeArea(child: Wrap(children: [
+              ListTile(leading: const Icon(Icons.photo_library_outlined),
+                  title: const Text('Escolher da galeria'),
+                  onTap: () {
+                    Navigator.pop(sheetContext);
+                    _chooseImage(ImageSource.gallery);
+                  }),
+              ListTile(leading: const Icon(Icons.camera_alt_outlined),
+                  title: const Text('Usar câmera'),
+                  onTap: () {
+                    Navigator.pop(sheetContext);
+                    _chooseImage(ImageSource.camera);
+                  }),
+            ])),
+      );
+
+  @override
+  Widget build(BuildContext context) =>
+      Scaffold(
+        appBar: const CustomAppBar(title: 'Perfil'),
+        body: SafeArea(
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              padding: const EdgeInsets.all(24),
+              children: [
+                Center(child: Stack(children: [
+                  CircleAvatar(radius: 56,
+                      backgroundImage: _imageFile == null ? const AssetImage(
+                          'assets/images/profile.png') : FileImage(
+                          _imageFile!)),
+                  Positioned(right: 0,
+                      bottom: 0,
+                      child: IconButton.filled(tooltip: 'Alterar foto',
+                          onPressed: _showPhotoOptions,
+                          icon: const Icon(Icons.edit))),
+                ])),
+                const SizedBox(height: 32),
+                TextFormField(controller: _nameController,
+                    textCapitalization: TextCapitalization.words,
+                    decoration: const InputDecoration(labelText: 'Nome',
+                        prefixIcon: Icon(Icons.person_outline)),
+                    validator: (value) =>
+                    value == null || value
+                        .trim()
+                        .isEmpty ? 'Informe seu nome.' : null),
+                const SizedBox(height: 16),
+                TextFormField(controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: const InputDecoration(labelText: 'E-mail',
+                        prefixIcon: Icon(Icons.email_outlined)),
+                    validator: (value) =>
+                    value == null || !value.contains('@')
+                        ? 'Informe um e-mail válido.'
+                        : null),
+                const SizedBox(height: 28),
+                FilledButton.icon(onPressed: _saving ? null : _save,
+                    icon: _saving
+                        ? const SizedBox.square(dimension: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2))
+                        : const Icon(Icons.save_outlined),
+                    label: const Text('Salvar alterações')),
+              ],
+            ),
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
 }

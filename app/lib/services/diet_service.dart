@@ -1,25 +1,35 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../config/app_config.dart';
 import '../models/health/diet_model.dart';
 
-
 class DietService {
+  String get _mealsCacheKey => 'cached_meals_${AppConfig.user?.id ?? 'guest'}';
+
+  Future<List<Meal>> _cachedMeals() async {
+    final saved = (await SharedPreferences.getInstance()).getString(_mealsCacheKey);
+    if (saved == null) return [];
+    final data = jsonDecode(saved) as Map<String, dynamic>;
+    final meals = data['data'] as List? ?? [];
+    return meals.map((meal) => Meal.fromJson(meal as Map<String, dynamic>)).toList();
+  }
+
   Future<List<Food>> fetchFoods(search) async {
     http.Client client = await AppConfig.getHttpClient();
-    final response = await client.get(Uri.parse(
-        '${AppConfig.apiUrl}/fitness/diet/meal/food?query=$search'));
+    final response = await client.get(
+        Uri.parse('${AppConfig.apiUrl}/fitness/diet/meal/food?query=$search'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
 
-
       List<Food> foods = [];
 
       if (data['data'] != null) {
-        foods = List<Food>.from(data['data'].map((food) => Food.fromJson(food)));
+        foods =
+            List<Food>.from(data['data'].map((food) => Food.fromJson(food)));
       }
 
       return foods;
@@ -29,30 +39,29 @@ class DietService {
   }
 
   Future<List<Meal>> fetchMeals() async {
-    http.Client client = await AppConfig.getHttpClient();
-    final response =
-        await client.get(Uri.parse('${AppConfig.apiUrl}/fitness/diet/meals'));
-
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> data = jsonDecode(response.body);
-
-      List<Meal> diets = [];
-
-      if (data['data'] != null) {
-        diets =
-            List<Meal>.from(data['data'].map((meal) => Meal.fromJson(meal)));
+    try {
+      final client = await AppConfig.getHttpClient();
+      final response = await client.get(Uri.parse('${AppConfig.apiUrl}/fitness/diet/meals'));
+      if (response.statusCode != 200) throw Exception('Failed to load meals');
+      final data = jsonDecode(response.body) as Map<String, dynamic>;
+      await (await SharedPreferences.getInstance()).setString(_mealsCacheKey, response.body);
+      AppConfig.isOffline.value = false;
+      final meals = data['data'] as List? ?? [];
+      return meals.map((meal) => Meal.fromJson(meal as Map<String, dynamic>)).toList();
+    } catch (_) {
+      final cached = await _cachedMeals();
+      if (cached.isNotEmpty) {
+        AppConfig.isOffline.value = true;
+        return cached;
       }
-
-      return diets;
-    } else {
-      throw Exception('Failed to load meals');
+      rethrow;
     }
   }
 
   Future<MealResponse> getMeal(int id) async {
     http.Client client = await AppConfig.getHttpClient();
-    final response =
-        await client.get(Uri.parse('${AppConfig.apiUrl}/fitness/diet/meal?id=$id'));
+    final response = await client
+        .get(Uri.parse('${AppConfig.apiUrl}/fitness/diet/meal?id=$id'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
@@ -71,12 +80,7 @@ class DietService {
 
     try {
       final response = await client.post(Uri.parse(apiUrl),
-          body: jsonEncode(<String, dynamic>{
-            'name': request.name,
-            'foods': request.foods,
-            'hour': request.hour,
-            'user_id': request.userID
-          }));
+          body: jsonEncode(request.toJson()));
 
       final Map<String, dynamic> jsonResponse = json.decode(response.body);
 
@@ -97,11 +101,7 @@ class DietService {
 
     try {
       final response = await client.put(Uri.parse("$apiUrl?id=$id"),
-          body: jsonEncode(<String, dynamic>{
-            'name': request.name,
-            'hour': request.hour,
-            'foods': request.foods,
-          }));
+          body: jsonEncode(request.toJson()));
 
       final Map<String, dynamic> jsonResponse = json.decode(response.body);
 

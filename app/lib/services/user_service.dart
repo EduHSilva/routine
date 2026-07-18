@@ -1,11 +1,28 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import '../config/app_config.dart';
 import '../models/user/login_model.dart';
 import '../models/user/user_model.dart';
 
 class UserService {
+  Map<String, dynamic> _decodeBody(http.Response response) {
+    if (response.body.isEmpty) return <String, dynamic>{};
+    final decoded = jsonDecode(response.body);
+    if (decoded is! Map<String, dynamic>) {
+      throw const FormatException('A resposta da API não é um objeto JSON.');
+    }
+    return decoded;
+  }
+
+  String _message(Map<String, dynamic> body,
+          [String fallback = 'Não foi possível concluir a solicitação.']) =>
+      body['message']?.toString() ?? fallback;
+
+  void _logFailure(String operation, Object error, StackTrace stackTrace) {
+    AppConfig.getLogger()
+        .e('Falha em $operation: $error', error: error, stackTrace: stackTrace);
+  }
+
   Future<LoginResponse?> login(LoginRequest loginRequest) async {
     final String apiUrl = '${AppConfig.apiUrl}/users/auth/login';
     http.Client client = await AppConfig.getHttpClient();
@@ -16,23 +33,16 @@ class UserService {
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(<String, String>{
-          'email': loginRequest.email,
-          'password': loginRequest.password,
-        }),
+        body: jsonEncode(loginRequest.toJson()),
       );
-      final Map<String, dynamic> jsonResponse = json.decode(response.body);
-
-      print(apiUrl);
-      print(response.statusCode);
-      debugPrint(jsonResponse['message']);
+      final jsonResponse = _decodeBody(response);
       if (response.statusCode == 200) {
         return LoginResponse.fromJson(jsonResponse);
       } else {
-        return LoginResponse(message: jsonResponse['message']);
+        return LoginResponse(message: _message(jsonResponse));
       }
-    } catch (e) {
-      AppConfig.getLogger().e(e);
+    } catch (error, stackTrace) {
+      _logFailure('login', error, stackTrace);
     }
     return null;
   }
@@ -47,42 +57,39 @@ class UserService {
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(<String, String>{
-          'email': createUserRequest.email,
-          'password': createUserRequest.password,
-          'name': createUserRequest.name
-        }),
+        body: jsonEncode(createUserRequest.toJson()),
       );
-      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      final jsonResponse = _decodeBody(response);
 
       if (response.statusCode == 200) {
         return UserResponse.fromJson(jsonResponse);
       } else {
-        return UserResponse(message: jsonResponse['message']);
+        return UserResponse(message: _message(jsonResponse));
       }
-    } catch (e) {
-      AppConfig.getLogger().e(e);
+    } catch (error, stackTrace) {
+      _logFailure('cadastro', error, stackTrace);
       return null;
     }
   }
 
   Future<UserResponse?> getUser(String id) async {
-    http.Client client = await AppConfig.getHttpClient();
-    final response =
-    await client.get(Uri.parse('${AppConfig.apiUrl}user?id=$id'));
-
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-
-      UserResponse? task = UserResponse.fromJson(jsonResponse);
-
-      return task;
-    } else {
-      throw Exception('Failed to load user');
+    try {
+      http.Client client = await AppConfig.getHttpClient();
+      final response =
+          await client.get(Uri.parse('${AppConfig.apiUrl}user?id=$id'));
+      final jsonResponse = _decodeBody(response);
+      if (response.statusCode == 200) {
+        return UserResponse.fromJson(jsonResponse);
+      }
+      return UserResponse(message: _message(jsonResponse));
+    } catch (error, stackTrace) {
+      _logFailure('consulta de usuário', error, stackTrace);
+      return null;
     }
   }
 
-  Future<UserResponse?> updateUser(UpdateUserRequest updateUserRequest, String id) async {
+  Future<UserResponse?> updateUser(
+      UpdateUserRequest updateUserRequest, String id) async {
     final String apiUrl = '${AppConfig.apiUrl}user?id=$id';
     http.Client client = await AppConfig.getHttpClient();
 
@@ -92,21 +99,17 @@ class UserService {
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(<String, String>{
-          'email': updateUserRequest.email,
-          'photo': updateUserRequest.photo == null ? "" : updateUserRequest.photo!,
-          'name': updateUserRequest.name
-        }),
+        body: jsonEncode(updateUserRequest.toJson()),
       );
-      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      final jsonResponse = _decodeBody(response);
 
       if (response.statusCode == 200) {
         return UserResponse.fromJson(jsonResponse);
       } else {
-        return UserResponse(message: jsonResponse['message']);
+        return UserResponse(message: _message(jsonResponse));
       }
-    } catch (e) {
-      AppConfig.getLogger().e(e);
+    } catch (error, stackTrace) {
+      _logFailure('atualização de usuário', error, stackTrace);
       return null;
     }
   }
